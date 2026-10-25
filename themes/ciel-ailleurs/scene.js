@@ -151,29 +151,47 @@ void main(){
     col += (tn * (st * 1.7 + st2) + milky * .3 + vec3(.5, .6, .9) * dust * .2) * nf;
     // airglow vert très faible près de l'horizon
     col += vec3(.015, .05, .03) * exp(-d.y * 9.) * night * .6;
-    // galaxie lointaine
-    { float fc; vec2 q = tang(d, P_GAL, fc); q = rot(q, .5) / vec2(.1, .028); float r = length(q);
-      if (fc > 0. && r < 3.) { float core2 = exp(-r * r * 1.2) + exp(-r * 2.4) * .25; float arm = .5 + .5 * sin(atan(q.y, q.x * .4) * 2. - r * 4.); float gl = (core2 + .3 * exp(-r * r * .2) * arm) * (.7 + .3 * fbm3(q * 3.)); gl *= 1. - .6 * smoothstep(.35, .6, fbm3(vec2(q.x * 4., q.y * 9.))) * step(.3, abs(q.y) + .2) * .5; col += mix(vec3(.55, .6, 1.), vec3(1., .85, .65), exp(-r * r)) * gl * .55 * nf; } }
+    // galaxie lointaine : spirale inclinée (bulbe, bras, voile de poussière, étoiles d'avant-plan)
+    { float fc; vec2 q = tang(d, P_GAL, fc) / .095; q = rot(q, .62);
+      float rho = length(q);
+      if (fc > 0. && rho < 3.4) {
+        vec2 f2 = vec2(q.x, q.y / .42);                        // plan du disque vu sous ~65°
+        float r = length(f2), th = atan(f2.y, f2.x);
+        float disk = exp(-r * 1.05) * smoothstep(3.2, 1.6, r);
+        float spiral = .5 + .5 * cos(2. * (th - 1.9 * log(r + .12)) + .6 * fbm3(f2 * 2.));
+        float arms = mix(.55, 1.25, pow(spiral, 1.6)) * smoothstep(.25, 1., r);
+        float bulge = exp(-r * r * 3.6) * 1.6 + exp(-r * 6.) * .9;
+        float clump = .75 + .5 * fbm3(f2 * 5. + 3.);
+        float dustL = smoothstep(.32, .0, abs(q.y * 1.1 - .035 * q.x * q.x * 0. + .03 * (fbm3(vec2(q.x * 3., 4.)) - .5))) * smoothstep(2.6, .4, abs(q.x)) * (1. - .5 * exp(-r * r * 4.));
+        float g = (disk * arms * clump + bulge) * (1. - .7 * dustL);
+        vec3 gc = mix(vec3(.62, .68, 1.), vec3(1., .86, .66), smoothstep(.1, 1.1, bulge + .2 * exp(-r)));
+        col += gc * g * .34 * nf;
+        } }
     // nébuleuse en émission
     { float fc; vec2 q = tang(d, P_NEB, fc) / .16; float r = length(q);
       if (fc > 0. && r < 2.2) { float n1 = fbm(q * 2.4 + 3.), n2 = fbm(q * 5. - n1 * 2. + 8.); float m = smoothstep(.28, .8, n1) * smoothstep(2.2, .5, r);
         vec3 nc = mix(vec3(.9, .2, .45), vec3(.15, .6, .75), smoothstep(.35, .75, n2)); nc = mix(nc, vec3(1., .75, .85), smoothstep(.7, .95, n2) * .6);
         col += nc * m * (.25 + .75 * n2) * .5 * nf; col *= 1. - .5 * smoothstep(.55, .75, fbm(q * 6. + 20.)) * m * .6; } }
-    // comète : tête, coma, queue
-    { float fc; vec2 q = tang(d, P_COMET, fc) / .05; 
-      if (fc > 0.) { float r = length(q); vec2 td = normalize(vec2(-.35, .94)); float along = dot(q, td), perp = dot(q, vec2(-td.y, td.x));
-        float coma = exp(-r * r * 1.4) + exp(-r * 2.8) * .5;
-        float tail = step(0., along) * exp(-along * .24) * exp(-pow(perp / (.25 + along * .09), 2.)) * (.5 + .5 * fbm3(vec2(along * 1.6, perp * 3.)));
-        float tail2 = step(0., along) * exp(-along * .17) * exp(-pow((perp - along * .06 - .1) / (.5 + along * .16), 2.)) * .18;
-        col += (vec3(.7, .95, 1.) * (coma * 1.4 + tail * .8) + vec3(1., .88, .65) * tail2) * nf; } }
+    // comète : noyau, coma, queue ionique (droite, bleutée) et queue de poussière (courbe, dorée)
+    { float fc; vec2 q = tang(d, P_COMET, fc) / .05;
+      if (fc > .97) { float r = length(q); vec2 td = normalize(vec2(-.35, .94)); float along = dot(q, td), perp = dot(q, vec2(-td.y, td.x));
+        float gate = smoothstep(.97, .995, fc);
+        float coma = exp(-r * r * 2.2) * .9 + exp(-r * 3.4) * .45 + exp(-r * 22.) * 1.4;
+        float fl = .55 + .45 * fbm3(vec2(along * 1.3, perp * 2.2));
+        float ion = smoothstep(-.5, .4, along) * exp(-max(along, 0.) * .55) * exp(-pow(perp / (.14 + max(along, 0.) * .05), 2.)) * fl;
+        float pc = perp - .06 * along * along * .12 - .2 * along;
+        float dust = smoothstep(-.3, .5, along) * exp(-max(along, 0.) * .36) * exp(-pow((perp - .12 * along * (1. + .12 * along)) / (.3 + max(along, 0.) * .16), 2.)) * (.6 + .4 * fl);
+        col += (vec3(.65, .85, 1.) * (coma * .9 + ion * .45) + vec3(1., .85, .6) * dust * .22) * gate * nf; } }
     // étoiles filantes
     { float tt = uT * .2; float id = floor(tt), f = fract(tt); float on = step(.55, h21(vec2(id, 4.)));
       vec3 sd = normalize(vec3(h21(vec2(id, 1.)) * 2. - 1., .35 + .5 * h21(vec2(id, 2.)), h21(vec2(id, 3.)) * 2. - 1.));
       vec3 dr = normalize(cross(sd, normalize(vec3(h21(vec2(id, 6.)) - .5, 1., h21(vec2(id, 7.)) - .5)))); dr = normalize(dr - vec3(0., .5, 0.));
       vec3 pp = normalize(sd + dr * (f - .5) * .35); vec3 dt = normalize(dr - pp * dot(dr, pp));
-      vec3 off = d - pp * dot(d, pp); float u = dot(off, dt), w = length(off - dt * u);
-      float L = .09; float tl = exp(-w * w / .0000012) * smoothstep(-L, 0., u) * step(u, .001) * step(.98, dot(d, pp));
-      col += vec3(.9, .95, 1.) * tl * smoothstep(0., .12, f) * smoothstep(1., .7, f) * on * .9 * step(.02, d.y); }
+      vec3 nr = normalize(cross(pp, dt)); float u = dot(d, dt), w = dot(d, nr), pz = dot(d, pp);
+      float L = .1; float k = clamp(-u / L, 0., 1.);
+      float wd = .0007 + .0009 * (1. - k);   // fine, un peu plus large près de la tête
+      float tl = exp(-w * w / (wd * wd)) * pow(1. - k, 1.6) * step(u, .0008) * step(-L, u) * step(.9, pz);
+      col += vec3(.85, .93, 1.) * tl * smoothstep(0., .12, f) * smoothstep(1., .7, f) * on * .9 * step(.02, d.y); }
   }
   // --- astres proches
   { // petite planète orange, en croissant
