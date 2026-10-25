@@ -57,3 +57,15 @@
 @media (max-width: 900px) { .lab-detail.full { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 700px) { .lab-body { grid-template-columns: minmax(0, 1fr); } .lab-grid.is-wheel { position: static; } .lab-side, .lab-cols { grid-template-columns: minmax(0, 1fr); } .lab-head .lab-tagrow { margin-left: 0; } .lab-off { justify-items: start; } }
 .pane:has(.lab) { max-width: 1040px; }
+
+/* lecteur large (Champ stellaire…) : on aère */
+:root[data-reader-layout="wide"] .lab { gap: 26px; font-size: 1rem; }
+:root[data-reader-layout="wide"] .lab-bar { padding-bottom: 6px; }
+:root[data-reader-layout="wide"] .lab-body { grid-template-columns: 250px minmax(0, 1fr); gap: 44px; padding-top: 10px; }
+:root[data-reader-layout="wide"] .lab-detail { gap: 18px 48px; }
+:root[data-reader-layout="wide"] .lab-main, :root[data-reader-layout="wide"] .lab-soft { gap: 16px; }
+:root[data-reader-layout="wide"] .lab-feat ul, :root[data-reader-layout="wide"] .lab-cols ul { gap: 8px; font-size: .9rem; }
+:root[data-reader-layout="wide"] .lab-side { padding: 8px 22px; gap: 0 26px; }
+:root[data-reader-layout="wide"] .lab-meta { padding: 13px 0; }
+:root[data-reader-layout="wide"] .lab-cols { gap: 30px; }
+:root[data-reader-layout="wide"] .lab-head { gap: 8px 22px; padding-bottom: 6px; }

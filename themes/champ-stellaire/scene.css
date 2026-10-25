@@ -2,7 +2,7 @@
 #scene #stars {position:fixed;inset:0;width:100%;height:100%;z-index:-2;display:block;background:radial-gradient(ellipse at 70% 48%,#171a39 0%,#0a1025 42%,#040711 88%)}
 #scene .veil {position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,#04061165,transparent 65%)}
 #scene .hero {min-height:100svh;display:grid;align-items:center;padding:110px clamp(24px,7vw,125px) 65px}
-#scene .hero-inner {max-width:430px;background:linear-gradient(90deg,#070916b8,#07091624 85%,transparent);padding:30px 18px 30px 0;border-radius:12px}
+#scene .hero-inner {max-width:470px;background:none;padding:0;text-shadow:0 2px 18px #02040c,0 0 3px #02040c}
 #scene .eyebrow {font-size:11px;letter-spacing:.25em;color:#d0b7ff;text-transform:uppercase;font-weight:700}
 #scene .hero h1 {font-size:clamp(27px,3.4vw,49px);letter-spacing:.18em;font-weight:450;line-height:1.2;margin:20px 0}
 #scene .hero p {color:#c6c9e0;font-size:16px;max-width:410px}
@@ -11,7 +11,7 @@
 #scene .hero-note {position:absolute;bottom:34px;right:48px;color:#929abd;font-size:11px;letter-spacing:.18em}
 #scene .status {position:fixed;bottom:18px;left:24px;color:#9ea4c7;font-size:11px;letter-spacing:.11em;pointer-events:none}
 @media(max-width:800px) {
-#scene .hero {padding:100px 28px 60px}
+#scene .hero {padding:100px 36px 60px}
 #scene .hero-note {right:22px}
 #scene .status {display:none}
 }
@@ -43,12 +43,16 @@ html.reading #scene .hero, html.reading #scene .status { opacity: 0; visibility:
 html.reading #scene #cs-const, html.reading #scene .cs-horizon { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .35s, visibility 0s .35s; }
 @media (max-width: 800px) { #scene .cs-star .lab { font-size: .68rem; letter-spacing: .06em; } }
 
-#scene .cs-persee { position: absolute; inset: 0; pointer-events: none; }
-#scene .cs-persee svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-#scene .cs-persee line { stroke: rgba(200,215,255,.2); stroke-width: 1; }
-#scene .cs-persee .ps { position: absolute; left: 0; top: 0; width: 0; height: 0; }
-#scene .cs-persee .ps::before { content: ''; position: absolute; width: var(--s); height: var(--s); left: calc(var(--s) / -2); top: calc(var(--s) / -2); border-radius: 50%; background: #fff; box-shadow: 0 0 6px 1px rgba(210,225,255,.9), 0 0 16px 4px rgba(150,180,255,.35); }
-#scene .cs-persee .ps i { position: absolute; left: 10px; top: 6px; white-space: nowrap; font: italic .7rem/1 var(--font-body, inherit); letter-spacing: .06em; color: rgba(215,225,255,.62); }
-#scene .cs-persee .ps.algol::before { animation: csAlgol 11s ease-in-out infinite; }
-@keyframes csAlgol { 0%, 82%, 100% { opacity: 1; } 90% { opacity: .35; } }
-#scene .cs-persee .pt { position: absolute; left: 0; top: 0; font: .68rem/1 var(--font-mono, monospace); letter-spacing: .32em; text-transform: uppercase; color: rgba(190,205,255,.5); }
+#scene #cs-const { transition: opacity .7s, transform .8s ease-out; }
+#scene .cs-dot { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; }
+#scene .cs-dot::before { content: ''; position: absolute; width: var(--s); height: var(--s); left: calc(var(--s) / -2); top: calc(var(--s) / -2); border-radius: 50%; background: #fff; box-shadow: 0 0 6px 1px rgba(210,225,255,.9), 0 0 16px 4px rgba(150,180,255,.35); }
+#scene .cs-dot i, #scene .cs-star .real { position: absolute; left: 10px; top: 6px; white-space: nowrap; font: italic .7rem/1 var(--font-body, inherit); letter-spacing: .06em; color: rgba(215,225,255,.55); pointer-events: none; }
+#scene .cs-star .real { top: 32px; left: 14px; }
+#scene .cs-title { position: absolute; left: 0; top: 0; font: .7rem/1 var(--font-mono, monospace); letter-spacing: .34em; text-transform: uppercase; color: rgba(190,205,255,.5); pointer-events: none; }
+#scene .cs-star .tip { position: absolute; left: 22px; top: -62px; min-width: 190px; max-width: 250px; padding: 9px 12px; border-radius: 9px; background: rgba(8,12,28,.9); border: 1px solid rgba(197,161,255,.35); box-shadow: 0 8px 26px rgba(0,0,0,.5); opacity: 0; transform: translateY(4px); transition: opacity .2s, transform .2s; pointer-events: none; z-index: 3; }
+#scene .cs-star .tip b { display: block; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: #fff; }
+#scene .cs-star .tip em { display: block; margin-top: 3px; font-style: normal; font-size: .76rem; line-height: 1.4; color: #b9bfdc; }
+#scene .cs-star button:hover ~ .tip, #scene .cs-star button:focus-visible ~ .tip { opacity: 1; transform: none; }
+#scene .hero p.sub { font-family: var(--font-body); text-transform: none; letter-spacing: 0; font-size: 13px; line-height: 1.55; color: #9aa1c4; max-width: 380px; }
+#scene #cs-lines line { stroke: rgba(190,205,255,.3); }
+#scene .cs-dot::before { filter: brightness(1.15); }
