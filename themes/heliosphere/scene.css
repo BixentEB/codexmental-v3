@@ -340,3 +340,10 @@ body.nm-menus #scene .pl.pl-info .lbl, body.nm-objects #scene .pl.pl-menu .lbl {
 body.nm-objects.nm-objn #scene .pl.pl-menu .lbl { display: block !important; }
 body.nm-objects.nm-objn #scene .pl.pl-menu .lbl b, body.nm-objects.nm-objn #scene .pl.pl-menu .lbl i { display: none; }
 body.nm-objects.nm-objn #scene .pl.pl-menu .lbl em.objn { display: block; }
+
+#scene .hl-lead { position: fixed; z-index: 7; left: clamp(18px,4vw,68px); bottom: clamp(48px,7vh,80px); max-width: 430px; margin: 0; font-size: .86rem; line-height: 1.6; color: #d9d3c6; text-shadow: 0 2px 14px #000, 0 0 3px #000; pointer-events: none; }
+@media (max-width: 900px), (max-height: 640px) { #scene .hl-lead { display: none; } }
+@media (min-width: 901px) and (min-height: 641px) {
+  #scene .wrap>h1 { top: 84px !important; bottom: auto !important; }
+  #scene .hl-lead { top: 196px; bottom: auto; }
+}

@@ -77,6 +77,19 @@ function place(){var W=innerWidth,H=innerHeight,mob=W<800;
   lines.forEach(function(l,i){l.setAttribute('x1',STARS[i]._x);l.setAttribute('y1',STARS[i]._y);l.setAttribute('x2',STARS[i+1]._x);l.setAttribute('y2',STARS[i+1]._y)});
 }
 place(); addEventListener('resize',place);
+/* Persée : constellation décorative — le héros qui regarde Méduse dans son bouclier-miroir (voir Portrait · Mythes) */
+var PER=[{x:.50,y:.82,n:'Algol',s:3.4,k:'L’œil de la Gorgone'},{x:.545,y:.765,s:1.8},{x:.605,y:.715,n:'Mirfak',s:3.2},{x:.665,y:.745,s:2},{x:.715,y:.805,s:2.4},{x:.745,y:.875,s:2},{x:.59,y:.655,s:2},{x:.645,y:.625,s:1.8},{x:.685,y:.69,s:1.6}];
+var PEDGE=[[0,1],[1,2],[2,3],[3,4],[4,5],[2,6],[6,7],[3,8]];
+var pbox=document.createElement('div'); pbox.className='cs-persee'; pbox.setAttribute('aria-hidden','true'); box.appendChild(pbox);
+var psvg=document.createElementNS(NS,'svg'); pbox.appendChild(psvg); var pl=PEDGE.map(function(){var l=document.createElementNS(NS,'line'); psvg.appendChild(l); return l});
+var pe=PER.map(function(s,i){var d=document.createElement('span'); d.className='ps'+(i===0?' algol':''); d.style.setProperty('--s',s.s+'px'); if(s.n) d.innerHTML='<i>'+s.n+(s.k?' · '+s.k:'')+'</i>'; pbox.appendChild(d); return d});
+var ptitle=document.createElement('span'); ptitle.className='pt'; ptitle.textContent='Persée'; pbox.appendChild(ptitle);
+function placeP(){var W=innerWidth,H=innerHeight; pbox.style.display=W<900?'none':'';
+  PER.forEach(function(s,i){s._x=s.x*W; s._y=s.y*H; pe[i].style.transform='translate('+s._x+'px,'+s._y+'px)'});
+  PEDGE.forEach(function(e,i){var a=PER[e[0]],b=PER[e[1]]; pl[i].setAttribute('x1',a._x);pl[i].setAttribute('y1',a._y);pl[i].setAttribute('x2',b._x);pl[i].setAttribute('y2',b._y)});
+  ptitle.style.transform='translate('+(PER[2]._x+16)+'px,'+(PER[2]._y-34)+'px)';
+}
+placeP(); addEventListener('resize',placeP);
 addEventListener('pointermove',function(e){if(reduce)return;box.style.transform='translate('+((e.clientX/innerWidth-.5)*-10)+'px,'+((e.clientY/innerHeight-.5)*-7)+'px)'},{passive:true});
 /* étoiles filantes */
 var fx=document.getElementById('cs-fx'); if(!fx||reduce) return; var g=fx.getContext('2d'), m=null, W=0,H=0;

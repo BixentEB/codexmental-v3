@@ -86,25 +86,46 @@ void main(){
     neb *= 1. - .78 * lanes;
     col += neb * uDust * (1. - .65 * uDisc);
   }
-  // disque et jets de la protoétoile
+  // disque, cavité et jets de la protoétoile
   if (uDisc > .01) {
     vec2 p = rot(uv, dA); vec2 e = vec2(p.x, p.y * dRatio); float rd = length(e);
-    float disc = smoothstep(.045, .1, rd) * smoothstep(.44, .16, rd);
-    float rings = fbm(vec2(rd * 22. - uT * .05, atan(e.y, e.x) * 2. + uT * .08));
-    col += mix(uH, vec3(1., .9, .75), .35) * disc * (.18 + .8 * rings) * uDisc * (.55 + .45 * smoothstep(-.1, .1, -p.y));
-    float jet = exp(-pow(p.x / (.006 + abs(p.y) * .045), 2.)) * exp(-abs(p.y) * 3.2) * smoothstep(.05, .14, abs(p.y));
-    col += vec3(.55, .75, 1.) * jet * (.5 + .5 * fbm(vec2(p.y * 14. - uT * .6, p.x * 20.))) * uDisc * .8;
+    float ea = atan(e.y, e.x);
+    // cavité bipolaire : nébuleuse par réflexion, deux cônes de poussière éclairée
+    float cone = exp(-pow(p.x / (.035 + abs(p.y) * .55), 2.)) * exp(-abs(p.y) * 2.6) * smoothstep(.02, .12, abs(p.y));
+    col += mix(uH, vec3(.75, .8, 1.), .4) * cone * (.25 + .75 * fbm(vec2(p.x * 9., p.y * 7. - uT * .02))) * uDisc * .55;
+    // disque : anneaux et lacunes, bord interne chaud, bord externe irrégulier
+    float edge = .38 + .06 * fbm(vec2(ea * 3., 4.));
+    float disc = smoothstep(.04, .075, rd) * smoothstep(edge, edge * .45, rd);
+    float rings = fbm(vec2(rd * 30. - uT * .04, ea * 1.6 + uT * .06));
+    float gaps = .55 + .45 * smoothstep(.2, .8, sin(rd * 46. + 1.7 * fbm(vec2(rd * 9., 2.))));
+    vec3 dcol = mix(vec3(1., .78, .5), uH, smoothstep(.05, .32, rd)) * (1. + 2.4 * exp(-(rd - .05) * 22.));
+    col += dcol * disc * (.12 + .62 * rings) * gaps * uDisc * (.55 + .45 * smoothstep(-.1, .1, -p.y));
+    // bande de poussière : l'avant du disque occulte le cœur
+    float lane = exp(-pow(e.y / (.012 + .02 * rd), 2.)) * smoothstep(.34, .06, rd) * smoothstep(.03, .06, rd);
+    col *= 1. - .6 * lane * uDisc;
+    // jet : mince, dentelé en nœuds de choc (objet Herbig-Haro), léger balancement
+    float wob = sin(p.y * 7. + uT * .25) * .006 * abs(p.y);
+    float jw = .0045 + abs(p.y) * .02;
+    float jet = exp(-pow((p.x - wob) / jw, 2.)) * exp(-abs(p.y) * 2.4) * smoothstep(.06, .16, abs(p.y));
+    float knots = .3 + 1.3 * pow(.5 + .5 * sin(abs(p.y) * 17. - uT * .5 + 3. * fbm(vec2(abs(p.y) * 6., 1.))), 5.);
+    vec3 jc = mix(vec3(1., .42, .38), vec3(.6, .8, 1.), smoothstep(.1, .8, abs(p.y)));
+    col += jc * jet * knots * (.5 + .5 * fbm(vec2(p.y * 12. - uT * .5, p.x * 40.))) * uDisc * .55;
   }
-  // coquille : nébuleuse planétaire ou rémanent de supernova
+  // coquille : nébuleuse planétaire (anneau elliptique, filaments, halo) ou rémanent de supernova
   if (uShell > .01) {
-    float s0 = .12 + .12 * uShell, th = mix(.032, .075, uMass);
-    float nz = fbm(uv * mix(8., 15., uMass) + uT * .02), nz2 = fbm(uv * 22. - uT * .03);
-    float rim = exp(-pow((r - s0 * (.92 + .16 * nz)) / th, 2.));
-    vec3 inner = mix(vec3(.25, .75, 1.), vec3(.9, .35, .55), uMass), outer = mix(vec3(1., .5, .22), vec3(.35, .55, 1.), uMass);
-    vec3 sc = mix(inner, outer, smoothstep(s0 - th, s0 + th * 1.4, r));
-    float fil = mix(1., pow(nz2, 2.2) * 3.2, uMass);
-    col += sc * rim * (.35 + 1.1 * nz) * fil * .9;
-    col += inner * exp(-pow(r / (s0 * .9), 2.)) * .12 * (.5 + nz);
+    float s0 = .12 + .12 * uShell, th = mix(.03, .075, uMass);
+    vec2 pq = rot(uv, .5); float ell = mix(1.32, 1., uMass); vec2 ue = vec2(pq.x, pq.y * ell); float re = length(ue), ae = atan(ue.y, ue.x);
+    float nz = fbm(uv * mix(9., 15., uMass) + uT * .02), nz2 = fbm(uv * 26. - uT * .03);
+    float lob = 1. + mix(.75, 0., uMass) * cos(2. * ae);           // les bords du « tore » brillent davantage
+    float rim = exp(-pow((re - s0 * (.92 + .14 * nz)) / th, 2.));
+    vec3 inner = mix(vec3(.25, .85, .8), vec3(.9, .35, .55), uMass), outer = mix(vec3(1., .38, .3), vec3(.35, .55, 1.), uMass);
+    vec3 sc = mix(inner, outer, smoothstep(s0 - th, s0 + th * 1.5, re));
+    float fil = mix(.25 + 2.6 * pow(nz2, 2.), pow(nz2, 2.2) * 3.2, uMass);
+    col += sc * rim * (.3 + 1.2 * nz) * fil * lob * .85;
+    // seconde coque ténue (vent de la géante), à bord net
+    float halo2 = smoothstep(s0 * 1.9, s0 * 1.55, re) * smoothstep(s0 * .6, s0 * 1.4, re);
+    col += outer * halo2 * (.04 + .08 * nz) * (1. - uMass);
+    col += inner * exp(-pow(re / (s0 * .85), 2.)) * (.1 + .08 * nz) * (1. - .5 * uMass);
   }
   // étoile
   float R = uR * (1. + uPuls * .028 * sin(uT * 1.3)); float x = r / max(R, .0008);
@@ -130,6 +151,7 @@ void main(){
       col += vec3(1., .35, .18) * arch * .9 * smoothstep(.98, 1.02, x);
     }
   }
+  if (uR > 0. && uR < .012) { float sk = exp(-abs(uv.y) * 380.) * exp(-abs(uv.x) * 7.) + exp(-abs(uv.x) * 380.) * exp(-abs(uv.y) * 7.); col += mix(uH, vec3(1.), .5) * sk * .5 * uGlow; }
   // faisceaux du pulsar
   if (uBeams > .01) {
     vec2 p = rot(uv, uT * 1.05 + .6 + uYaw);

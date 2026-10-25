@@ -315,7 +315,7 @@ var SUN_FRAG = [
 'varying vec3 vObj; varying vec3 vN; varying vec3 vV;',
 GLSL_COMMON,
 'vec3 ramp(float h){',
-'  vec3 a=vec3(0.45,0.08,0.0); vec3 b=vec3(0.95,0.32,0.02); vec3 c=vec3(1.0,0.66,0.18); vec3 d=vec3(1.0,0.93,0.65);',
+'  vec3 a=vec3(0.42,0.12,0.02); vec3 b=vec3(0.92,0.46,0.12); vec3 c=vec3(1.0,0.78,0.42); vec3 d=vec3(1.0,0.96,0.82);',
 '  if(h<0.4) return mix(a,b,h/0.4);',
 '  if(h<0.7) return mix(b,c,(h-0.4)/0.3);',
 '  return mix(c,d,clamp((h-0.7)/0.3,0.0,1.0));',
@@ -327,13 +327,13 @@ GLSL_COMMON,
 '  float g1=fbm(p*5.0+vec3(0.0,0.0,t*0.05),fw*5.0);',
 '  float g2=snoise(p*22.0+vec3(t*0.2,0.0,0.0))*(1.0-smoothstep(0.2,0.8,fw*22.0));',
 '  float g3=snoise(p*60.0+vec3(0.0,t*0.3,0.0))*(1.0-smoothstep(0.2,0.8,fw*60.0));',
-'  float spot=smoothstep(0.30,0.55,fbm(p*1.6+vec3(4.0),fw*1.6));',
-'  float heat=0.64+0.17*g1+0.09*g2+0.04*g3-0.34*spot;',
+'  float spot=smoothstep(0.42,0.6,fbm(p*2.4+vec3(4.0),fw*2.4))*0.8;',
+'  float heat=0.7+0.1*g1+0.12*g2+0.07*g3-0.3*spot;',
 '  float mu=clamp(dot(normalize(vN),normalize(vV)),0.0,1.0);',
-'  float limb=0.38+0.62*pow(mu,0.5);',
+'  float limb=0.3+0.7*pow(mu,0.55);',
 '  heat*=limb;',
 '  vec3 col=ramp(clamp(heat,0.0,1.0));',
-'  col*=1.25+1.1*pow(clamp(heat,0.0,1.0),3.0);',
+'  col*=1.2+1.0*pow(clamp(heat,0.0,1.0),3.0); col=mix(col,col*vec3(1.0,0.78,0.6),(1.0-mu)*0.6);',
 '  gl_FragColor=vec4(col,1.0);',
 '}'
 ].join('\n');
@@ -578,7 +578,7 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
     g.fillStyle = gr; g.fillRect(0, 0, 256, 256);
     var tx = new T.CanvasTexture(c); return tx;
   }
-  var glowTexA = glowTexture([[0, 'rgba(255,205,130,0.85)'], [.16, 'rgba(255,150,60,0.45)'], [.4, 'rgba(255,100,30,0.14)'], [1, 'rgba(255,80,20,0)']]);
+  var glowTexA = glowTexture([[0, 'rgba(255,238,205,0.85)'], [.16, 'rgba(255,185,105,0.4)'], [.4, 'rgba(255,125,50,0.12)'], [1, 'rgba(255,90,30,0)']]);
   var glowTexB = glowTexture([[0, 'rgba(255,170,90,0.28)'], [.3, 'rgba(255,120,50,0.10)'], [1, 'rgba(255,90,30,0)']]);
   function glowSprite(tex, size) {
     var sp = new T.Sprite(new T.SpriteMaterial({ map: tex, blending: T.AdditiveBlending, depthWrite: false, transparent: true }));

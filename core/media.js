@@ -54,10 +54,38 @@
       if (after && !g.contains(after)) { after.after(g); if (credit) g.after(credit); }
     });
   }
+  /* ---------- illustrations Wikimedia : une requête de recherche -> une image libre + son crédit ---------- */
+  var WK = {}; try { WK = JSON.parse(localStorage.getItem('codex.wk') || '{}'); } catch (e) {}
+  function wkSave() { try { localStorage.setItem('codex.wk', JSON.stringify(WK)); } catch (e) {} }
+  function wkFill(fig, d) {
+    var img = new Image(); img.alt = d.t; img.className = 'th'; img.tabIndex = 0; img.setAttribute('role', 'button');
+    img.setAttribute('aria-label', 'Agrandir l’image : ' + d.t); img.dataset.full = d.f; img.decoding = 'async'; img.loading = 'lazy';
+    img.onerror = function () { fig.remove(); };
+    img.src = d.s; fig.classList.add('th-fig');
+    var c = document.createElement('figcaption'); c.innerHTML = '<span></span><small></small>';
+    c.firstChild.textContent = d.t; c.lastChild.textContent = [d.a, d.l, 'Wikimedia Commons'].filter(Boolean).join(' · ');
+    fig.append(img, c);
+  }
+  function resolveWiki(root) {
+    root.querySelectorAll('figure.wk[data-q]').forEach(function (fig) {
+      var q = fig.getAttribute('data-q');
+      if (WK[q]) return wkFill(fig, WK[q]);
+      var u = 'https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrlimit=1&gsrsearch=' + encodeURIComponent(q + ' filetype:bitmap') +
+        '&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=' + THUMB + '&iiextmetadatafilter=LicenseShortName|Artist|ObjectName';
+      fetch(u).then(function (r) { return r.json(); }).then(function (j) {
+        var pg = j && j.query && j.query.pages && Object.keys(j.query.pages).map(function (k) { return j.query.pages[k]; })[0];
+        var ii = pg && pg.imageinfo && pg.imageinfo[0]; if (!ii) throw 0;
+        var m = ii.extmetadata || {}, strip = function (x) { return x ? String(x.value).replace(/<[^>]*>/g, '').trim().slice(0, 60) : ''; };
+        var name = pg.title.replace(/^File:/, '').replace(/\.[a-z]+$/i, '').replace(/_/g, ' ');
+        var d = { s: ii.thumburl || ii.url, f: sized(ii.url, FULL), t: strip(m.ObjectName) || name, a: strip(m.Artist), l: strip(m.LicenseShortName) };
+        WK[q] = d; wkSave(); wkFill(fig, d);
+      }).catch(function () { fig.remove(); });
+    });
+  }
   function enhance(root) {
     root = root || main;
     var prose = root.querySelector('.prose'); if (!prose) return;
-    restructureRefs(prose); moveGalleries(prose);
+    restructureRefs(prose); moveGalleries(prose); resolveWiki(prose);
     var n = 0;
     prose.querySelectorAll('img').forEach(function (img) {
       if (img.closest('.codex-nexus-person') || img.classList.contains('astra-avatar') || img.dataset.thumb === 'no') return;
