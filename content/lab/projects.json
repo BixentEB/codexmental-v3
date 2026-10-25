@@ -1,5 +1,21 @@
 {
- "intro": "Une vitrine de mes créations, pas une boutique : rien n'est annoncé qui n'existe pas. Les fiches complètes viendront dans un espace indépendant.",
+ "intro": "",
+ "official": {
+  "label": "Laboratoire officiel",
+  "url": "https://lab.codexmental.com",
+  "host": "lab.codexmental.com",
+  "note": "ouverture prochaine"
+ },
+ "tabs": [
+  {
+   "id": "cours",
+   "label": "Projets en cours"
+  },
+  {
+   "id": "reflexion",
+   "label": "En réflexion"
+  }
+ ],
  "palette": {
   "Windows": "#8cc7ff",
   "Android": "#8cc7ff",
@@ -34,12 +50,12 @@
   "Jeu": "#ff9fa8",
   "Science": "#9fe3e8",
   "Physique": "#9fe3e8",
-  "Recherche": "#9fe3e8"
+  "Recherche": "#9fe3e8",
+  "JavaScript": "#a6d9f5"
  },
  "projects": [
   {
    "id": "noxdl",
-   "group": "Applications",
    "name": "NoxDL",
    "mark": "↓",
    "accent": "#94c8ff",
@@ -65,11 +81,11 @@
     "Multimédia",
     "Automatisation",
     "Bêta"
-   ]
+   ],
+   "tab": "cours"
   },
   {
    "id": "perimgo-home",
-   "group": "Applications",
    "name": "Périm-GO Home",
    "mark": "◷",
    "accent": "#92e5b5",
@@ -95,11 +111,11 @@
     "Gestion",
     "Quotidien",
     "En développement"
-   ]
+   ],
+   "tab": "cours"
   },
   {
    "id": "perimgo-business",
-   "group": "Applications",
    "name": "Périm-GO Business",
    "mark": "◷",
    "accent": "#71d9bc",
@@ -125,11 +141,11 @@
     "Commerce",
     "Stock",
     "Accès privé"
-   ]
+   ],
+   "tab": "cours"
   },
   {
    "id": "dexlibera",
-   "group": "Applications",
    "name": "DexLibera",
    "mark": "❖",
    "accent": "#e8c98a",
@@ -155,11 +171,11 @@
     "Bibliothèque",
     "Culture",
     "Bêta"
-   ]
+   ],
+   "tab": "cours"
   },
   {
    "id": "codex-mental",
-   "group": "Sites et personnalisation",
    "name": "Codex Mental",
    "mark": "✦",
    "accent": "#ffc27a",
@@ -169,7 +185,7 @@
    "features": [
     "Codex, Atelier, Laboratoire, Observatoire, Portrait",
     "Recherche et consultation d'articles",
-    "Quatre à six univers interchangeables"
+    "Plusieurs univers visuels interchangeables"
    ],
    "tech": "HTML, CSS, JavaScript, moteurs graphiques Web",
    "next": "",
@@ -183,11 +199,12 @@
     "Création",
     "Immersif",
     "Site public"
-   ]
+   ],
+   "tab": "cours",
+   "link": "Vous y êtes"
   },
   {
    "id": "css-chatgpt",
-   "group": "Sites et personnalisation",
    "name": "CSS ChatGPT personnalisé",
    "mark": "❏",
    "accent": "#f0a9d0",
@@ -211,111 +228,126 @@
     "Personnalisation",
     "UX/UI",
     "Expérimental"
-   ]
+   ],
+   "tab": "cours"
   },
   {
    "id": "heures-sacrees",
-   "group": "Concepts et expériences",
    "name": "Heures Sacrées",
    "mark": "◔",
    "accent": "#d8b4a0",
    "platform": "Python de bureau (version conservée à confirmer)",
-   "summary": "Les heures symboliques, leurs interprétations et leur suivi personnel.",
-   "detail": "Ancien prototype à reprendre et à vérifier. Onglets Journal, Lexique et Grilles ; thème jour/nuit envisagé.",
-   "features": [
-    "Consultation d'interprétations",
-    "Lexique",
-    "Journal personnel"
+   "concept": "Une application autour des heures symboliques, de leurs interprétations et de leur suivi personnel.",
+   "goal": "Reprendre l'ancien prototype et vérifier ce qui mérite d'être conservé.",
+   "ideas": [
+    "Onglets Journal, Lexique et Grilles",
+    "Thème jour / nuit",
+    "Fichiers JSON locaux"
    ],
-   "tech": "Python, fichiers JSON locaux",
-   "next": "",
-   "state": "Ancien prototype à reprendre",
-   "access": "Non disponible",
-   "diffusion": "Non définie",
-   "license": "À définir",
-   "download": "Aucun livrable complet confirmé",
    "tags": [
     "Python",
     "Symbolisme",
     "Journal",
     "Prototype"
-   ]
+   ],
+   "tab": "reflexion"
   },
   {
-   "id": "widget-photo",
-   "group": "Concepts et expériences",
-   "name": "Widget photo Android",
+   "id": "widgets-android",
+   "name": "Widgets Android",
    "mark": "▣",
    "accent": "#f0a9d0",
    "platform": "Android",
-   "summary": "Un widget d'écran d'accueil qui fait tourner une sélection de photographies.",
-   "detail": "Rotation d'une grande collection, intervalle personnalisable, nom du widget, formes de cadres dessinées par l'utilisateur, lissage des contours.",
-   "features": [
-    "Rotation de photos",
-    "Intervalle personnalisable",
-    "Cadres dessinés et contours lissés"
+   "concept": "Un widget d'écran d'accueil qui fait tourner une sélection de photographies.",
+   "goal": "Afficher une grande collection de photos, avec un réglage simple de l'intervalle et du nom du widget.",
+   "ideas": [
+    "Cadres aux formes dessinées par l'utilisateur",
+    "Contours lissés",
+    "Version Lite gratuite et Premium envisagées"
    ],
-   "tech": "À déterminer",
-   "next": "",
-   "state": "Concept en conception",
-   "access": "Non disponible",
-   "diffusion": "Version Lite gratuite et Premium envisagées",
-   "license": "Propriétaire envisagée, non arrêtée",
-   "download": "Aucun",
    "tags": [
     "Android",
     "Widget",
     "Photo",
-    "Personnalisation",
     "Concept"
-   ]
+   ],
+   "tab": "reflexion"
   },
   {
    "id": "mini-rpg",
-   "group": "Concepts et expériences",
    "name": "Mini-RPG",
    "mark": "⚔",
    "accent": "#ff9fa8",
    "platform": "À définir",
-   "summary": "Un jeu de rôle numérique dont les mécaniques et l'univers restent à concevoir.",
-   "detail": "Idée à l'état de concept.",
-   "features": [],
-   "tech": "À définir",
-   "next": "",
-   "state": "Idée / concept",
-   "access": "Non disponible",
-   "diffusion": "À définir",
-   "license": "À définir",
-   "download": "Aucun",
+   "concept": "Un petit jeu de rôle numérique.",
+   "goal": "Concevoir les mécaniques et l'univers.",
+   "ideas": [
+    "Tout reste à définir"
+   ],
    "tags": [
     "Jeu",
     "Création",
     "Concept"
-   ]
+   ],
+   "tab": "reflexion"
   },
   {
    "id": "nox-electron-lab",
-   "group": "Concepts et expériences",
    "name": "NOX Electron Lab",
    "mark": "⚛",
    "accent": "#9fe3e8",
-   "platform": "Non définie (simulation numérique envisagée)",
-   "summary": "Expériences physiques miniaturisées, simulation et observation de phénomènes liés aux particules.",
-   "detail": "Exploration théorique, à ce stade purement conceptuelle.",
-   "features": [],
-   "tech": "À déterminer",
-   "next": "",
-   "state": "Recherche conceptuelle",
-   "access": "Non disponible",
-   "diffusion": "Non définie",
-   "license": "Sans objet à ce stade",
-   "download": "Aucun",
+   "platform": "Non définie",
+   "concept": "Expériences physiques miniaturisées, simulation et observation de phénomènes liés aux particules.",
+   "goal": "Explorer l'idée sur le plan théorique.",
+   "ideas": [
+    "Simulation numérique éventuelle"
+   ],
    "tags": [
     "Science",
     "Physique",
     "Recherche",
     "Concept"
-   ]
+   ],
+   "tab": "reflexion"
+  },
+  {
+   "id": "widgets-windows",
+   "name": "Widgets Windows",
+   "mark": "▤",
+   "accent": "#8cc7ff",
+   "platform": "Windows",
+   "concept": "Des widgets pour le bureau Windows.",
+   "goal": "À préciser.",
+   "ideas": [
+    "Pistes à préciser"
+   ],
+   "tags": [
+    "Windows",
+    "Widget",
+    "Concept"
+   ],
+   "tab": "reflexion"
+  },
+  {
+   "id": "gestionnaire-css-js",
+   "name": "Gestionnaire CSS/JS (nom provisoire)",
+   "mark": "{ }",
+   "accent": "#a6d9f5",
+   "platform": "Navigateur Web",
+   "concept": "Un gestionnaire de personnalisations pour sites Web, dans l'esprit de Stylus, mais intégrant aussi le JavaScript.",
+   "goal": "Activer ou désactiver chaque personnalisation indépendamment, site par site.",
+   "ideas": [
+    "Profils CSS et JS",
+    "Extension de navigateur",
+    "Point de départ : le CSS ChatGPT personnalisé"
+   ],
+   "tags": [
+    "Web",
+    "CSS",
+    "JavaScript",
+    "Concept"
+   ],
+   "tab": "reflexion"
   }
  ]
 }

@@ -15,7 +15,7 @@
     sun: { label: 'Étoile comme le Soleil', stages: [
       { id: 'atelier', menu: 1, name: 'Nébuleuse natale', dur: 'des millions d’années', text: 'Un nuage froid de gaz et de poussière s’effondre sur lui-même. Rien ne brille encore : tout est promesse. Ici vit l’Atelier, là où l’on range les idées avant qu’elles ne prennent forme.', p: P({ dust: 1, h: [255, 140, 110], glow: .05 }) },
       { id: 'lab', menu: 1, name: 'Protoétoile', dur: '≈ 50 millions d’années', text: 'Le cœur s’échauffe, un disque tourne autour. L’étoile n’est pas encore née, mais elle chauffe déjà. Le Laboratoire : ce qui se matérialise.', p: P({ r: .028, c: [255, 220, 180], h: [255, 150, 90], glow: .55, dust: .45, disc: 1 }) },
-      { id: 'codex', menu: 1, name: 'Séquence principale', dur: '≈ 10 milliards d’années', text: 'La fusion de l’hydrogène s’allume et l’équilibre dure. C’est le long présent d’une étoile, celui du Soleil aujourd’hui. Le Codex : le temps des articles et des réflexions.', p: P({ r: .075, c: [255, 243, 205], h: [255, 190, 90], glow: 1, rays: 1 }) },
+      { id: 'codex', menu: 1, name: 'Séquence principale', dur: '≈ 10 milliards d’années', text: 'La fusion de l’hydrogène s’allume et l’équilibre dure. C’est le long présent d’une étoile, celui du Soleil aujourd’hui. Le Codex : le temps des articles et des réflexions.', p: P({ r: .075, c: [255, 228, 165], h: [255, 168, 70], glow: 1, rays: 1 }) },
       { id: 'dashb', menu: 1, name: 'Géante rouge', dur: '≈ 1 milliard d’années', text: 'L’hydrogène du cœur est épuisé : l’étoile enfle, rougit, avale ses planètes proches. L’Observatoire : on regarde de loin ce qui change.', p: P({ r: .24, c: [255, 190, 130], h: [235, 70, 40], glow: .9, puls: 1 }) },
       { id: null, name: 'Nébuleuse planétaire', dur: '≈ 20 000 ans', text: 'Les couches externes s’échappent doucement et forment une coquille lumineuse. Elle n’a rien à voir avec les planètes : c’est un vieux nom.', p: P({ r: .02, c: [230, 245, 255], h: [120, 200, 255], glow: .8, shell: 1 }) },
       { id: 'profil', menu: 1, name: 'Naine blanche', dur: 'des milliards d’années à refroidir', text: 'Il ne reste que le cœur, petit comme la Terre et très dense, qui se refroidit lentement. Le Portrait : ce qui reste quand on ne garde que l’essentiel.', p: P({ r: .016, c: [245, 250, 255], h: [150, 190, 255], glow: .7 }) }
@@ -59,24 +59,24 @@
   function rgba(c, a) { return 'rgba(' + (c[0] | 0) + ',' + (c[1] | 0) + ',' + (c[2] | 0) + ',' + a + ')'; }
   function blob(x, y, r, c, a) { var gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, rgba(c, a)); gr.addColorStop(1, rgba(c, 0)); g.fillStyle = gr; g.beginPath(); g.arc(x, y, r, 0, 6.2832); g.fill(); }
 
-  var clock = 0;
+  var clock = 0, view = { z: 1, yaw: 0, pitch: .3, tz: 1 };
 
   /* ---------- rendu réaliste WebGL (un seul shader plein écran) ---------- */
   var FRAG = `
 precision highp float;
-uniform vec2 uRes, uCen; uniform float uT, uR, uGlow, uDust, uDisc, uShell, uFlash, uBeams, uRays, uPuls, uMass; uniform vec3 uC, uH;
+uniform vec2 uRes, uCen; uniform float uZoom, uYaw, uPitch; uniform float uT, uR, uGlow, uDust, uDisc, uShell, uFlash, uBeams, uRays, uPuls, uMass; uniform vec3 uC, uH;
 float h21(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
 float vn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f); return mix(mix(h21(i), h21(i + vec2(1., 0.)), f.x), mix(h21(i + vec2(0., 1.)), h21(i + vec2(1., 1.)), f.x), f.y); }
 float fbm(vec2 p){ float v = 0., a = .5; for (int i = 0; i < 6; i++) { v += a * vn(p); p = p * 2.02 + vec2(5.2, 1.3); a *= .5; } return v; }
 vec2 rot(vec2 p, float a){ float c = cos(a), s = sin(a); return vec2(c * p.x - s * p.y, s * p.x + c * p.y); }
 void main(){
-  float m = min(uRes.x, uRes.y); vec2 uv = (gl_FragCoord.xy - uCen) / m; float r = length(uv), ang = atan(uv.y, uv.x);
+  float m = min(uRes.x, uRes.y); vec2 uv = (gl_FragCoord.xy - uCen) / m / uZoom; float r = length(uv), ang = atan(uv.y, uv.x); float dA = -.38 + uYaw * .55, dRatio = mix(7., 1.15, smoothstep(0., 1.25, abs(uPitch + .1)));
   vec3 col = vec3(.004, .003, .009);
   // champ d'étoiles lointaines
-  vec2 sp = gl_FragCoord.xy / 3.5; float s = h21(floor(sp)); 
+  vec2 sp = (gl_FragCoord.xy + vec2(uYaw, -uPitch) * 60.) / 3.5; float s = h21(floor(sp)); 
   if (s > .972) { float d = length(fract(sp) - .5); float b = pow((s - .972) / .028, 4.) * smoothstep(.42, .0, d); float tw = .75 + .25 * sin(uT * (1. + s * 4.) + s * 50.); vec3 tint = mix(vec3(.7, .8, 1.), vec3(1., .85, .7), h21(floor(sp) + 3.1)); col += tint * b * tw * 1.3; }
   // nébuleuse : gaz, poussière sombre, lumière diffusée
-  float t = uT * .012; vec2 q = uv * 1.5;
+  float t = uT * .012; vec2 q = uv * 1.5 + vec2(uYaw, -uPitch) * .18;
   if (uDust > .01) {
     vec2 w = vec2(fbm(q * 1.4 + t), fbm(q * 1.4 + 7. - t)); float n = fbm(q * 2.1 + w * 1.8), n2 = fbm(q * 4.6 - w * 2.2 + 3.);
     float gas = smoothstep(.32, .86, n);
@@ -88,7 +88,7 @@ void main(){
   }
   // disque et jets de la protoétoile
   if (uDisc > .01) {
-    vec2 p = rot(uv, -.38); vec2 e = vec2(p.x, p.y * 4.2); float rd = length(e);
+    vec2 p = rot(uv, dA); vec2 e = vec2(p.x, p.y * dRatio); float rd = length(e);
     float disc = smoothstep(.045, .1, rd) * smoothstep(.44, .16, rd);
     float rings = fbm(vec2(rd * 22. - uT * .05, atan(e.y, e.x) * 2. + uT * .08));
     col += mix(uH, vec3(1., .9, .75), .35) * disc * (.18 + .8 * rings) * uDisc * (.55 + .45 * smoothstep(-.1, .1, -p.y));
@@ -110,25 +110,29 @@ void main(){
   float R = uR * (1. + uPuls * .028 * sin(uT * 1.3)); float x = r / max(R, .0008);
   if (uR > 0.) {
     if (x < 1.) {
-      float mu = sqrt(1. - x * x); vec2 sp2 = uv / max(R, .001) / (mu * .85 + .15);
+      float mu = sqrt(1. - x * x); vec2 sp2 = uv / max(R, .001) / (mu * .85 + .15) + vec2(uYaw * 1.6 + uT * .004, uPitch * 1.1);
       float sc = mix(16., 2.6, smoothstep(.03, .3, uR));
       float g1 = fbm(sp2 * sc + uT * .04), g2 = fbm(sp2 * sc * 2.3 + g1 * 2. - uT * .03);
       float ld = 1. - .62 * (1. - mu);
-      vec3 base = mix(uH, uC, pow(mu, .55));
+      vec3 base = mix(uH, uC, pow(mu, .9));
       vec3 surf = base * (.72 + .55 * g1) * ld * (.9 + .35 * (g2 - .5));
-      float spots = smoothstep(.7, .8, fbm(sp2 * 1.6 + 11.)) * .32 * step(.04, uRays) * step(uR, .13);
+      float spots = smoothstep(.72, .82, fbm(sp2 * 3.4 + 11.)) * .22 * step(.04, uRays) * step(uR, .13);
       surf *= 1. - spots;
-      col = surf * 1.7 + col * .12;
+      col = surf * 1.3 + col * .12;
     }
     float d = max(r - R, 0.) / max(R, .001);
     float halo = uGlow * (.55 * exp(-d * 3.6) + .2 * exp(-d * 1.1) + .05 * exp(-d * .35));
     float stream = fbm(vec2(ang * 3.2 + sin(uT * .05) * 2., d * .8 + uT * .02));
     halo *= 1. + uRays * (stream - .42) * 1.5 * exp(-d * .5);
     if (x >= 1.) col += mix(uH, uC, .25) * halo * .95; else col += uH * halo * .12;
+    if (uRays > .04 && uR < .14 && x >= .98 && x < 1.5) {   // protubérances du bord
+      float pn = fbm(vec2(ang * 5. + uYaw * 2., uT * .06)); float arch = smoothstep(.6, .8, pn) * exp(-(x - 1.) * 9. / (.4 + pn));
+      col += vec3(1., .35, .18) * arch * .9 * smoothstep(.98, 1.02, x);
+    }
   }
   // faisceaux du pulsar
   if (uBeams > .01) {
-    vec2 p = rot(uv, uT * 1.05 + .6);
+    vec2 p = rot(uv, uT * 1.05 + .6 + uYaw);
     float w = .0035 + abs(p.x) * .05; float bm = exp(-pow(p.y / w, 2.)) * exp(-abs(p.x) * 2.6) * smoothstep(.0, .03, abs(p.x));
     col += vec3(.6, .78, 1.) * bm * uBeams * .9;
   }
@@ -149,13 +153,13 @@ void main(){
     if (prog) {
       gl.useProgram(prog); var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
       var loc = gl.getAttribLocation(prog, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-      ['uRes', 'uCen', 'uT', 'uR', 'uGlow', 'uDust', 'uDisc', 'uShell', 'uFlash', 'uBeams', 'uRays', 'uPuls', 'uMass', 'uC', 'uH'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
+      ['uRes', 'uCen', 'uZoom', 'uYaw', 'uPitch', 'uT', 'uR', 'uGlow', 'uDust', 'uDisc', 'uShell', 'uFlash', 'uBeams', 'uRays', 'uPuls', 'uMass', 'uC', 'uH'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
     } else { gl = null; g = cv.getContext('2d'); }
   }
   function drawGL() {
     var w = cv.width, h = cv.height, mass = cfg.path === 'massive' ? 1 : 0;
     gl.viewport(0, 0, w, h);
-    gl.uniform2f(U.uRes, w, h); gl.uniform2f(U.uCen, w * (.5 - cxShift * .2), h * (1 - .46)); gl.uniform1f(U.uT, clock);
+    gl.uniform2f(U.uRes, w, h); gl.uniform2f(U.uCen, w * (.5 - cxShift * .2), h * (1 - .46)); gl.uniform1f(U.uT, clock); gl.uniform1f(U.uZoom, view.z); gl.uniform1f(U.uYaw, view.yaw); gl.uniform1f(U.uPitch, view.pitch);
     gl.uniform1f(U.uR, cur.r); gl.uniform1f(U.uGlow, cur.glow); gl.uniform1f(U.uDust, cur.dust); gl.uniform1f(U.uDisc, cur.disc);
     gl.uniform1f(U.uShell, cur.shell); gl.uniform1f(U.uFlash, cur.flash); gl.uniform1f(U.uBeams, cur.beams); gl.uniform1f(U.uRays, cur.rays); gl.uniform1f(U.uPuls, cur.puls); gl.uniform1f(U.uMass, mass);
     gl.uniform3f(U.uC, cur.c[0] / 255, cur.c[1] / 255, cur.c[2] / 255); gl.uniform3f(U.uH, cur.h[0] / 255, cur.h[1] / 255, cur.h[2] / 255);
@@ -246,6 +250,21 @@ void main(){
     $('ve-speed').addEventListener('input', function (e) { cfg.speed = parseFloat(e.target.value); save(); });
   }
 
+
+  /* ---------- navigation : glisser pour tourner, molette ou pincement pour zoomer, double clic pour revenir ---------- */
+  var ptr = {}, pinch0 = 0;
+  cv.style.touchAction = 'none'; cv.style.cursor = 'grab';
+  cv.addEventListener('pointerdown', function (e) { ptr[e.pointerId] = { x: e.clientX, y: e.clientY }; try { cv.setPointerCapture(e.pointerId); } catch (x) {} cv.style.cursor = 'grabbing'; userHold = 25; var k = Object.keys(ptr); if (k.length === 2) pinch0 = Math.hypot(ptr[k[0]].x - ptr[k[1]].x, ptr[k[0]].y - ptr[k[1]].y); });
+  cv.addEventListener('pointermove', function (e) {
+    var p = ptr[e.pointerId]; if (!p) return; var dx = e.clientX - p.x, dy = e.clientY - p.y; p.x = e.clientX; p.y = e.clientY; var k = Object.keys(ptr);
+    if (k.length === 2) { var d = Math.hypot(ptr[k[0]].x - ptr[k[1]].x, ptr[k[0]].y - ptr[k[1]].y); if (pinch0) view.tz = clamp(view.tz * d / pinch0, .45, 4); pinch0 = d; }
+    else { view.yaw += dx * .006; view.pitch = clamp(view.pitch + dy * .005, -1.2, 1.2); }
+  });
+  function pend(e) { delete ptr[e.pointerId]; pinch0 = 0; if (!Object.keys(ptr).length) cv.style.cursor = 'grab'; }
+  cv.addEventListener('pointerup', pend); cv.addEventListener('pointercancel', pend);
+  cv.addEventListener('wheel', function (e) { e.preventDefault(); view.tz = clamp(view.tz * Math.exp(-e.deltaY * .0012), .45, 4); userHold = 25; }, { passive: false });
+  cv.addEventListener('dblclick', function () { view.tz = 1; view.yaw = 0; view.pitch = .3; });
+
   /* ---------- boucle ---------- */
   function resize() { W = window.innerWidth; H = window.innerHeight; dpr = Math.min(2, window.devicePixelRatio || 1); dpr = Math.min(gl ? 1.5 : 2, window.devicePixelRatio || 1); cv.width = W * dpr; cv.height = H * dpr; }
   window.addEventListener('resize', resize); resize();
@@ -256,6 +275,7 @@ void main(){
     var dt = Math.min(.05, (now - last) / 1000); last = now; clock += dt;
     var reading = document.documentElement.classList.contains('reading');
     cxShift += ((reading ? 1 : 0) - cxShift) * Math.min(1, dt * 4);
+    view.z += (view.tz - view.z) * Math.min(1, dt * 6);
     stepAnim(dt); since += dt; if (to.flash) cur.flash = to.flash * Math.max(.07, 1 - since / 4.5);
     if (userHold > 0) userHold -= dt;
     else if (cfg.auto && !reading && !reduce) { timer += dt * cfg.speed; if (timer > 9) { goStage((stage + 1) % 6); } }

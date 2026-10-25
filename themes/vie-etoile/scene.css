@@ -21,3 +21,6 @@ html.reading #scene .ve-card { top: calc(var(--topbar-h) + 34px); }
 @media (prefers-reduced-motion: reduce) { #scene * { transition: none !important; } }
 html.reading #scene .ve-time { left: 10px; transform: none; max-width: calc(44vw - 20px); overflow-x: auto; }
 #scene .ve-time .ve-path { white-space: nowrap; }
+#scene .ve-hint { position: fixed; z-index: 3; left: clamp(18px, 4vw, 64px); bottom: 96px; margin: 0; font-size: .7rem; letter-spacing: .06em; color: var(--muted); pointer-events: none; transition: opacity .4s; }
+html.reading #scene .ve-hint { opacity: 0; }
+@media (max-width: 900px) { #scene .ve-hint { display: none; } }

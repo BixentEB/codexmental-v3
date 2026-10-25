@@ -16,30 +16,68 @@ window.CodexScene = { ok: false };
   var DEG = Math.PI / 180;
 
   /* ---------- données ---------- */
-  var COL = { O: 0xa9c6ff, B: 0xb8d0ff, A: 0xdce8ff, F: 0xfff3de, G: 0xffe3a6, K: 0xffbf80, M: 0xff8f66 };
+  var COL = { O: 0xa9c6ff, B: 0xb8d0ff, A: 0xdce8ff, F: 0xfff3de, G: 0xffe3a6, K: 0xffbf80, M: 0xff8f66, D: 0xeaf2ff };
   var STARS = [
     { id: 'profil', menu: 1, name: 'Portrait', star: 'Le Soleil', ra: 0, dec: 0, d: 0, cls: 'G', m: 1.3, sub: 'Notre étoile', text: "Le point de départ de toute carte : c’est d’ici que l’on observe. Un espace pour découvrir l’auteur, ses passions et ses influences." },
     { id: 'codex', menu: 1, name: 'Codex', star: 'Sirius', ra: 6.7525, dec: -16.716, d: 8.6, cls: 'A', m: 1.6, text: "La plus brillante des étoiles du ciel nocturne, accompagnée d’une naine blanche. Le blog : articles et réflexions." },
     { id: 'atelier', menu: 1, name: 'Atelier', star: 'Alpha du Centaure', ra: 14.66, dec: -60.83, d: 4.37, cls: 'G', m: 1.4, text: "Le système stellaire le plus proche du Soleil. Le lieu où je range mes idées farfelues." },
     { id: 'lab', menu: 1, name: 'Laboratoire', star: 'Véga', ra: 18.615, dec: 38.78, d: 25, cls: 'A', m: 1.5, text: "Étoile blanche très brillante, longtemps utilisée comme référence de luminosité. La vitrine de mes créations." },
     { id: 'dashb', menu: 1, name: 'Observatoire', star: 'Arcturus', ra: 14.261, dec: 19.18, d: 36.7, cls: 'K', m: 1.5, text: "Géante orangée parmi les plus brillantes du ciel. La tête dans les étoiles : cartes et données astronomiques." },
-    { id: 'proxima', name: 'Proxima du Centaure', ra: 14.495, dec: -62.68, d: 4.24, cls: 'M', m: .8, text: "Naine rouge, l’étoile la plus proche du Soleil. Elle possède au moins une planète tempérée, Proxima b." },
-    { id: 'barnard', name: 'Étoile de Barnard', ra: 17.963, dec: 4.69, d: 5.96, cls: 'M', m: .8, text: "Naine rouge qui possède le plus grand mouvement propre connu : elle se déplace plus vite que toute autre sur le fond du ciel." },
+    { id: 'proxima', name: 'Proxima du Centaure', lbl: 1, ra: 14.495, dec: -62.68, d: 4.24, cls: 'M', m: .8, text: "Naine rouge, l’étoile la plus proche du Soleil. Elle possède au moins une planète tempérée, Proxima b." },
+    { id: 'barnard', name: 'Étoile de Barnard', lbl: 1, ra: 17.963, dec: 4.69, d: 5.96, cls: 'M', m: .8, text: "Naine rouge qui possède le plus grand mouvement propre connu : elle se déplace plus vite que toute autre sur le fond du ciel." },
     { id: 'wolf359', name: 'Wolf 359', ra: 10.94, dec: 7.01, d: 7.86, cls: 'M', m: .7, text: "Naine rouge très peu lumineuse, invisible à l’œil nu malgré sa proximité." },
     { id: 'lalande', name: 'Lalande 21185', ra: 11.05, dec: 35.97, d: 8.3, cls: 'M', m: .7, text: "Naine rouge de la Grande Ourse, l’une des étoiles les plus proches visibles aux jumelles." },
     { id: 'epseri', name: 'Epsilon Eridani', ra: 3.549, dec: -9.46, d: 10.5, cls: 'K', m: 1, text: "Étoile orangée encore jeune, entourée d’un disque de débris." },
     { id: 'cygni61', name: '61 Cygni', ra: 21.115, dec: 38.75, d: 11.4, cls: 'K', m: .9, text: "Première étoile dont la distance a été mesurée, par Friedrich Bessel en 1838." },
     { id: 'procyon', name: 'Procyon', ra: 7.655, dec: 5.225, d: 11.46, cls: 'F', m: 1.2, text: "Étoile blanc-jaune brillante, accompagnée d’une naine blanche." },
     { id: 'taucet', name: 'Tau Ceti', ra: 1.734, dec: -15.94, d: 11.9, cls: 'G', m: 1, text: "Étoile semblable au Soleil, autour de laquelle plusieurs planètes candidates ont été signalées." },
-    { id: 'altair', name: 'Altair', ra: 19.846, dec: 8.87, d: 16.7, cls: 'A', m: 1.2, text: "Étoile blanche à la rotation très rapide, environ neuf heures : elle est visiblement aplatie." },
-    { id: 'fomalhaut', name: 'Fomalhaut', ra: 22.96, dec: -29.62, d: 25.1, cls: 'A', m: 1.2, text: "Étoile blanche entourée d’un vaste disque de poussières, photographié directement." },
+    { id: 'altair', name: 'Altair', lbl: 1, ra: 19.846, dec: 8.87, d: 16.7, cls: 'A', m: 1.2, text: "Étoile blanche à la rotation très rapide, environ neuf heures : elle est visiblement aplatie." },
+    { id: 'fomalhaut', name: 'Fomalhaut', lbl: 1, ra: 22.96, dec: -29.62, d: 25.1, cls: 'A', m: 1.2, text: "Étoile blanche entourée d’un vaste disque de poussières, photographié directement." },
     { id: 'pollux', name: 'Pollux', ra: 7.755, dec: 28.03, d: 33.8, cls: 'K', m: 1.2, text: "Géante orangée des Gémeaux, qui possède une exoplanète confirmée." },
-    { id: 'trappist', name: 'TRAPPIST-1', ra: 23.106, dec: -5.04, d: 40.7, cls: 'M', m: .8, text: "Naine rouge ultra-froide autour de laquelle gravitent sept planètes rocheuses de taille proche de la Terre." },
+    { id: 'trappist', name: 'TRAPPIST-1', lbl: 1, ra: 23.106, dec: -5.04, d: 40.7, cls: 'M', m: .8, text: "Naine rouge ultra-froide autour de laquelle gravitent sept planètes rocheuses de taille proche de la Terre." },
     { id: 'capella', name: 'Capella', ra: 5.278, dec: 46, d: 42.9, cls: 'G', m: 1.3, text: "Système de quatre étoiles : deux géantes jaunes et deux naines rouges." },
     { id: 'castor', name: 'Castor', ra: 7.577, dec: 31.89, d: 51, cls: 'A', m: 1.1, text: "Système de six étoiles, regroupées en trois paires." },
-    { id: 'aldebaran', name: 'Aldébaran', ra: 4.599, dec: 16.51, d: 65, cls: 'K', m: 1.3, text: "Géante orangée, « l’œil du Taureau »." },
-    { id: 'regulus', name: 'Régulus', ra: 10.14, dec: 11.97, d: 79, cls: 'B', m: 1.2, text: "Étoile bleu-blanc du Lion, qui tourne si vite qu’elle est nettement aplatie." },
-    { id: 'polaris', name: 'Polaris', ra: 2.53, dec: 89.26, d: 433, cls: 'F', m: 1.2, text: "L’étoile Polaire actuelle, une céphéide à environ 430 années-lumière : sa luminosité varie régulièrement." }
+    { id: 'aldebaran', name: 'Aldébaran', lbl: 1, ra: 4.599, dec: 16.51, d: 65, cls: 'K', m: 1.3, text: "Géante orangée, « l’œil du Taureau »." },
+    { id: 'regulus', name: 'Régulus', lbl: 1, ra: 10.14, dec: 11.97, d: 79, cls: 'B', m: 1.2, text: "Étoile bleu-blanc du Lion, qui tourne si vite qu’elle est nettement aplatie." },
+    { id: 'polaris', name: 'Polaris', ra: 2.53, dec: 89.26, d: 433, cls: 'F', m: 1.2, text: "L’étoile Polaire actuelle, une céphéide à environ 430 années-lumière : sa luminosité varie régulièrement." },    { id: 'x0', name: 'Luyten 726-8', ra: 1.65, dec: -18.0, d: 8.7, cls: 'M', m: .8, text: "Couple de naines rouges, dont l’une, UV Ceti, a donné son nom à une famille d’étoiles à éruptions.", lbl: 0 },
+    { id: 'x1', name: 'Ross 154', ra: 18.83, dec: -23.84, d: 9.7, cls: 'M', m: .8, text: "Naine rouge à éruptions du Sagittaire.", lbl: 0 },
+    { id: 'x2', name: 'Ross 248', ra: 23.7, dec: 44.18, d: 10.3, cls: 'M', m: .8, text: "Naine rouge d’Andromède, appelée à devenir l’étoile la plus proche du Soleil dans environ 33 000 ans.", lbl: 0 },
+    { id: 'x3', name: 'Lacaille 9352', ra: 23.08, dec: -35.85, d: 10.7, cls: 'M', m: .8, text: "Naine rouge du Poisson austral, accompagnée de deux planètes.", lbl: 0 },
+    { id: 'x4', name: 'Ross 128', ra: 11.79, dec: 0.8, d: 11.0, cls: 'M', m: .8, text: "Naine rouge calme de la Vierge, autour de laquelle tourne une planète tempérée.", lbl: 0 },
+    { id: 'x5', name: 'EZ Aquarii', ra: 22.64, dec: -15.3, d: 11.3, cls: 'M', m: .8, text: "Système de trois naines rouges.", lbl: 0 },
+    { id: 'x6', name: 'Struve 2398', ra: 18.7, dec: 59.6, d: 11.5, cls: 'M', m: .8, text: "Couple de naines rouges du Dragon.", lbl: 0 },
+    { id: 'x7', name: 'Groombridge 34', ra: 0.29, dec: 44.0, d: 11.6, cls: 'M', m: .8, text: "Couple de naines rouges d’Andromède.", lbl: 0 },
+    { id: 'x8', name: 'DX Cancri', ra: 8.5, dec: 26.8, d: 11.7, cls: 'M', m: .8, text: "Naine rouge très faible du Cancer.", lbl: 0 },
+    { id: 'x9', name: 'Epsilon Indi', ra: 22.05, dec: -56.8, d: 11.9, cls: 'K', m: 1, text: "Étoile orangée entourée d’une géante gazeuse et de deux naines brunes.", lbl: 0 },
+    { id: 'x10', name: 'GJ 1061', ra: 3.59, dec: -44.5, d: 12.0, cls: 'M', m: .8, text: "Naine rouge qui abrite des planètes de taille voisine de la Terre.", lbl: 0 },
+    { id: 'x11', name: 'YZ Ceti', ra: 1.2, dec: -16.99, d: 12.1, cls: 'M', m: .8, text: "Naine rouge de la Baleine, avec plusieurs planètes rocheuses.", lbl: 0 },
+    { id: 'x12', name: 'Étoile de Luyten', ra: 7.45, dec: 5.23, d: 12.4, cls: 'M', m: .8, text: "Naine rouge du Petit Chien, avec une planète potentiellement tempérée.", lbl: 0 },
+    { id: 'x13', name: 'Teegarden', ra: 2.88, dec: 16.88, d: 12.5, cls: 'M', m: .8, text: "Naine rouge très peu lumineuse, entourée de planètes de taille terrestre.", lbl: 0 },
+    { id: 'x14', name: 'Étoile de Kapteyn', ra: 5.19, dec: -45.0, d: 12.8, cls: 'M', m: .8, text: "Naine rouge ancienne, venue d’un halo galactique.", lbl: 0 },
+    { id: 'x15', name: 'Lacaille 8760', ra: 21.28, dec: -38.87, d: 12.9, cls: 'M', m: .8, text: "Naine rouge du Microscope, sujette aux éruptions.", lbl: 0 },
+    { id: 'x16', name: 'Kruger 60', ra: 22.46, dec: 57.7, d: 13.1, cls: 'M', m: .8, text: "Couple de naines rouges de Céphée.", lbl: 0 },
+    { id: 'x17', name: 'Ross 614', ra: 6.45, dec: -2.8, d: 13.4, cls: 'M', m: .8, text: "Couple de naines rouges de la Licorne.", lbl: 0 },
+    { id: 'x18', name: 'Wolf 1061', ra: 16.5, dec: -12.66, d: 14.0, cls: 'M', m: .8, text: "Naine rouge d’Ophiuchus avec trois planètes connues.", lbl: 0 },
+    { id: 'x19', name: 'Étoile de van Maanen', ra: 0.82, dec: 5.4, d: 14.1, cls: 'D', m: .8, text: "Naine blanche, l’une des plus proches du Soleil.", lbl: 0 },
+    { id: 'x20', name: 'Gliese 1', ra: 0.08, dec: -37.4, d: 14.2, cls: 'M', m: .8, text: "Naine rouge de l’Éridan sud.", lbl: 0 },
+    { id: 'x21', name: 'Wolf 424', ra: 12.56, dec: 9.0, d: 14.3, cls: 'M', m: .8, text: "Couple de naines rouges de la Vierge.", lbl: 0 },
+    { id: 'x22', name: 'Gliese 687', ra: 17.58, dec: 68.3, d: 14.8, cls: 'M', m: .8, text: "Naine rouge du Dragon, avec une planète de masse proche de Neptune.", lbl: 0 },
+    { id: 'x23', name: 'Gliese 674', ra: 17.46, dec: -46.9, d: 14.8, cls: 'M', m: .8, text: "Naine rouge de l’Autel.", lbl: 0 },
+    { id: 'x24', name: 'Gliese 876', ra: 22.9, dec: -14.3, d: 15.3, cls: 'M', m: .8, text: "Naine rouge du Verseau, premier système à planètes multiples autour d’une telle étoile.", lbl: 0 },
+    { id: 'x25', name: '40 Eridani', ra: 4.25, dec: -7.65, d: 16.3, cls: 'K', m: 1, text: "Système triple : une étoile orangée, une naine blanche et une naine rouge.", lbl: 0 },
+    { id: 'x26', name: '70 Ophiuchi', ra: 18.07, dec: 2.5, d: 16.6, cls: 'K', m: 1, text: "Couple d’étoiles orangées, très étudié par les astronomes.", lbl: 0 },
+    { id: 'x27', name: 'Gliese 667', ra: 17.19, dec: -34.99, d: 23.6, cls: 'M', m: .8, text: "Système triple du Scorpion, avec plusieurs planètes dans la zone habitable.", lbl: 0 },
+    { id: 'x28', name: 'Gliese 581', ra: 15.32, dec: -7.72, d: 20.4, cls: 'M', m: .8, text: "Naine rouge de la Balance, célèbre pour ses exoplanètes.", lbl: 0 },
+    { id: 'x29', name: 'Delta du Paon', ra: 20.1, dec: -66.2, d: 19.9, cls: 'G', m: 1, text: "Étoile jaune proche, ressemblant au Soleil.", lbl: 0 },
+    { id: 'x30', name: '82 Eridani', ra: 3.32, dec: -43.1, d: 19.7, cls: 'G', m: 1, text: "Étoile jaune de l’Éridan, avec trois petites planètes.", lbl: 0 },
+    { id: 'x31', name: 'Eta Cassiopeiae', ra: 0.82, dec: 57.8, d: 19.4, cls: 'G', m: 1, text: "Étoile double de Cassiopée, visible à l’œil nu.", lbl: 0 },
+    { id: 'x32', name: 'Bêta de l’Hydre mâle', ra: 0.43, dec: -77.25, d: 24.3, cls: 'G', m: 1, text: "Étoile ancienne, parmi les plus proches du Soleil en âge et en type.", lbl: 0 },
+    { id: 'x33', name: 'Gliese 436', ra: 11.7, dec: 26.7, d: 31.9, cls: 'M', m: .8, text: "Naine rouge du Lion, avec une planète de la taille de Neptune.", lbl: 0 },
+    { id: 'x34', name: '55 Cancri', ra: 8.87, dec: 28.3, d: 41, cls: 'K', m: 1, text: "Étoile orangée du Cancer, entourée d’au moins cinq planètes.", lbl: 0 },
+    { id: 'x35', name: 'HD 40307', ra: 5.9, dec: -60.0, d: 42, cls: 'K', m: 1, text: "Étoile orangée qui possède plusieurs planètes.", lbl: 0 },
+    { id: 'x36', name: '51 Pegasi', ra: 22.96, dec: 20.77, d: 50.5, cls: 'G', m: 1, text: "Première étoile de type solaire dont on a découvert une exoplanète, en 1995.", lbl: 0 },
+    { id: 'x37', name: 'Bêta Pictoris', ra: 5.79, dec: -51.07, d: 63, cls: 'A', m: 1, text: "Jeune étoile entourée d’un disque de débris et d’une planète.", lbl: 0 },
+    { id: 'x38', name: 'Rigel', ra: 5.24, dec: -8.2, d: 860, cls: 'B', m: 1, text: "Supergéante bleue d’Orion, très lointaine.", lbl: 0 }
   ];
   function pos(s) {
     var ra = s.ra * 15 * DEG, dec = s.dec * DEG, r = rad(s.d);
@@ -47,7 +85,7 @@ window.CodexScene = { ok: false };
   }
   function rad(d) { return d <= 0 ? 0 : 8 * Math.pow(d, .62); }   // échelle compressée
   function fmtD(d) { return d <= 0 ? 'Au centre de la carte' : (d >= 100 ? Math.round(d) : String(d).replace('.', ',')) + ' années-lumière'; }
-  function CLS(c) { return { O: 'bleue', B: 'bleu-blanc', A: 'blanche', F: 'jaune-blanc', G: 'jaune', K: 'orangée', M: 'rouge' }[c]; }
+  function CLS(c) { return { O: 'bleue', B: 'bleu-blanc', A: 'blanche', F: 'jaune-blanc', G: 'jaune', K: 'orangée', M: 'rouge', D: 'naine blanche' }[c]; }
 
   /* ---------- fond : voie lactée et nébuleuses procédurales ---------- */
   var sky = new T.Mesh(new T.SphereGeometry(1500, 48, 32), new T.ShaderMaterial({
@@ -106,6 +144,8 @@ window.CodexScene = { ok: false };
   guides.add(new T.LineSegments(new T.BufferGeometry().setFromPoints(stemPts), new T.LineBasicMaterial({ color: 0x7fb0e8, transparent: true, opacity: .16, depthWrite: false })));
   var feet = pointsOf(named.filter(function (s) { return s.d > 0; }).map(function (s) { return { p: new T.Vector3(s.p.x, 0, s.p.z), c: 0x7fb0e8, q: 0 }; }), function () { return 2.2; });
   guides.add(feet);
+  var routePts = []; named.forEach(function (s) { if (s.menu && s.d > 0) routePts.push(new T.Vector3(), s.p.clone()); });
+  scene.add(new T.LineSegments(new T.BufferGeometry().setFromPoints(routePts), new T.LineBasicMaterial({ color: 0xffc27a, transparent: true, opacity: .26, depthWrite: false })));
   /* étiquettes d'anneaux */
   var ringLabels = RINGS.map(function (d) { var e = document.createElement('div'); e.className = 'vs-pt'; e.innerHTML = '<span class="lbl" style="left:4px;top:-6px;font-size:10.5px;color:var(--muted);font-family:var(--font-mono)">' + d + ' al</span>'; labelsEl.appendChild(e); return { el: e, p: new T.Vector3(rad(d), 0, 0) }; });
 
@@ -221,7 +261,7 @@ window.CodexScene = { ok: false };
     camera.setViewOffset(W, H, cam.shift * W, 0, W, H);
     starMat.uniforms.uTime.value = clock; sky.material.uniforms.uTime.value = clock; sky.position.copy(camera.position);
     renderer.render(scene, camera);
-    named.forEach(function (s) { project(s.p, o); var vis = o.z < 1 && o.x > -60 && o.x < W + 60 && o.y > 64 && o.y < H + 40; s.el.style.visibility = vis ? '' : 'hidden'; if (vis) s.el.style.transform = 'translate3d(' + o.x.toFixed(1) + 'px,' + o.y.toFixed(1) + 'px,0)'; });
+    named.forEach(function (s) { project(s.p, o); var vis = o.z < 1 && o.x > -60 && o.x < W + 60 && o.y > 64 && o.y < H + 40; var near = s.menu || s === focused || s === hov || s.lbl === 1 || s.p.distanceTo(cam.target) < cam.dist * .2; s.el.style.visibility = (vis && near) ? '' : 'hidden'; if (vis) s.el.style.transform = 'translate3d(' + o.x.toFixed(1) + 'px,' + o.y.toFixed(1) + 'px,0)'; });
     (function () {   // désencombrement : les rubriques gardent leur nom, les autres étoiles s'effacent si elles se chevauchent
       var placed = [], list = named.filter(function (s) { return s.el.style.visibility !== 'hidden'; }).sort(function (a, b) { return (b.menu ? 1 : 0) - (a.menu ? 1 : 0); });
       list.forEach(function (s) {

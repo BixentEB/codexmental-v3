@@ -54,3 +54,17 @@
 
 /* Petite icône posée dans le texte (le lapin du Nexus) : pas une image à agrandir */
 .prose img.inline-icon { display: inline-block; height: 1.5em; width: auto; max-width: none; vertical-align: -.3em; margin: 0 .15em; border-radius: 0; image-rendering: pixelated; }
+
+/* Page « Coups de cœur » : chaque morceau est un bloc aéré, séparé par un filet */
+.music-capsules { display: grid; gap: 0; margin-top: 4px; }
+.music-capsule { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 300px); gap: 12px 34px; align-items: start; padding: 34px 0; }
+.music-capsule + .music-capsule::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 45%, transparent) 20%, color-mix(in srgb, var(--accent) 45%, transparent) 80%, transparent); }
+.music-capsule + .music-capsule::after { content: '◆'; position: absolute; left: 50%; top: -.55em; transform: translateX(-50%); padding: 0 12px; font-size: .62rem; color: var(--accent); background: var(--panel-solid, #0b1020); }
+.music-text { display: grid; gap: 8px; min-width: 0; }
+.music-kicker { font-family: var(--font-mono); font-size: .64rem; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); }
+.music-text h3 { margin: 0; font-size: 1.28rem; line-height: 1.25; }
+.music-meta { margin: 0 !important; font-size: .86rem; color: var(--muted); }
+.music-text p { margin: 0; line-height: 1.7; }
+.music-note { font-size: .78rem !important; color: var(--muted); font-style: italic; }
+.music-player .yt-facade { width: 100%; margin: 0; }
+@media (max-width: 760px) { .music-capsule { grid-template-columns: minmax(0, 1fr); padding: 28px 0; } .music-player { max-width: 340px; } }

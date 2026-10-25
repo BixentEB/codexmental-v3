@@ -31,10 +31,11 @@
     var playing = false, timer = null, dead = false, clicks = 0, anims = [];
     var UW = 40, UH = 26;   // taille de la soucoupe
 
+    var SLOW = 1.9;   // la soucoupe prend son temps
     function W() { return sky.clientWidth || 600; }
     function H() { return sky.clientHeight || 150; }
     function go(el, frames, opt) {
-      var a = el.animate(frames, Object.assign({ fill: 'forwards', easing: 'ease-in-out' }, opt)); anims.push(a);
+      var o2 = Object.assign({ fill: 'forwards', easing: 'ease-in-out' }, opt); if (o2.duration) o2.duration = Math.round(o2.duration * SLOW); var a = el.animate(frames, o2); anims.push(a);
       return a.finished.catch(function () {});
     }
     function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
@@ -122,7 +123,7 @@
     /* zigzag : fonce, s'arrête net, repart dans l'autre sens, comme sur un fil */
     var zigzag = guard(function () {
       var w = W(), fromLeft = Math.random() < .5, k = fromLeft ? 1 : -1, x0 = fromLeft ? -70 : w + 60, pts = [{ x: x0, y: R(30, 60), r: -8 * k, o: 0 }], x = x0, y;
-      for (var i = 0; i < 5; i++) { x += k * R(w * .12, w * .22) * (i % 2 ? -.5 : 1); x = Math.max(10, Math.min(w - UW - 10, x)); y = R(14, H() - UH - 56); pts.push({ x: x, y: y, r: R(-14, 14) }); }
+      for (var i = 0; i < 5; i++) { x += k * R(w * .12, w * .22) * (i % 2 ? -.5 : 1); x = Math.max(10, Math.min(w - UW - 10, x)); y = R(14, Math.min(H() - UH - 56, 190)); pts.push({ x: x, y: y, r: R(-14, 14) }); }
       pts.push({ x: fromLeft ? w + 80 : -80, y: R(10, 50), r: 10 * k, o: 0 });
       return trail(pts, 5200, 'cubic-bezier(.5,0,.3,1)');
     });
@@ -148,14 +149,15 @@
     });
 
     var seq = { passage: passage, scan: scan, salut: salut, vache: enlevement, zigzag: zigzag, looping: looping, hesite: hesite, pique: pique };
-    var last = '';
+    var last = '', nSeq = 0;
     function pick() {   // au hasard, jamais deux fois la même d'affilée
-      var all = ['passage', 'scan', 'salut', 'vache', 'zigzag', 'zigzag', 'looping', 'hesite', 'pique'], n;
+      var all = ['passage', 'scan', 'salut', 'zigzag', 'looping', 'hesite', 'pique'], n;
+      nSeq++; if (nSeq % 3 === 0) return (last = 'vache');   // un enlèvement de vache toutes les trois apparitions
       do { n = all[Math.floor(Math.random() * all.length)]; } while (n === last); return (last = n);
     }
     function schedule() {
       clearTimeout(timer);
-      timer = setTimeout(function () { if (dead) return; (document.hidden ? Promise.resolve() : seq[pick()]()).then(schedule); }, 14000 + Math.random() * 26000);
+      timer = setTimeout(function () { if (dead) return; (document.hidden ? Promise.resolve() : seq[pick()]()).then(schedule); }, 12000 + Math.random() * 14000);
     }
     function onClick() { clicks++; seq[clicks % 3 === 0 ? 'vache' : pick()](); }
     icon.setAttribute('role', 'button'); icon.setAttribute('tabindex', '0'); icon.setAttribute('aria-label', 'Faire revenir le vaisseau spatial');

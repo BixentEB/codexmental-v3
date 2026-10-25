@@ -171,7 +171,7 @@
     var b = e.target.closest && e.target.closest('.yt-facade .yt-play'); if (!b) return;
     var box = b.parentNode, id = box.getAttribute('data-yt'); if (!id) return;
     var f = document.createElement('iframe');
-    f.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) + '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+    f.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) + '?autoplay=1&rel=0&modestbranding=1&playsinline=1' + (box.getAttribute('data-start') ? '&start=' + box.getAttribute('data-start') : '') + (box.getAttribute('data-end') ? '&end=' + box.getAttribute('data-end') : '');
     f.title = b.getAttribute('aria-label') || 'Lecture YouTube';
     f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen'; f.allowFullscreen = true;
     f.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');

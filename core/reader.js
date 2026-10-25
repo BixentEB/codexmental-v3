@@ -84,7 +84,7 @@
       if (!/^https:\/\//.test(src)) { f.remove(); return; }
       var yt = src.match(/^https:\/\/(?:www\.)?youtube(?:-nocookie)?\.com\/embed\/([\w-]{6,20})/);
       if (yt) {   // YouTube : rien n'est chargé tant que le visiteur ne demande pas la lecture (media.js)
-        var fc = document.createElement('div'); fc.className = 'yt-facade'; fc.setAttribute('data-yt', yt[1]);
+        var fc = document.createElement('div'); fc.className = 'yt-facade'; fc.setAttribute('data-yt', yt[1]); var qs = src.split('?')[1] || ''; var st = qs.match(/(?:^|&(?:amp;)?)start=(\d{1,5})/), en = qs.match(/(?:^|&(?:amp;)?)end=(\d{1,5})/); if (st) fc.setAttribute('data-start', st[1]); if (en) fc.setAttribute('data-end', en[1]);
         var bt = document.createElement('button'); bt.type = 'button'; bt.className = 'yt-play';
         bt.setAttribute('aria-label', (f.getAttribute('title') || 'Lire la vidéo'));
         bt.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg><span>Écouter</span><small>Lecture via YouTube</small>';
