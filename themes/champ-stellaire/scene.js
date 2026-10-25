@@ -68,12 +68,12 @@ var NS='http://www.w3.org/2000/svg';
 var MENU=[['atelier','Atelier','#ffb48a','Créations, théories, hypothèses'],['lab','Laboratoire','#bff0d0','Applications et projets en construction'],['codex','Codex','#dfe8ff','Articles et réflexions'],['dashb','Observatoire','#9ec8ff','Observations, cartes et explorations'],['profil','Portrait','#fff0c8','Parcours, passions et aspirations']];
 /* étoiles : [x, y, taille, nom] — coordonnées approximatives, y vers le bas ; m = les cinq étoiles-rubriques (Atelier, Laboratoire, Codex, Observatoire, Portrait) */
 var CONS=[
- {n:'Persée',w:3,m:[0,6,2,4,5],s:[[.00,.80,3.4,'Algol'],[.12,.62,1.8],[.30,.45,3.2,'Mirfak'],[.52,.55,2],[.70,.75,2.4],[.80,1.0,2],[.22,.15,2],[.45,.0,1.8],[.60,.32,1.6]],e:[[0,1],[1,2],[2,3],[3,4],[4,5],[2,6],[6,7],[3,8]]},
- {n:'Cassiopée',w:1,m:[0,1,2,3,4],s:[[.0,.30,2.6,'Caph'],[.22,.78,3,'Schedar'],[.48,.42,2.6],[.74,.90,2.4],[1.0,.35,2.2,'Segin'],[.35,.10,1.4],[.88,.70,1.4]],e:[[0,1],[1,2],[2,3],[3,4]]},
- {n:'Orion',w:1,m:[0,1,3,5,6],s:[[.28,.12,3.4,'Bételgeuse'],[.78,.14,2.6,'Bellatrix'],[.70,.50,2.4],[.54,.52,2.8,'Alnilam'],[.40,.54,2.4],[.26,.96,2.4,'Saïph'],[.86,.92,3.4,'Rigel'],[.54,.0,1.8]],e:[[7,0],[7,1],[0,4],[1,2],[4,3],[3,2],[4,5],[2,6]]},
- {n:'Le Cygne',w:1,m:[0,1,2,3,4],s:[[.50,.0,3,'Deneb'],[.50,.46,2.8,'Sadr'],[.50,1.0,2.6,'Albiréo'],[.08,.36,2.2],[.92,.30,2.2]],e:[[0,1],[1,2],[3,1],[1,4]]},
- {n:'La Lyre',w:1,m:[0,1,2,3,4],s:[[.30,.0,3.6,'Véga'],[.38,.38,2.2],[.22,.55,2],[.58,1.0,2.4],[.74,.72,2.4]],e:[[0,1],[1,2],[2,3],[3,4],[4,1]]},
- {n:'La Grande Ourse',w:1,m:[0,1,2,4,6],s:[[.86,.18,3,'Dubhé'],[.82,.52,2.4,'Mérak'],[.56,.60,2.4],[.50,.34,2],[.30,.28,2.6,'Alioth'],[.16,.20,2.4,'Mizar'],[.0,.38,2.6,'Alkaïd']],e:[[0,1],[1,2],[2,3],[3,0],[3,4],[4,5],[5,6]]}
+ {n:'Persée',w:3,m:[0,2,4,5,6],s:[[2.8,8.9,3.4,'Algol'],[0,0,3.2,'Mirfak'],[-3.3,2.1,2.4],[-3.7,7.3,1.8],[-5.9,9.9,2.6,'Ménkib'],[-5.9,14.1,1.8],[-5.2,18,2.4],[3.2,-3.6,2.2],[5,-6,1.8]],e:[[0,1],[1,7],[7,8],[1,2],[2,3],[3,4],[4,5],[5,6]]},
+ {n:'Cassiopée',w:1,m:[0,1,2,3,4],s:[[0,4.5,2.6,'Caph'],[3.9,7.2,3,'Schedar'],[5.9,3,2.6],[9.5,3.5,2.4,'Ruchbah'],[13.2,0,2.2,'Segin']],e:[[0,1],[1,2],[2,3],[3,4]]},
+ {n:'Orion',w:1,m:[0,1,3,5,6],s:[[-4.75,-8.6,3.4,'Bételgeuse'],[2.8,-7.5,2.6,'Bellatrix'],[1.05,-.9,2.4],[0,0,2.8,'Alnilam'],[-1.15,.7,2.4],[-2.9,8.5,2.4,'Saïph'],[5.4,7,3.4,'Rigel'],[.3,-11.1,1.8]],e:[[7,0],[7,1],[0,4],[1,2],[4,3],[3,2],[4,5],[2,6]]},
+ {n:'Le Cygne',w:1,m:[0,1,2,3,4],s:[[-3.7,-5,3,'Deneb'],[0,0,2.8,'Sadr'],[10.6,12.3,2.6,'Albiréo'],[-4.8,6.3,2.2],[6.9,-4.9,2.2]],e:[[0,1],[1,2],[3,1],[1,4]]},
+ {n:'La Lyre',w:1,m:[0,1,2,3,4],s:[[0,0,3.8,'Véga'],[1.5,1.2,2.2],[3.4,1.9,2.2],[4.6,6.1,2.4],[2.6,5.4,2.4],[1.5,-.9,1.5]],e:[[0,1],[1,2],[2,3],[3,4],[4,1],[0,5]]},
+ {n:'La Grande Ourse',w:1,m:[0,1,2,4,6],s:[[0,0,3,'Dubhé'],[-.3,5.4,2.4,'Mérak'],[7,8,2.4],[10,4.8,2],[15.5,5.8,2.6,'Alioth'],[19.6,6.9,2.4,'Mizar'],[23,12.5,2.6,'Alkaïd']],e:[[0,1],[1,2],[2,3],[3,0],[3,4],[4,5],[5,6]]}
 ];
 var LS='codex.const', cur=null, built=[], lastIdx=-1;
 try{lastIdx=parseInt(localStorage.getItem(LS),10)}catch(e){}
@@ -95,14 +95,14 @@ function build(i){
   place();
 }
 function place(){ if(!cur) return;
-  var W=innerWidth,H=innerHeight,mob=W<800, rx=mob?.08*W:Math.max(.44*W,560), ry=mob?.46*H:.2*H, rw=mob?.84*W:W-rx-.06*W, rh=mob?.40*H:.62*H;
-  var sc=Math.min(rw,rh*(mob?1.1:1.25)), fw=sc, fh=sc/ (mob?1.1:1.25); fw=Math.min(rw,sc); fh=Math.min(rh,sc*.8); var f=Math.min(rw,rh*1.2);
-  var ox=rx+(rw-f)/2, oy=ry+(rh-f*.8)/2;
-  cur.s.forEach(function(st,j){st._x=ox+st[0]*f; st._y=oy+st[1]*f*.8; built[j].style.transform='translate('+st._x+'px,'+st._y+'px)'});
+  var W=innerWidth,H=innerHeight,mob=W<800, rx=mob?.06*W:Math.max(.44*W,560), ry=mob?.46*H:.2*H, rw=mob?.88*W:W-rx-.07*W, rh=mob?.4*H:.62*H;
+  var x0=1e9,x1=-1e9,y0=1e9,y1=-1e9; cur.s.forEach(function(t){x0=Math.min(x0,t[0]);x1=Math.max(x1,t[0]);y0=Math.min(y0,t[1]);y1=Math.max(y1,t[1])});
+  var k=Math.min(rw/(x1-x0||1),rh/(y1-y0||1),(mob?300:620)/Math.max(x1-x0,y1-y0,1)), ox=rx+(rw-(x1-x0)*k)/2, oy=ry+(rh-(y1-y0)*k)/2;
+  cur.s.forEach(function(st,j){st._x=ox+(st[0]-x0)*k; st._y=oy+(st[1]-y0)*k; built[j].style.transform='translate('+st._x+'px,'+st._y+'px)'});
   var ls=svg.querySelectorAll('line'); cur.e.forEach(function(e,i){var a=cur.s[e[0]],b=cur.s[e[1]]; ls[i].setAttribute('x1',a._x);ls[i].setAttribute('y1',a._y);ls[i].setAttribute('x2',b._x);ls[i].setAttribute('y2',b._y)});
   built.t.style.transform='translate('+ox+'px,'+(oy-46)+'px)';
 }
-build(pick()); addEventListener('resize',place);
+var qc=/[?&]const=(\d)/.exec(location.search); build(qc&&CONS[+qc[1]]?+qc[1]:pick()); addEventListener('resize',place);
 function swap(){ if(document.hidden||document.documentElement.classList.contains('reading')) return; box.style.opacity='0'; setTimeout(function(){build(pick()); box.style.opacity=''},700) }
 setInterval(swap,reduce?3600000:6*60000);
 addEventListener('pointermove',function(e){if(reduce)return;box.style.transform='translate('+((e.clientX/innerWidth-.5)*-10)+'px,'+((e.clientY/innerHeight-.5)*-7)+'px)'},{passive:true});

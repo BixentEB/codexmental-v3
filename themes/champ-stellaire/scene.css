@@ -56,3 +56,4 @@ html.reading #scene #cs-const, html.reading #scene .cs-horizon { opacity: 0; vis
 #scene .hero p.sub { font-family: var(--font-body); text-transform: none; letter-spacing: 0; font-size: 13px; line-height: 1.55; color: #9aa1c4; max-width: 380px; }
 #scene #cs-lines line { stroke: rgba(190,205,255,.3); }
 #scene .cs-dot::before { filter: brightness(1.15); }
+#scene #cs-lines line { stroke: rgba(200,215,255,.5); stroke-dasharray: 3 5; }
