@@ -1,0 +1,17 @@
+{
+  "label": "Champ stellaire",
+  "palette": {
+    "bg": "#070b18", "fg": "#eef0ff", "fgSoft": "#d2d5e7", "muted": "#a6accb", "hud": "#d7b7ff",
+    "accent": "#c5a1ff", "accent2": "#7a8fe0", "line": "rgba(141, 142, 181, 0.32)",
+    "panel": "rgba(12, 18, 35, 0.92)", "panelSolid": "rgba(10, 15, 30, 0.98)", "panelDeep": "rgba(4, 7, 17, 0.45)"
+  },
+  "fonts": {
+    "display": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+    "body": "system-ui, -apple-system, 'Segoe UI', sans-serif"
+  },
+  "reader": { "layout": "wide" },
+  "markup": "scene.html",
+  "css": ["scene.css"],
+  "scripts": ["https://cdn.jsdelivr.net/npm/three@0.148.0/build/three.min.js"],
+  "scene": "scene.js"
+}

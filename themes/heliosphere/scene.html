@@ -1,0 +1,40 @@
+<div class="cm-signature cm-monogram" role="img" aria-label="Monogramme CODEX Mental"></div>
+<div class="wrap">
+  <h1>Héliosphère <span style="font-size:.48em;opacity:.55;letter-spacing:.1em">· Laboratoire 3D</span></h1>
+
+  <div class="stage" id="stage">
+    
+    <div id="labels"></div>
+    <div class="loading" id="loading">Calcul des textures du système solaire…</div>
+  </div>
+
+  <section id="solar-observatory" aria-label="Observatoire solaire"><strong>OBSERVATOIRE<br>SOLAIRE</strong><div class="solar-observatory-actions"><button type="button" id="solar-observatory-settings" aria-expanded="false" aria-label="Réglages" title="Réglages">⚙</button></div></section>
+<button id="solar-settings-toggle" class="solar-settings-toggle" type="button" aria-controls="solar-settings-panel" aria-expanded="false">⚙ Réglages</button>
+<button id="solar-return-sun" type="button" hidden aria-label="Revenir à la vue générale du Soleil">← Retour au système</button>
+<div id="solar-hover" class="solar-hover" hidden aria-live="polite"><strong id="solar-hover-name"></strong><span id="solar-hover-sub"></span><span id="solar-hover-desc"></span></div>
+<div class="under">
+    <div class="info" aria-live="polite">
+      <h2><span class="dot" id="infoDot"></span><span id="infoTitle">Accueil</span></h2>
+      <p id="infoText"></p>
+      
+    </div>
+    <div class="ctrl" id="solar-settings-panel">
+      <div class="row">
+        <button class="btn" id="pause" type="button">Pause</button>
+        <label for="speed">Vitesse</label>
+        <input id="speed" type="range" min="0.25" max="6" step="0.25" value="1">
+        <output id="speedOut" for="speed">1×</output>
+      </div>
+      <div class="row">
+        <input id="orbits" type="checkbox" checked>
+        <label for="orbits">Afficher les orbites</label>
+        <label for="quality" style="margin-left:auto">Qualité</label>
+        <select id="quality">
+          <option value="high">Élevée</option>
+          <option value="std">Standard</option>
+        </select>
+      </div>
+      <p class="hint">Glissez pour tourner autour du système, molette ou pincement pour zoomer. Cliquez une planète pour voler jusqu'à elle, puis Accueil pour revenir.</p>
+    </div>
+  </div>
+</div>

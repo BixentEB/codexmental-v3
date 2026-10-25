@@ -1,0 +1,317 @@
+/* Thème Héliosphère — décor et console de la scène (importés de v2, circonscrits à #scene). */
+html[data-theme="heliosphere"] {scroll-padding-top:env(safe-area-inset-top,0px)}
+#scene img {max-width:100%}
+#scene [hidden]:not([hidden=until-found i]) {display:none!important}
+#scene .brand {font-family:"Syne","Trebuchet MS",system-ui,sans-serif!important;font-size:17px!important;font-weight:700!important;letter-spacing:.09em!important;white-space:nowrap!important}
+@media(max-width:640px) {
+#scene .brand {font-size:13px!important;letter-spacing:.035em!important;max-width:none!important}
+}
+#scene #solar-observatory {width:340px!important;max-width:calc(100vw - 24px)!important;box-sizing:border-box;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:14px!important}
+#scene #solar-observatory>strong {flex:1;min-width:0;color:#f0c477}
+#scene #solar-observatory .solar-observatory-actions {flex:none;display:flex;gap:9px!important;align-items:center}
+#scene #solar-observatory-settings {min-width:32px!important;min-height:30px!important;font-size:17px!important;line-height:1}
+#scene #solar-observatory-themes {min-height:30px}
+html[data-theme="heliosphere"] {
+  --void: #03040a;
+  --deep: #0a0d22;
+  --ink: #e9ecf8;
+  --mute: #8f96b8;
+  --sun: #ffb23e;
+  --line: rgba(150, 170, 255, 0.16);
+  --font-display: "Syne", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+#scene * { box-sizing: border-box; }
+html[data-theme="heliosphere"], html[data-theme="heliosphere"] body { background: var(--void); }
+html[data-theme="heliosphere"] body {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  padding-block: 24px 32px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+#scene .wrap { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+#scene h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(20px, 3.4vw, 28px);
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+#scene .stage {
+  position: relative;
+  height: clamp(520px, 72vh, 760px);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--void);
+  box-shadow: 0 30px 80px -30px rgba(40, 60, 180, 0.35);
+}
+#scene #cv { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+#scene #cv.over { cursor: pointer; }
+#scene #cv:active { cursor: grabbing; }
+#scene .loading {
+  position: absolute; inset: 0; z-index: 6; display: grid; place-items: center; text-align: center; padding: 24px;
+  background: var(--void); color: var(--mute); font-size: 14px; transition: opacity .6s;
+}
+#scene .loading.done { opacity: 0; pointer-events: none; }
+#scene .bar {
+  position: absolute; z-index: 5; top: 0; left: 0; right: 0;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 10px 14px;
+  background: linear-gradient(to bottom, rgba(3, 4, 10, 0.78), rgba(3, 4, 10, 0));
+  pointer-events: none;
+}
+#scene .bar > * { pointer-events: auto; }
+#scene .brand { font-family: var(--font-display); font-weight: 700; font-size: 16px; letter-spacing: 0.02em; white-space: nowrap; }
+#scene .tabs { display: flex; gap: 2px; overflow-x: auto; min-width: 0; scrollbar-width: none; }
+#scene .tabs::-webkit-scrollbar { display: none; }
+#scene .tabs button {
+  appearance: none; border: 0; background: transparent; color: var(--mute);
+  font: 500 13px/1 var(--font-body); padding: 9px 12px; border-radius: 999px; cursor: pointer; white-space: nowrap;
+  transition: color .2s, background .2s;
+}
+#scene .tabs button:hover { color: var(--ink); }
+#scene .tabs button[aria-current="true"] { color: var(--ink); background: rgba(255, 255, 255, 0.09); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16); }
+#scene button:focus-visible, #scene input:focus-visible, #scene select:focus-visible { outline: 2px solid var(--sun); outline-offset: 2px; }
+#scene .pl { position: absolute; left: 0; top: 0; width: 0; height: 0; z-index: 3; pointer-events: none; transition: opacity .3s; will-change: transform; }
+#scene .pl .hit {
+  position: absolute; appearance: none; border: 0; background: transparent; padding: 0; border-radius: 50%; pointer-events: none;
+  width: var(--hit); height: var(--hit); left: calc(var(--hit) / -2); top: calc(var(--hit) / -2); transition: box-shadow .2s;
+}
+#scene .pl.hov .hit, #scene .pl.active .hit { box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.55); }
+#scene .pl .lbl {
+  position: absolute; top: -17px; white-space: nowrap;
+  font-family: var(--font-display); text-shadow: 0 1px 8px rgba(0, 0, 0, 0.95), 0 0 2px rgba(0, 0, 0, 0.95);
+  display: flex; flex-direction: column; gap: 1px;
+}
+#scene .pl .lbl b { font-weight: 600; font-size: 15px; letter-spacing: 0.01em; }
+#scene .pl .lbl i { font-style: normal; font-family: var(--font-body); font-size: 11px; color: var(--mute); }
+#scene .pl.right .lbl { left: calc(var(--s) + 12px); text-align: left; }
+#scene .pl.left .lbl { right: calc(var(--s) + 12px); text-align: right; }
+#scene .pl.below .lbl { left: 50%; top: calc(var(--s) + 8px); transform: translateX(-50%); text-align: center; align-items: center; }
+#scene .pl.active .lbl b { color: #fff; }
+#scene .pl.dim { opacity: 0.38; }
+#scene .pl.hid { opacity: 0; }
+#scene .under { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+#scene .info, #scene .ctrl { border: 1px solid var(--line); border-radius: 14px; background: var(--deep); padding: 16px 18px; min-width: 0; }
+#scene .info h2 { margin: 0 0 4px; font-family: var(--font-display); font-weight: 600; font-size: 18px; display: flex; align-items: center; gap: 10px; }
+#scene .dot { width: 12px; height: 12px; border-radius: 50%; flex: none; background: var(--c, var(--sun)); box-shadow: 0 0 12px var(--c, var(--sun)); }
+#scene .info p { margin: 0; color: var(--mute); max-width: 62ch; }
+#scene .ctrl { display: flex; flex-direction: column; gap: 12px; }
+#scene .row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+#scene .row label { color: var(--mute); font-size: 13px; }
+#scene .btn {
+  appearance: none; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.05); color: var(--ink);
+  font: 500 13px/1 var(--font-body); padding: 9px 14px; border-radius: 999px; cursor: pointer;
+}
+#scene .btn:hover { background: rgba(255, 255, 255, 0.1); }
+#scene select {
+  font: 500 13px/1 var(--font-body); color: var(--ink); background: #11152e; border: 1px solid var(--line);
+  border-radius: 8px; padding: 8px 10px;
+}
+#scene input[type="range"] { accent-color: var(--sun); flex: 1; min-width: 100px; }
+#scene output { font-variant-numeric: tabular-nums; min-width: 3ch; font-size: 13px; }
+#scene .hint { color: var(--mute); font-size: 12.5px; margin: 0; }
+@media (max-width: 720px) {
+#scene .under { grid-template-columns: minmax(0, 1fr); }
+#scene .stage { height: clamp(540px, 76vh, 660px); }
+#scene .bar { flex-direction: column; align-items: flex-start; gap: 4px; }
+#scene .tabs { width: 100%; }
+}
+html[data-theme="heliosphere"] {color-scheme:dark}
+html[data-theme="heliosphere"], html[data-theme="heliosphere"] body {min-height:100%;background:#03040a!important}
+#scene .cm-signature {position:fixed;z-index:9998;right:18px;bottom:9px;pointer-events:none;color:rgba(210,222,255,.36);font:600 9px/1.4 system-ui,sans-serif;letter-spacing:.16em;text-shadow:0 1px 5px #000}
+#scene .codex-solar-lucioles {--luciole:#ffd58c;--luciole-glow:rgba(255,174,67,.5)}
+html[data-theme="heliosphere"], html[data-theme="heliosphere"] body {width:100%;height:100%;overflow:hidden!important}
+html[data-theme="heliosphere"] body {padding:0!important;margin:0!important;background:#03040a!important}
+#scene .wrap {display:contents!important}
+#scene .wrap>h1 {position:fixed;z-index:7;left:clamp(18px,4vw,68px);bottom:clamp(115px,15vh,160px);font-size:clamp(27px,3.8vw,54px);font-weight:500;letter-spacing:.08em;text-shadow:0 3px 22px #000;pointer-events:none}
+#scene .wrap>h1 span {display:block;margin-top:8px;font-size:11px!important;font-family:var(--font-body);letter-spacing:.17em;color:#d7b98c}
+#scene .stage {position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;min-height:0!important;max-height:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;margin:0!important}
+#scene .stage .bar {position:fixed;z-index:8;top:57px;right:clamp(12px,2.5vw,35px);left:auto;width:auto;padding:0;background:none;pointer-events:none}
+#scene .stage .bar .brand {display:none}
+#scene .stage .tabs {max-width:min(75vw,650px);display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px;overflow:visible;pointer-events:auto}
+#scene .stage .tabs button {font-size:11px;padding:7px 11px;background:#080d20a8;border:1px solid #a8b7e533;backdrop-filter:blur(12px)}
+#scene .stage .tabs button[aria-current="true"] {background:#28304dcb}
+#scene .under {position:fixed;z-index:8;inset:auto 20px 20px auto;display:flex;align-items:flex-end;gap:12px;max-width:min(700px,75vw);pointer-events:none}
+#scene .under .info, #scene .under .ctrl {pointer-events:auto;border:1px solid #b0baf52b;background:#080d20bc;backdrop-filter:blur(16px);box-shadow:0 12px 35px #0005;border-radius:12px;padding:12px 15px}
+#scene .under .info {max-width:300px;min-width:170px}
+#scene .under .info h2 {font-size:13px}
+#scene .under .info p {font-size:11px;line-height:1.5}
+#scene .under .ctrl {width:275px;max-width:35vw;gap:7px}
+#scene .under .ctrl .row {gap:7px}
+#scene .under .ctrl label, #scene .under .ctrl output {font-size:10px}
+#scene .under .ctrl .hint {font-size:10px;line-height:1.5}
+#scene .under .ctrl input[type="range"] {min-width:60px}
+#scene .cm-signature {z-index:9;bottom:4px}
+@media(max-width:850px) {
+html[data-theme="heliosphere"] body {padding:0!important}
+#scene .stage .bar {top:92px;right:10px}
+#scene .stage .tabs {max-width:95vw;gap:3px}
+#scene .stage .tabs button {font-size:10px;padding:6px 8px}
+#scene .wrap>h1 {bottom:145px;left:18px;font-size:clamp(25px,6vw,40px)}
+#scene .under {left:12px;right:12px;bottom:16px;max-width:none;justify-content:space-between}
+#scene .under .info {max-width:42%;min-width:0}
+#scene .under .ctrl {max-width:56%;width:250px}
+}
+@media(max-width:550px) {
+#scene .stage .bar {top:105px;left:9px;right:9px}
+#scene .stage .tabs {justify-content:center;max-width:100%}
+#scene .stage .tabs button {font-size:9px;padding:5px 7px}
+#scene .wrap>h1 {bottom:165px;font-size:27px}
+#scene .under {bottom:18px;gap:7px}
+#scene .under .info {max-width:48%;padding:9px}
+#scene .under .ctrl {max-width:52%;padding:9px}
+#scene .under .ctrl .hint {display:none}
+#scene .under .ctrl .row {gap:5px}
+#scene .under .ctrl label, #scene .under .ctrl output {font-size:9px}
+#scene .under .ctrl select {max-width:95px;font-size:10px;padding:5px}
+}
+@media(max-height:550px) {
+#scene .wrap>h1 {bottom:20px}
+#scene .under .info {display:none}
+#scene .under {max-width:300px}
+}
+#scene .pl.hov .hit, #scene .pl.active .hit {box-shadow:none!important}
+#scene .under {max-width:min(410px,75vw)!important;right:20px!important;bottom:24px!important}
+#scene .under .info {max-width:360px!important;min-width:200px}
+#scene .under .info:has(#infoTitle:not(:empty)) {display:block}
+#scene .under .ctrl {display:none!important}
+html[data-theme="heliosphere"] body.solar-settings-open .under .ctrl {display:block!important;position:fixed;right:20px;bottom:67px;max-width:min(340px,calc(100vw - 32px))!important;width:300px}
+#scene .solar-settings-toggle {position:fixed;z-index:12;right:20px;bottom:20px;cursor:pointer;color:#dfe6ff;background:#0b1024c9;border:1px solid #a9baf455;border-radius:20px;padding:9px 15px;font:600 12px system-ui;backdrop-filter:blur(12px)}
+#scene .under {right:135px!important;bottom:18px!important;pointer-events:none}
+#scene .under .info {pointer-events:auto}
+html[data-theme="heliosphere"] body.solar-settings-open .under .info {display:none}
+@media(max-width:700px) {
+#scene .solar-settings-toggle {right:12px;bottom:12px}
+#scene .under {left:12px!important;right:125px!important;bottom:12px!important;max-width:calc(100vw - 150px)!important}
+#scene .under .info {max-width:100%!important;min-width:0;padding:9px!important}
+html[data-theme="heliosphere"] body.solar-settings-open .under .ctrl {right:12px;bottom:55px}
+}
+#scene #solar-return-sun {position:fixed;z-index:13;left:clamp(18px,4vw,68px);bottom:clamp(185px,24vh,235px);padding:10px 16px;border-radius:22px;border:1px solid #b9c8ff66;background:#090f26c9;color:#edf1ff;backdrop-filter:blur(14px);font:600 12px system-ui;cursor:pointer;box-shadow:0 5px 20px #0005}
+#scene #solar-return-sun:hover {background:#273453dd;border-color:#d8e3ff}
+#scene #solar-return-sun[hidden] {display:none!important}
+@media(max-width:700px) {
+#scene #solar-return-sun {left:18px;bottom:215px;font-size:11px;padding:8px 12px}
+}
+@media(max-height:550px) {
+#scene #solar-return-sun {bottom:85px}
+}
+#scene .under .info #solar-return-sun {position:static!important;display:inline-flex;align-items:center;left:auto!important;right:auto!important;bottom:auto!important;margin-top:9px;padding:7px 11px;font-size:11px;border-radius:18px;background:#18244375;border-color:#b9c8ff38;box-shadow:none}
+#scene .under .info #solar-return-sun[hidden] {display:none!important}
+#scene .under .info #solar-return-sun:hover {background:#344467a8}
+#scene .under .info {background:#080d2088!important;border-color:#b0baf520!important;box-shadow:none!important}
+#scene .under .info p {opacity:.85}
+#scene .under .info #solar-return-sun:not([hidden]) {display:inline!important;position:static!important;padding:0!important;margin:0!important;border:0!important;border-radius:0!important;background:transparent!important;backdrop-filter:none!important;box-shadow:none!important;color:#a6bce2!important;font:500 11px system-ui!important;text-decoration:none}
+#scene .under .info #solar-return-sun:hover {text-decoration:underline!important;color:#fff!important}
+#scene .solar-hover {position:fixed;z-index:10;left:clamp(18px,4vw,68px);bottom:clamp(185px,23vh,235px);pointer-events:none;text-shadow:0 2px 14px #000,0 0 3px #000;max-width:min(420px,70vw)}
+#scene .solar-hover strong {display:block;font:600 clamp(20px,2vw,30px)/1.25 var(--font-display);color:#f3f4ff}
+#scene .solar-hover span {display:block;margin-top:5px;font:400 13px/1.4 var(--font-body);color:#d1d7ee}
+#scene #solar-settings-slot .ctrl {display:flex!important;position:static!important;width:auto!important;max-width:none!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important}
+#scene #solar-settings-slot .ctrl .row {gap:8px}
+#scene #solar-settings-slot .ctrl label {font-size:11px}
+#scene #solar-settings-slot .ctrl input[type=range] {min-width:65px;width:70px}
+#scene #solar-settings-slot .ctrl .hint {font-size:10px;line-height:1.4}
+#scene #solar-settings-slot .ctrl select {font-size:11px;padding:5px}
+#scene .under .info {display:none!important}
+#scene .under {pointer-events:none!important}
+#scene #solar-return-sun {position:fixed!important;z-index:12!important;left:clamp(18px,4vw,68px)!important;right:auto!important;bottom:clamp(185px,23vh,235px)!important;display:none!important;background:#101a32a8!important;border:1px solid #b9c8ff55!important;padding:9px 14px!important;border-radius:20px!important;color:#e5ebff!important;font:500 12px system-ui!important;pointer-events:auto!important}
+html[data-theme="heliosphere"] body.solar-selected #solar-return-sun:not([hidden]) {display:inline-flex!important}
+@media(max-width:700px) {
+#scene .solar-hover {left:18px;bottom:180px;max-width:75vw}
+#scene .solar-hover strong {font-size:20px}
+#scene .solar-hover span {font-size:12px}
+#scene #solar-return-sun {left:18px!important;bottom:185px!important}
+}
+#scene .solar-hover {left:50%;bottom:clamp(62px,10vh,105px);transform:translateX(-50%);width:min(620px,calc(100vw - 44px));max-width:none;text-align:center;padding:12px 16px;box-sizing:border-box;transition:opacity .2s ease}
+#scene .solar-hover strong {font-size:clamp(28px,3.3vw,46px);line-height:1.15;letter-spacing:.035em}
+#scene .solar-hover #solar-hover-sub {font-size:clamp(14px,1.25vw,18px);margin-top:10px;color:#f2e6cb}
+#scene .solar-hover #solar-hover-desc {font-size:clamp(12px,1vw,14px);line-height:1.55;margin:9px auto 0;color:#c7ccdf;max-width:530px}
+@media(max-width:700px) {
+#scene .solar-hover {left:50%;bottom:80px;max-width:none;width:calc(100vw - 32px)}
+#scene .solar-hover strong {font-size:28px}
+#scene .solar-hover #solar-hover-sub {font-size:14px}
+#scene .solar-hover #solar-hover-desc {font-size:12px}
+}
+html[data-theme="heliosphere"] body.solar-selected #solar-return-sun:not([hidden]) {
+ display:inline-flex!important;position:fixed!important;
+ left:clamp(18px,4vw,68px)!important;
+ bottom:clamp(185px,23vh,235px)!important;
+ z-index:15!important;pointer-events:auto!important;
+ background:rgba(10,18,38,.56)!important;
+ border:1px solid rgba(185,200,255,.28)!important;
+ color:#e8edff!important;padding:9px 15px!important;
+ border-radius:22px!important;font:500 12px system-ui!important;
+ cursor:pointer!important;backdrop-filter:blur(8px);
+}
+@media(max-width:700px) {
+html[data-theme="heliosphere"] body.solar-selected #solar-return-sun:not([hidden]) {left:18px!important;bottom:185px!important}
+}
+#scene .stage .bar {display:none!important}
+#scene .cm-signature.cm-monogram {width:34px!important;height:34px!important;min-width:0!important;min-height:0!important;right:15px!important;bottom:12px!important;padding:0!important;background-color:#d5ad63!important;opacity:.48!important;mask:url('../../assets/images/codex-monogramme.png') center/contain no-repeat;-webkit-mask:url('../../assets/images/codex-monogramme.png') center/contain no-repeat;border:0!important;box-shadow:none!important;font-size:0!important;pointer-events:none!important}
+html[data-theme="heliosphere"] {--codex-glass:rgba(9,14,29,.69);--codex-edge:rgba(199,211,255,.24);--codex-ink:#f1f3ff;--codex-accent:#d6ae68}
+#scene #solar-return-sun {left:auto!important;right:clamp(18px,3vw,52px)!important;bottom:clamp(70px,10vh,105px)!important;opacity:.68;font-size:11px;padding:7px 12px;background:rgba(9,15,29,.45)}
+#scene #solar-return-sun:hover, #scene #solar-return-sun:focus-visible {opacity:1}
+html[data-theme="heliosphere"] body.solar-selected #solar-return-sun:not([hidden]), #scene #solar-return-sun:not([hidden]) {
+ position:fixed!important;left:auto!important;right:clamp(18px,3vw,48px)!important;
+ top:auto!important;bottom:clamp(60px,8vh,86px)!important;
+ width:auto!important;height:auto!important;min-width:0!important;max-width:max-content!important;
+ display:inline!important;z-index:40!important;box-sizing:border-box!important;
+ padding:3px 0!important;margin:0!important;border:0!important;border-radius:0!important;
+ background:none!important;box-shadow:none!important;backdrop-filter:none!important;
+ color:rgba(231,236,255,.68)!important;font:400 11px/1.3 system-ui!important;
+ letter-spacing:.015em!important;text-decoration:none!important;opacity:1!important;
+ pointer-events:auto!important;cursor:pointer!important;
+}
+html[data-theme="heliosphere"] body.solar-selected #solar-return-sun:not([hidden]):hover, #scene #solar-return-sun:not([hidden]):focus-visible {color:#fff!important;text-decoration:underline!important}
+@media(max-width:700px) {
+html[data-theme="heliosphere"] body.solar-selected #solar-return-sun:not([hidden]), #scene #solar-return-sun:not([hidden]) {right:16px!important;bottom:65px!important;font-size:11px!important}
+}
+#scene .solar-title, #scene .stage .solar-title {position:fixed!important;left:clamp(16px,2.8vw,52px)!important;bottom:clamp(35px,7vh,80px)!important;top:auto!important;z-index:5!important;pointer-events:none!important;max-width:55vw!important}
+#scene #labels .pl .lbl i {display:none!important}
+#scene #labels .pl .lbl {gap:0;line-height:1.2}
+#scene #labels .pl.above .lbl {left:50%;top:auto;bottom:calc(var(--s) + 8px);transform:translateX(-50%);text-align:center;align-items:center}
+@media(max-width:700px) {
+#scene #labels .pl .lbl b {font-size:clamp(12px,3.3vw,15px);letter-spacing:0}
+#scene .stage .solar-title, #scene .solar-title {max-width:60vw}
+}
+@media(min-width:701px) {
+#scene .stage .solar-title, #scene .solar-title {bottom:clamp(12px,2.3vh,26px)!important;left:clamp(14px,2vw,38px)!important}
+}
+@media(min-width:701px) and (max-height:750px) {
+#scene .stage .solar-title, #scene .solar-title {bottom:12px!important}
+}
+@media(max-width:700px) {
+html[data-theme="heliosphere"], html[data-theme="heliosphere"] body {overflow-x:hidden!important}
+html[data-theme="heliosphere"] body {padding-top:43px!important}
+#scene .wrap>h1 {position:fixed!important;top:auto!important;bottom:12px!important;left:14px!important;z-index:4!important;margin:0!important;font:400 23px/1.1 system-ui!important;letter-spacing:.02em!important;text-shadow:0 2px 10px #000!important}
+#scene .wrap>h1 span {display:block!important;font:500 9px/1.3 system-ui!important;letter-spacing:.14em!important;opacity:.6!important;margin-top:5px!important}
+#scene #solar-return-sun:not([hidden]) {position:fixed!important;bottom:13px!important;right:12px!important;top:auto!important;left:auto!important;z-index:10021!important}
+}
+#scene #solar-observatory {position:fixed;left:12px;bottom:12px;z-index:10025;display:flex;align-items:center;gap:14px;padding:9px 12px;border:1px solid rgba(190,169,111,.27);border-radius:13px;background:rgba(9,12,27,.86);backdrop-filter:blur(14px);color:#f3d7a1;font:600 10px/1.15 system-ui;letter-spacing:.1em}
+#scene #solar-observatory .solar-observatory-actions {display:flex;gap:6px}
+#scene #solar-observatory button {border:1px solid rgba(193,180,147,.27);border-radius:15px;background:transparent;color:#d5c8ad;font:500 10px system-ui;padding:6px 9px;cursor:pointer}
+#scene #solar-observatory button:hover, #scene #solar-observatory button:focus-visible {color:#ffe0a0;border-color:#ffe0a088}
+#scene #solar-settings-toggle {display:none!important}
+html[data-theme="heliosphere"] body.solar-settings-open .under .ctrl {left:12px!important;right:auto!important;bottom:66px!important;z-index:10024!important}
+@media(max-width:700px) {
+#scene #solar-observatory {left:8px;bottom:8px;padding:7px 9px;gap:8px}
+html[data-theme="heliosphere"] body.solar-settings-open .under .ctrl {left:8px!important;right:auto!important;bottom:62px!important;max-width:calc(100vw - 16px)!important}
+}
+html[data-theme="heliosphere"] body.solar-settings-open .under .ctrl {width:min(315px,calc(100vw - 24px))!important;max-width:calc(100vw - 24px)!important;padding:14px!important;border-radius:13px!important;background:rgba(12,17,33,.96)!important;box-shadow:0 14px 35px #0008!important}
+#scene #solar-settings-panel .row {display:flex!important;align-items:center!important;gap:9px!important;flex-wrap:wrap!important;margin-bottom:10px!important}
+#scene #solar-settings-panel label, #scene #solar-settings-panel .hint {font:400 11px/1.55 system-ui!important;letter-spacing:0!important}
+#scene #solar-settings-panel .hint {opacity:.68!important;margin:8px 0 0!important}
+#scene #solar-settings-panel select {min-width:96px!important;font-size:11px!important}
+#scene #solar-settings-panel .btn {font-size:11px!important}
+#scene #solar-settings-panel input[type=range] {flex:1;min-width:70px;max-width:110px}
+#scene #solar-settings-panel output {font-size:11px!important}
+/* La barre commune occupe le haut de l'écran */
+html[data-theme="heliosphere"] #scene .stage .bar { top: calc(var(--topbar-h) + 4px); }
+#scene #solar-observatory-themes { display: none; }

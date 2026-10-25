@@ -1,0 +1,40 @@
+<div class="wrap">
+  <div class="stage" id="stage">
+    <div class="bar" aria-hidden="true" hidden><nav class="tabs" id="tabs" aria-label="Sections"></nav></div>
+    <div class="hero">
+      <p class="eye">Codex · Carte galactique</p>
+      <h1>Galactique</h1>
+      <p>Une galaxie procédurale vivante. Chaque section du site est un système stellaire dans un bras de la spirale.</p>
+    </div>
+    <div id="labels"></div>
+
+    <section class="card" id="card" aria-live="polite">
+      <h3><span class="dot" id="cardDot"></span><span id="cardTitle">Codex</span><button class="gal-card-dismiss" id="cardDismiss" type="button" aria-label="Masquer la fiche du système" title="Masquer la fiche">×</button></h3>
+      <p id="cardText"></p>
+      <button class="btn" id="back" type="button">Retour à la galaxie</button>
+    </section>
+
+    <section class="panel closed" id="panel" aria-label="Laboratoire de la galaxie">
+      <header><h2>Laboratoire de la galaxie</h2><div class="gal-panel-actions"><button class="tg" id="panelToggle" type="button" aria-expanded="false" aria-label="Réglages" title="Réglages">⚙</button></div></header>
+      <div class="body">
+        <div class="rw"><label for="pop">Population</label><input id="pop" type="range" min="20" max="200" step="10" value="100"><output id="popOut" for="pop">100 %</output></div>
+        <div class="rw"><label for="arms">Bras spiraux</label><input id="arms" type="range" min="2" max="6" step="1" value="4"><output id="armsOut" for="arms">4</output></div>
+        <div class="rw"><label for="twist">Enroulement</label><input id="twist" type="range" min="1" max="9" step="0.5" value="9"><output id="twistOut" for="twist">9.0</output></div>
+        <div class="rw"><label for="nucleus">Noyau</label><input id="nucleus" type="range" min="0" max="100" step="5" value="50"><output id="nucleusOut" for="nucleus">50 %</output></div>
+        <div class="rw"><label for="turb">Turbulence</label><input id="turb" type="range" min="0" max="1.5" step="0.05" value="0.75"><output id="turbOut" for="turb">0.75</output></div>
+        <div class="rw"><label for="glow">Éclat</label><input id="glow" type="range" min="0.4" max="2" step="0.05" value="1.35"><output id="glowOut" for="glow">1.35</output></div>
+        <div class="rw"><label for="speed">Vitesse</label><input id="speed" type="range" min="0" max="5" step="0.25" value="1"><output id="speedOut" for="speed">1×</output></div>
+        <div class="rw"><label for="quality">Qualité</label><select id="quality"><option value="std">Standard</option><option value="high">Élevée</option><option value="ultra">Ultra</option></select><output id="countOut"></output></div>
+        <div class="btns">
+          <button class="btn" id="pause" type="button">Pause</button>
+          <button class="btn" id="reset" type="button">Réinitialiser la vue</button>
+          <button class="btn" id="reseed" type="button">Nouvelle graine</button>
+        </div>
+        <p class="hint">Glisser : orbiter. Molette ou pincement : zoomer, jusque dans les bras. Les réglages régénèrent la structure en direct.</p>
+      </div>
+    </section>
+
+    <div class="caption"><b>NGC · Codex 01</b><span id="capText">Simulation procédurale</span></div>
+    <div class="loading" id="loading">Formation de la galaxie…</div>
+  </div>
+</div>

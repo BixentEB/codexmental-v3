@@ -86,12 +86,16 @@
     try {
       if (T.markup) host.insertAdjacentHTML('beforeend', await (await fetch(base + T.markup)).text());
       await Promise.all((T.css || []).map(function (c) { return addCss(base + c); }));
-      for (var i = 0; i < (T.scripts || []).length; i++) await addScript(T.scripts[i]);
+      // une bibliothèque injoignable n'est pas fatale : la scène décide si elle peut démarrer ou se replier
+      for (var i = 0; i < (T.scripts || []).length; i++) { try { await addScript(T.scripts[i]); } catch (e) { console.warn(e.message); } }
       if (T.scene) await addScript(base + T.scene);
       Codex.sceneOk = !!(window.CodexScene && window.CodexScene.ok !== false);
+      if (!Codex.sceneOk) message("La scène n'a pas pu démarrer (WebGL indisponible ?). La lecture des articles reste disponible.");
     } catch (err) {
       console.error(err);
       message("La scène 3D n'a pas pu se charger (connexion ou WebGL). La lecture des articles reste disponible.");
+      var ld = document.getElementById('loading');
+      if (ld) { ld.textContent = "La scène n'a pas pu se charger."; ld.classList.remove('done'); }
     }
     document.documentElement.classList.add('ready');
     Codex.emit('ready', T);

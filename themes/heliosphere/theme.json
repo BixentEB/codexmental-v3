@@ -1,0 +1,28 @@
+{
+  "label": "Héliosphère",
+  "palette": {
+    "bg": "#03040a", "fg": "#e9ecf8", "fgSoft": "#cdd3e6", "muted": "#8f96b8", "hud": "#cdd6f5",
+    "accent": "#f4c77a", "accent2": "#ffb23e", "line": "rgba(194, 206, 239, 0.22)",
+    "panel": "rgba(9, 14, 29, 0.93)", "panelSolid": "rgba(7, 10, 22, 0.98)", "panelDeep": "rgba(2, 4, 12, 0.45)"
+  },
+  "fonts": {
+    "display": "'Syne', 'Trebuchet MS', system-ui, sans-serif",
+    "body": "'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif",
+    "href": "https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap"
+  },
+  "reader": { "layout": "wide" },
+  "markup": "scene.html",
+  "css": ["scene.css"],
+  "scripts": [
+    "https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js",
+    "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js",
+    "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js",
+    "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js",
+    "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js",
+    "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js",
+    "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js",
+    "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/MaskPass.js",
+    "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"
+  ],
+  "scene": "scene.js"
+}

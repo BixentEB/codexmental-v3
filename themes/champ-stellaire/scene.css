@@ -1,0 +1,25 @@
+/* Thème Champ stellaire — fond d'étoiles WebGL. */
+#scene #stars {position:fixed;inset:0;width:100%;height:100%;z-index:-2;display:block;background:radial-gradient(ellipse at 70% 48%,#171a39 0%,#0a1025 42%,#040711 88%)}
+#scene .veil {position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,#04061165,transparent 65%)}
+#scene .hero {min-height:100svh;display:grid;align-items:center;padding:110px clamp(24px,7vw,125px) 65px}
+#scene .hero-inner {max-width:430px;background:linear-gradient(90deg,#070916b8,#07091624 85%,transparent);padding:30px 18px 30px 0;border-radius:12px}
+#scene .eyebrow {font-size:11px;letter-spacing:.25em;color:#d0b7ff;text-transform:uppercase;font-weight:700}
+#scene .hero h1 {font-size:clamp(27px,3.4vw,49px);letter-spacing:.18em;font-weight:450;line-height:1.2;margin:20px 0}
+#scene .hero p {color:#c6c9e0;font-size:16px;max-width:410px}
+#scene .cta {margin-top:22px;border:1px solid #c5a1ffb0;color:#efe4ff;background:#25143eaa;padding:12px 23px;border-radius:12px;box-shadow:0 0 30px #a474ff27}
+#scene .cta:hover {background:#412763}
+#scene .hero-note {position:absolute;bottom:34px;right:48px;color:#929abd;font-size:11px;letter-spacing:.18em}
+#scene .status {position:fixed;bottom:18px;left:24px;color:#9ea4c7;font-size:11px;letter-spacing:.11em;pointer-events:none}
+@media(max-width:800px) {
+#scene .hero {padding:100px 28px 60px}
+#scene .hero-note {right:22px}
+#scene .status {display:none}
+}
+@media(prefers-reduced-motion:reduce) {
+#scene *, #scene *:before, #scene *:after {animation:none!important;transition:none!important}
+}
+html[data-theme="champ-stellaire"] { --void: #070b18; }
+#scene .hero { padding-top: calc(var(--topbar-h) + 52px); position: relative; z-index: 1; }
+#scene .hero .eyebrow, #scene .hero .cta { font-family: var(--font-body); }
+html.reading #scene .hero, html.reading #scene .status { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .35s, visibility 0s .35s; }
+#scene .hero, #scene .status { transition: opacity .5s .1s, visibility 0s; }
