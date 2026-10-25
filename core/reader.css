@@ -259,3 +259,10 @@
 .legal-link { margin: 26px 0 0; text-align: center; font-size: .78rem; }
 .legal-link a { color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
 .legal-link a:hover { color: var(--accent); }
+
+/* même largeur quelle que soit la page : le lecteur ne change de taille que par les réglages */
+:root[data-reader-layout="side"] .reader { width: var(--rd-max); }
+:root[data-reader-layout="side"] .reader.focus { width: auto; }
+@media (max-width: 1099px) { :root[data-reader-layout="side"] .reader { width: auto; } }
+/* le second affichage d'un article (après chargement) ne rejoue pas l'animation d'entrée */
+.pane.still { animation: none; }

@@ -71,3 +71,12 @@ button { font: inherit; color: inherit; }
 }
 @media (max-width: 420px) { .topbar .brand { font-size: 10px; } .nav-item, .nav-contact { padding: 8px 7px; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; } }
+
+/* barre de défilement « console » : fine, lumineuse, sans flèches */
+* { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--accent, #8fd0ff) 55%, transparent) transparent; }
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
+::-webkit-scrollbar-track { background: linear-gradient(90deg, transparent 4px, color-mix(in srgb, var(--line, #567) 70%, transparent) 4px 5px, transparent 5px); }
+::-webkit-scrollbar-thumb { border: 3px solid transparent; border-radius: 8px; background: linear-gradient(180deg, color-mix(in srgb, var(--accent, #8fd0ff) 80%, transparent), color-mix(in srgb, var(--accent-2, var(--accent, #8fd0ff)) 60%, transparent)) padding-box; box-shadow: 0 0 8px color-mix(in srgb, var(--accent, #8fd0ff) 55%, transparent); min-height: 40px; }
+::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, var(--accent, #8fd0ff), var(--accent-2, var(--accent, #8fd0ff))) padding-box; }
+::-webkit-scrollbar-corner { background: transparent; }

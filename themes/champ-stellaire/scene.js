@@ -28,7 +28,7 @@ const CFG={speed:1,bright:1,parallax:1};let tAcc=0,lastMs=0;window.CodexStellarC
 
 /* Liaison avec l'interface commune */
 const Codex=window.Codex;
-document.getElementById('enter').addEventListener('click',()=>{Codex.sceneOk?Codex.navigate('codex'):Codex.reader.open('codex')});
+
 Codex.on('navigate',e=>{if(e.direct)return;if(e.id)Codex.reader.open(e.id);else Codex.reader.close()});
 })();
 

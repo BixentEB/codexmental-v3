@@ -158,11 +158,28 @@
     markNav();
     if (R.opener && R.opener.focus) { try { R.opener.focus({ preventScroll: true }); } catch (e) {} }
   }
+  /* état de l'arbre : tout fermé sauf la première rubrique garnie ; un seul groupe ouvert par niveau ; le choix du visiteur est mémorisé */
+  function loadTree(id, sec) {
+    var ex = {}, saved = null;
+    try { saved = (JSON.parse(localStorage.getItem('codex.tree') || '{}') || {})[id]; } catch (e) {}
+    if (Array.isArray(saved)) { saved.forEach(function (g) { ex[g] = true; }); return ex; }
+    var first = (sec.tree || []).filter(function (g) { return !g.article && countOf(g) > 0; })[0];
+    if (first) ex[first.id] = true;
+    return ex;
+  }
+  function saveTree() {
+    if (!R.sec) return;
+    try { var all = JSON.parse(localStorage.getItem('codex.tree') || '{}') || {}; all[R.sec] = Object.keys(R.expanded).filter(function (k) { return R.expanded[k]; }); localStorage.setItem('codex.tree', JSON.stringify(all)); } catch (e) {}
+  }
+  function expand(id) {   // ouvre un groupe et ferme ses voisins du même niveau
+    var g = groups[id];
+    if (g) Object.keys(groups).forEach(function (k) { var o = groups[k]; if (o !== g && o.sec === g.sec && o.parent === g.parent) delete R.expanded[k]; });
+    R.expanded[id] = true;
+  }
   function openSec(id, from) {
     var sec = secById(id); if (!sec) return false;
     if (from) R.opener = from;
-    R.sec = id; tQ.value = ''; R.q = ''; R.expanded = {};
-    (sec.tree || []).forEach(function (g) { if (!g.article) R.expanded[g.id] = true; });
+    R.sec = id; tQ.value = ''; R.q = ''; R.expanded = loadTree(id, sec);
     if (sec.layout === 'page' && order[id][0]) { R.view = 'article'; R.aid = order[id][0]; R.gid = null; R.mview = 'main'; }
     else if (sec.layout === 'page' && sec.tree && sec.tree[0] && sec.tree[0].article) { R.view = 'article'; R.aid = sec.tree[0].article; R.gid = null; R.mview = 'main'; }
     else { R.view = 'hub'; R.gid = null; R.aid = null; R.mview = 'tree'; }
@@ -194,8 +211,9 @@
     var th = tabHost(g);
     R.tab = null;
     if (th) { g = th.host; id = g.id; R.tab = th.active ? th.active.id : ((tabList(g)[0] || {}).id || null); }
-    R.sec = g.sec; R.view = 'group'; R.gid = id; R.aid = null; R.expanded[id] = true; if (R.tab) R.expanded[R.tab] = true;
-    var p = g.parent; while (p) { R.expanded[p] = true; p = groups[p] && groups[p].parent; }
+    R.sec = g.sec; R.view = 'group'; R.gid = id; R.aid = null;
+    var chain = [], p = g.parent; while (p) { chain.unshift(p); p = groups[p] && groups[p].parent; }
+    chain.forEach(expand); expand(id); if (R.tab) expand(R.tab);
     if (isTablet()) R.treeOpen = false;
     render(); mainTop();
   }
@@ -203,7 +221,7 @@
     var m = idx[id]; if (!m) return;
     if (!R.open) showPanel();
     R.sec = m.sec; R.view = 'article'; R.aid = id; R.gid = null; R.mview = 'main';
-    m.path.forEach(function (g) { R.expanded[g.id] = true; });
+    m.path.forEach(function (g) { expand(g.id); });
     if (isTablet()) R.treeOpen = false;
     render(); mainTop();
     rdMain.focus({ preventScroll: true });
@@ -229,7 +247,7 @@
     rd.querySelector('[data-act="tree"]').setAttribute('aria-expanded', String(R.treeOpen));
     rd.querySelector('[data-act="focus"]').setAttribute('aria-pressed', String(R.focus));
     rd.style.setProperty('--fs', state.fs + 'px');
-    renderTop(); renderTreeHead(); renderTreeList(); renderMain(); markNav();
+    renderTop(); renderTreeHead(); renderTreeList(); renderMain(); markNav(); saveTree();
     setHash(R.view === 'article' ? R.aid : R.sec);
   }
   function renderTop() {
@@ -390,7 +408,7 @@
         if (p < ord.length - 1) h += '<button type="button" class="nx" data-act="art" data-id="' + esc(ord[p + 1]) + '"><span class="l">Suivant →</span><span class="t">' + esc(DB.articles[ord[p + 1]].title) + '</span></button>';
         h += '</nav>';
       }
-      rdMain.innerHTML = h + '</article>'; afterRender(); updateProg();
+      rdMain.innerHTML = h.replace('<article class="pane">', '<article class="pane still">') + '</article>'; afterRender(); updateProg();
     }, function () {
       if (token !== R.token) return;
       rdMain.innerHTML = '<article class="pane">' + title + '<div class="msgbox">Cet article n\'a pas pu être chargé. Réessayez dans un instant.</div></article>';
@@ -426,6 +444,8 @@
     var max = rdMain.scrollHeight - rdMain.clientHeight;
     prog.style.width = (R.view === 'article' && max > 8 ? Math.min(100, rdMain.scrollTop / max * 100) : 0).toFixed(1) + '%';
   }
+  function warm(e) { var b = e.target.closest && e.target.closest('.leaf[data-id], .arow[data-id], [data-act="art"][data-id]'); if (b && DB && DB.articles[b.dataset.id]) fetchArticle(DB.articles[b.dataset.id]).catch(function () {}); }
+  rd.addEventListener('pointerover', warm); rd.addEventListener('focusin', warm);
   rdMain.addEventListener('scroll', updateProg, { passive: true });
   rd.addEventListener('click', function (e) {
     var link = e.target.closest('a[data-art]');
@@ -434,9 +454,9 @@
     var act = el.dataset.act, id = el.dataset.id;
     if (act === 'close') closeReader();
     else if (act === 'hub') goHub();
-    else if (act === 'group') { if (isMobile() && el.closest('.tree')) { R.expanded[id] = !R.expanded[id]; renderTreeList(); } else goGroup(id); }
+    else if (act === 'group') { if (isMobile() && el.closest('.tree')) { if (R.expanded[id]) delete R.expanded[id]; else expand(id); saveTree(); renderTreeList(); } else goGroup(id); }
     else if (act === 'tab') { R.tab = id; render(); var tb = rdMain.querySelector('.tab.on'); if (tb) tb.focus({ preventScroll: true }); }
-    else if (act === 'tog') { R.expanded[id] = !R.expanded[id]; renderTreeList(); }
+    else if (act === 'tog') { if (R.expanded[id]) delete R.expanded[id]; else expand(id); saveTree(); renderTreeList(); }
     else if (act === 'art') goArticle(id);
     else if (act === 'back') { R.mview = 'tree'; render(); }
     else if (act === 'tree') { R.treeOpen = !R.treeOpen; render(); }
