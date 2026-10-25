@@ -671,7 +671,6 @@
    "src": "content/codex/psy/article2.html",
    "base": "blog/articles/psy",
    "words": 5,
-   "status": "draft",
    "type": "article"
   },
   "hp/cameleon": {
@@ -712,7 +711,6 @@
    "src": "content/codex/altstates/revelucide.html",
    "base": "blog/articles/altstates",
    "words": 70,
-   "status": "draft",
    "type": "article"
   },
   "symbol/tarot/13": {

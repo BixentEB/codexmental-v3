@@ -828,13 +828,14 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
 
   /* ---------- Étiquettes et onglets ---------- */
   var els = {};
+  var OBJ_NAMES = { codex: 'Mercure', dashb: 'Terre', atelier: 'Mars', profil: 'Saturne', lab: 'Uranus' };
   function makeLabel(P) {
     var s = SECTIONS[P.id];
     var d = document.createElement('div');
     d._k = (s.info ? ' pl-info' : ' pl-menu');
     d.className = 'pl right' + d._k;
     d.innerHTML = '<button class="hit" type="button" aria-label="' + s.name + (s.sub ? ' : ' + s.sub : '') + '"></button>' +
-      '<span class="lbl"><b>' + s.name + '</b>' + (s.sub ? '<i>' + s.sub + '</i>' : '') + '</span>';
+      '<span class="lbl"><b>' + s.name + '</b>' + (s.sub ? '<i>' + s.sub + '</i>' : '') + (OBJ_NAMES[P.id] ? '<em class="objn">' + OBJ_NAMES[P.id] + '</em>' : '') + '</span>';
     labelsEl.appendChild(d);
     var hit = d.querySelector('.hit');
     hit.addEventListener('focus', function () { hover = P.id; showSolarHover(P.id); });
@@ -1300,4 +1301,10 @@ toggle?.addEventListener('click',function(){
   var v = 'all'; try { var r = localStorage.getItem(KEY); if (MODES.indexOf(r) >= 0) v = r; } catch (e) {}
   sel.value = v; apply(v);
   sel.addEventListener('change', function () { apply(sel.value); try { localStorage.setItem(KEY, sel.value); } catch (e) {} });
+  var sw = document.getElementById('names-objn');   // interrupteur : en mode « objets seulement », nommer aussi les planètes-rubriques
+  if (sw) {
+    var on = true; try { on = localStorage.getItem(KEY + '.objn') !== '0'; } catch (e) {}
+    sw.checked = on; document.body.classList.toggle('nm-objn', on);
+    sw.addEventListener('change', function () { document.body.classList.toggle('nm-objn', sw.checked); try { localStorage.setItem(KEY + '.objn', sw.checked ? '1' : '0'); } catch (e) {} });
+  }
 })();

@@ -1,8 +1,9 @@
 /* Thème Vie d'une étoile — canvas 2D, six stades interpolés, deux destins. */
 (function () {
   'use strict';
-  var Codex = window.Codex, cv = document.getElementById('ve-cv'), g = cv.getContext('2d');
-  if (!g) { window.CodexScene = { ok: false }; return; }
+  var Codex = window.Codex, cv = document.getElementById('ve-cv'), gl = null, g = null;
+  try { gl = cv.getContext('webgl', { antialias: false, alpha: false, powerPreference: 'high-performance' }); } catch (e) {}
+  if (!gl) { g = cv.getContext('2d'); if (!g) { window.CodexScene = { ok: false }; return; } }
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var W = 0, H = 0, dpr = 1;
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
@@ -14,7 +15,7 @@
     sun: { label: 'Étoile comme le Soleil', stages: [
       { id: 'atelier', menu: 1, name: 'Nébuleuse natale', dur: 'des millions d’années', text: 'Un nuage froid de gaz et de poussière s’effondre sur lui-même. Rien ne brille encore : tout est promesse. Ici vit l’Atelier, là où l’on range les idées avant qu’elles ne prennent forme.', p: P({ dust: 1, h: [255, 140, 110], glow: .05 }) },
       { id: 'lab', menu: 1, name: 'Protoétoile', dur: '≈ 50 millions d’années', text: 'Le cœur s’échauffe, un disque tourne autour. L’étoile n’est pas encore née, mais elle chauffe déjà. Le Laboratoire : ce qui se matérialise.', p: P({ r: .028, c: [255, 220, 180], h: [255, 150, 90], glow: .55, dust: .45, disc: 1 }) },
-      { id: 'codex', menu: 1, name: 'Séquence principale', dur: '≈ 10 milliards d’années', text: 'La fusion de l’hydrogène s’allume et l’équilibre dure. C’est le long présent d’une étoile, celui du Soleil aujourd’hui. Le Codex : le temps des articles et des réflexions.', p: P({ r: .075, c: [255, 250, 225], h: [255, 205, 110], glow: 1, rays: 1 }) },
+      { id: 'codex', menu: 1, name: 'Séquence principale', dur: '≈ 10 milliards d’années', text: 'La fusion de l’hydrogène s’allume et l’équilibre dure. C’est le long présent d’une étoile, celui du Soleil aujourd’hui. Le Codex : le temps des articles et des réflexions.', p: P({ r: .075, c: [255, 243, 205], h: [255, 190, 90], glow: 1, rays: 1 }) },
       { id: 'dashb', menu: 1, name: 'Géante rouge', dur: '≈ 1 milliard d’années', text: 'L’hydrogène du cœur est épuisé : l’étoile enfle, rougit, avale ses planètes proches. L’Observatoire : on regarde de loin ce qui change.', p: P({ r: .24, c: [255, 190, 130], h: [235, 70, 40], glow: .9, puls: 1 }) },
       { id: null, name: 'Nébuleuse planétaire', dur: '≈ 20 000 ans', text: 'Les couches externes s’échappent doucement et forment une coquille lumineuse. Elle n’a rien à voir avec les planètes : c’est un vieux nom.', p: P({ r: .02, c: [230, 245, 255], h: [120, 200, 255], glow: .8, shell: 1 }) },
       { id: 'profil', menu: 1, name: 'Naine blanche', dur: 'des milliards d’années à refroidir', text: 'Il ne reste que le cœur, petit comme la Terre et très dense, qui se refroidit lentement. Le Portrait : ce qui reste quand on ne garde que l’essentiel.', p: P({ r: .016, c: [245, 250, 255], h: [150, 190, 255], glow: .7 }) }
@@ -48,7 +49,7 @@
     tt = Math.min(1, tt + dt / 2.2); var k = ease(tt);
     KEYS.forEach(function (key) { cur[key] = mix(from[key], to[key], k); });
     cur.c = mixRGB(from.c, to.c, k); cur.h = mixRGB(from.h, to.h, k);
-    if (to.flash && tt > .85) cur.flash = to.flash * (1 - (tt - .85) / .15 * .8);
+    
   }
 
   /* ---------- fond : étoiles et poussière ---------- */
@@ -59,7 +60,109 @@
   function blob(x, y, r, c, a) { var gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, rgba(c, a)); gr.addColorStop(1, rgba(c, 0)); g.fillStyle = gr; g.beginPath(); g.arc(x, y, r, 0, 6.2832); g.fill(); }
 
   var clock = 0;
+
+  /* ---------- rendu réaliste WebGL (un seul shader plein écran) ---------- */
+  var FRAG = `
+precision highp float;
+uniform vec2 uRes, uCen; uniform float uT, uR, uGlow, uDust, uDisc, uShell, uFlash, uBeams, uRays, uPuls, uMass; uniform vec3 uC, uH;
+float h21(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
+float vn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f); return mix(mix(h21(i), h21(i + vec2(1., 0.)), f.x), mix(h21(i + vec2(0., 1.)), h21(i + vec2(1., 1.)), f.x), f.y); }
+float fbm(vec2 p){ float v = 0., a = .5; for (int i = 0; i < 6; i++) { v += a * vn(p); p = p * 2.02 + vec2(5.2, 1.3); a *= .5; } return v; }
+vec2 rot(vec2 p, float a){ float c = cos(a), s = sin(a); return vec2(c * p.x - s * p.y, s * p.x + c * p.y); }
+void main(){
+  float m = min(uRes.x, uRes.y); vec2 uv = (gl_FragCoord.xy - uCen) / m; float r = length(uv), ang = atan(uv.y, uv.x);
+  vec3 col = vec3(.004, .003, .009);
+  // champ d'étoiles lointaines
+  vec2 sp = gl_FragCoord.xy / 3.5; float s = h21(floor(sp)); 
+  if (s > .972) { float d = length(fract(sp) - .5); float b = pow((s - .972) / .028, 4.) * smoothstep(.42, .0, d); float tw = .75 + .25 * sin(uT * (1. + s * 4.) + s * 50.); vec3 tint = mix(vec3(.7, .8, 1.), vec3(1., .85, .7), h21(floor(sp) + 3.1)); col += tint * b * tw * 1.3; }
+  // nébuleuse : gaz, poussière sombre, lumière diffusée
+  float t = uT * .012; vec2 q = uv * 1.5;
+  if (uDust > .01) {
+    vec2 w = vec2(fbm(q * 1.4 + t), fbm(q * 1.4 + 7. - t)); float n = fbm(q * 2.1 + w * 1.8), n2 = fbm(q * 4.6 - w * 2.2 + 3.);
+    float gas = smoothstep(.32, .86, n);
+    float lanes = smoothstep(.48, .8, fbm(q * 3.1 + w * 2. + 20.));
+    vec3 neb = mix(uH * .22, uH * 1.05, n2) * gas * .6 + vec3(.2, .34, .7) * smoothstep(.58, .92, n2) * gas * .22;
+    neb += uH * exp(-r * 3.4) * .25;
+    neb *= 1. - .78 * lanes;
+    col += neb * uDust * (1. - .65 * uDisc);
+  }
+  // disque et jets de la protoétoile
+  if (uDisc > .01) {
+    vec2 p = rot(uv, -.38); vec2 e = vec2(p.x, p.y * 4.2); float rd = length(e);
+    float disc = smoothstep(.045, .1, rd) * smoothstep(.44, .16, rd);
+    float rings = fbm(vec2(rd * 22. - uT * .05, atan(e.y, e.x) * 2. + uT * .08));
+    col += mix(uH, vec3(1., .9, .75), .35) * disc * (.18 + .8 * rings) * uDisc * (.55 + .45 * smoothstep(-.1, .1, -p.y));
+    float jet = exp(-pow(p.x / (.006 + abs(p.y) * .045), 2.)) * exp(-abs(p.y) * 3.2) * smoothstep(.05, .14, abs(p.y));
+    col += vec3(.55, .75, 1.) * jet * (.5 + .5 * fbm(vec2(p.y * 14. - uT * .6, p.x * 20.))) * uDisc * .8;
+  }
+  // coquille : nébuleuse planétaire ou rémanent de supernova
+  if (uShell > .01) {
+    float s0 = .12 + .12 * uShell, th = mix(.032, .075, uMass);
+    float nz = fbm(uv * mix(8., 15., uMass) + uT * .02), nz2 = fbm(uv * 22. - uT * .03);
+    float rim = exp(-pow((r - s0 * (.92 + .16 * nz)) / th, 2.));
+    vec3 inner = mix(vec3(.25, .75, 1.), vec3(.9, .35, .55), uMass), outer = mix(vec3(1., .5, .22), vec3(.35, .55, 1.), uMass);
+    vec3 sc = mix(inner, outer, smoothstep(s0 - th, s0 + th * 1.4, r));
+    float fil = mix(1., pow(nz2, 2.2) * 3.2, uMass);
+    col += sc * rim * (.35 + 1.1 * nz) * fil * .9;
+    col += inner * exp(-pow(r / (s0 * .9), 2.)) * .12 * (.5 + nz);
+  }
+  // étoile
+  float R = uR * (1. + uPuls * .028 * sin(uT * 1.3)); float x = r / max(R, .0008);
+  if (uR > 0.) {
+    if (x < 1.) {
+      float mu = sqrt(1. - x * x); vec2 sp2 = uv / max(R, .001) / (mu * .85 + .15);
+      float sc = mix(16., 2.6, smoothstep(.03, .3, uR));
+      float g1 = fbm(sp2 * sc + uT * .04), g2 = fbm(sp2 * sc * 2.3 + g1 * 2. - uT * .03);
+      float ld = 1. - .62 * (1. - mu);
+      vec3 base = mix(uH, uC, pow(mu, .55));
+      vec3 surf = base * (.72 + .55 * g1) * ld * (.9 + .35 * (g2 - .5));
+      float spots = smoothstep(.7, .8, fbm(sp2 * 1.6 + 11.)) * .32 * step(.04, uRays) * step(uR, .13);
+      surf *= 1. - spots;
+      col = surf * 1.7 + col * .12;
+    }
+    float d = max(r - R, 0.) / max(R, .001);
+    float halo = uGlow * (.55 * exp(-d * 3.6) + .2 * exp(-d * 1.1) + .05 * exp(-d * .35));
+    float stream = fbm(vec2(ang * 3.2 + sin(uT * .05) * 2., d * .8 + uT * .02));
+    halo *= 1. + uRays * (stream - .42) * 1.5 * exp(-d * .5);
+    if (x >= 1.) col += mix(uH, uC, .25) * halo * .95; else col += uH * halo * .12;
+  }
+  // faisceaux du pulsar
+  if (uBeams > .01) {
+    vec2 p = rot(uv, uT * 1.05 + .6);
+    float w = .0035 + abs(p.x) * .05; float bm = exp(-pow(p.y / w, 2.)) * exp(-abs(p.x) * 2.6) * smoothstep(.0, .03, abs(p.x));
+    col += vec3(.6, .78, 1.) * bm * uBeams * .9;
+  }
+  // éclat de la supernova
+  col += vec3(1., .96, .9) * uFlash * (exp(-r * 2.6) * 1.8 + .12);
+  col = 1. - exp(-col * 1.15); col = pow(col, vec3(.95));
+  col += (h21(gl_FragCoord.xy + uT) - .5) / 220.;
+  gl_FragColor = vec4(col, 1.);
+}
+`, U = {}, prog = null;
+  if (gl) {
+    function sh(type, src) { var o = gl.createShader(type); gl.shaderSource(o, src); gl.compileShader(o); if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) { if (window.console) console.warn(gl.getShaderInfoLog(o)); return null; } return o; }
+    var vs = sh(gl.VERTEX_SHADER, 'attribute vec2 p; void main(){ gl_Position = vec4(p, 0., 1.); }'), fs = sh(gl.FRAGMENT_SHADER, FRAG);
+    if (vs && fs) {
+      prog = gl.createProgram(); gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog);
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) prog = null;
+    }
+    if (prog) {
+      gl.useProgram(prog); var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+      var loc = gl.getAttribLocation(prog, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+      ['uRes', 'uCen', 'uT', 'uR', 'uGlow', 'uDust', 'uDisc', 'uShell', 'uFlash', 'uBeams', 'uRays', 'uPuls', 'uMass', 'uC', 'uH'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
+    } else { gl = null; g = cv.getContext('2d'); }
+  }
+  function drawGL() {
+    var w = cv.width, h = cv.height, mass = cfg.path === 'massive' ? 1 : 0;
+    gl.viewport(0, 0, w, h);
+    gl.uniform2f(U.uRes, w, h); gl.uniform2f(U.uCen, w * (.5 - cxShift * .2), h * (1 - .46)); gl.uniform1f(U.uT, clock);
+    gl.uniform1f(U.uR, cur.r); gl.uniform1f(U.uGlow, cur.glow); gl.uniform1f(U.uDust, cur.dust); gl.uniform1f(U.uDisc, cur.disc);
+    gl.uniform1f(U.uShell, cur.shell); gl.uniform1f(U.uFlash, cur.flash); gl.uniform1f(U.uBeams, cur.beams); gl.uniform1f(U.uRays, cur.rays); gl.uniform1f(U.uPuls, cur.puls); gl.uniform1f(U.uMass, mass);
+    gl.uniform3f(U.uC, cur.c[0] / 255, cur.c[1] / 255, cur.c[2] / 255); gl.uniform3f(U.uH, cur.h[0] / 255, cur.h[1] / 255, cur.h[2] / 255);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  }
   function draw() {
+    if (gl) return drawGL();
     var m = Math.min(W, H), cx = W * (.5 - cxShift * .2), cy = H * .46;
     g.setTransform(dpr, 0, 0, dpr, 0, 0); g.globalCompositeOperation = 'source-over';
     g.fillStyle = '#05030a'; g.fillRect(0, 0, W, H);
@@ -116,7 +219,7 @@
     setTarget(s.p);
     nEl.textContent = s.name; dEl.textContent = PATHS[cfg.path].label + ' · ' + s.dur; tEl.textContent = s.text;
     Array.prototype.forEach.call(timeEl.children, function (b, k) { if (b.classList.contains('ve-path')) return; if (k === stage) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
-    timer = 0;
+    timer = 0; since = 0;
   }
   function stageOf(id) { var st = PATHS[cfg.path].stages; for (var k = 0; k < st.length; k++) if (st[k].id === id) return k; return -1; }
 
@@ -144,16 +247,16 @@
   }
 
   /* ---------- boucle ---------- */
-  function resize() { W = window.innerWidth; H = window.innerHeight; dpr = Math.min(2, window.devicePixelRatio || 1); cv.width = W * dpr; cv.height = H * dpr; }
+  function resize() { W = window.innerWidth; H = window.innerHeight; dpr = Math.min(2, window.devicePixelRatio || 1); dpr = Math.min(gl ? 1.5 : 2, window.devicePixelRatio || 1); cv.width = W * dpr; cv.height = H * dpr; }
   window.addEventListener('resize', resize); resize();
-  var last = performance.now(), paused = document.hidden;
+  var since = 0, last = performance.now(), paused = document.hidden;
   document.addEventListener('visibilitychange', function () { paused = document.hidden; last = performance.now(); if (!paused) requestAnimationFrame(frame); });
   function frame(now) {
     if (paused) return;
     var dt = Math.min(.05, (now - last) / 1000); last = now; clock += dt;
     var reading = document.documentElement.classList.contains('reading');
     cxShift += ((reading ? 1 : 0) - cxShift) * Math.min(1, dt * 4);
-    stepAnim(dt);
+    stepAnim(dt); since += dt; if (to.flash) cur.flash = to.flash * Math.max(.07, 1 - since / 4.5);
     if (userHold > 0) userHold -= dt;
     else if (cfg.auto && !reading && !reduce) { timer += dt * cfg.speed; if (timer > 9) { goStage((stage + 1) % 6); } }
     draw(); requestAnimationFrame(frame);

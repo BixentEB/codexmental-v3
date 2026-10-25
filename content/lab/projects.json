@@ -1,136 +1,320 @@
 {
- "intro": "Versions, téléchargements, tutoriels, historique des mises à jour et informations de licence seront regroupés dans un espace indépendant.",
- "repo": "https://github.com/BixentEB/codexmental-lab",
- "repoLabel": "Explorer le dépôt du Lab ↗",
+ "intro": "Une vitrine de mes créations, pas une boutique : rien n'est annoncé qui n'existe pas. Les fiches complètes viendront dans un espace indépendant.",
  "palette": {
-  "Multimédia": "#8cc7ff",
+  "Windows": "#8cc7ff",
+  "Android": "#8cc7ff",
+  "Python": "#8cc7ff",
+  "Flutter": "#8cc7ff",
+  "CSS": "#8cc7ff",
+  "Navigateur": "#8cc7ff",
+  "Bêta": "#f4ce91",
+  "En développement": "#f4ce91",
+  "Prototype": "#f4ce91",
+  "Concept": "#f4ce91",
+  "Expérimental": "#f4ce91",
+  "Accès privé": "#f4ce91",
+  "Site public": "#f4ce91",
+  "Multimédia": "#c9a6ff",
   "Automatisation": "#e5b5ff",
   "Gestion": "#8ee0b7",
-  "Quotidien": "#f4ce91",
+  "Quotidien": "#9fe0c9",
   "Commerce": "#f4b68d",
-  "Création": "#d3b3ff",
+  "Stock": "#f4b68d",
+  "Bibliothèque": "#e8c98a",
+  "Culture": "#e8c98a",
   "Web": "#a6d9f5",
-  "Expérimentation": "#b3d9dc"
+  "Création": "#d3b3ff",
+  "Immersif": "#b8c4ff",
+  "Personnalisation": "#f0a9d0",
+  "UX/UI": "#f0a9d0",
+  "Symbolisme": "#d8b4a0",
+  "Journal": "#d8b4a0",
+  "Widget": "#f0a9d0",
+  "Photo": "#f0a9d0",
+  "Jeu": "#ff9fa8",
+  "Science": "#9fe3e8",
+  "Physique": "#9fe3e8",
+  "Recherche": "#9fe3e8"
  },
  "projects": [
   {
    "id": "noxdl",
+   "group": "Applications",
    "name": "NoxDL",
    "mark": "↓",
-   "platform": "Windows",
-   "status": "Développement",
-   "visibility": "Diffusion publique envisagée",
-   "license": "Gratuit envisagé",
    "accent": "#94c8ff",
-   "summary": "Télécharger, classer et automatiser ses médias depuis une interface unique.",
-   "detail": "Trois modes complémentaires : Standard pour un téléchargement à la demande, Chasseur pour les listes de liens et Radar pour la détection automatisée. Le projet s’appuie sur Python, yt-dlp et FFmpeg.",
+   "platform": "Windows",
+   "summary": "Télécharger, extraire et organiser ses contenus multimédias depuis une seule interface.",
+   "detail": "Application de bureau qui réunit plusieurs modes d'utilisation : Standard, Chasseur et Radar. Thème sombre, dossiers automatiques et journal de session.",
+   "features": [
+    "Vidéos et MP3, choix de la qualité",
+    "Playlists et dossiers automatiques",
+    "Gestion des cookies et journal de session",
+    "Modes Standard, Chasseur et Radar"
+   ],
+   "tech": "Python, CustomTkinter, yt-dlp, FFmpeg",
+   "next": "Moteur multi-extracteurs, solutions de repli, authentification multisite, portabilité",
+   "state": "Développement avancé (bêta interne)",
+   "access": "Non publié",
+   "diffusion": "Publication gratuite envisagée après tests",
+   "license": "À définir (gratuit ne veut pas dire open source)",
+   "download": "Aucun fichier public",
    "tags": [
+    "Windows",
+    "Python",
     "Multimédia",
-    "Automatisation"
+    "Automatisation",
+    "Bêta"
    ]
   },
   {
    "id": "perimgo-home",
-   "name": "Périm-Go Home",
-   "tags": [
-    "Gestion",
-    "Quotidien"
-   ],
-   "features": [
-    "Scan des codes-barres",
-    "Inventaire local",
-    "Suivi des entrées et sorties"
-   ],
+   "group": "Applications",
+   "name": "Périm-GO Home",
    "mark": "◷",
-   "platform": "Android",
-   "status": "Prototype fonctionnel",
-   "visibility": "Tests privés",
-   "license": "Licences envisagées",
    "accent": "#92e5b5",
-   "summary": "Suivi des stocks et des dates de péremption, directement depuis un smartphone.",
-   "detail": "Scan des codes-barres, inventaire local et gestion des entrées et sorties. Cette édition est destinée à un usage personnel. Aucune version publique n’est proposée à ce stade."
+   "platform": "Android",
+   "summary": "Suivre ses produits, leurs dates limites et ses stocks, pour moins d'oublis au quotidien.",
+   "detail": "Gestionnaire personnel pour réduire le gaspillage et faciliter le suivi du quotidien. Édition « Plus » incluse dans la même fiche. Distinct de la version Business.",
+   "features": [
+    "Scanner et enregistrer les produits",
+    "Quantités et dates",
+    "Recherche des informations disponibles",
+    "Saisie manuelle des produits absents"
+   ],
+   "tech": "Flutter, Dart, SQLite, lecture de codes-barres",
+   "next": "Alertes, sauvegardes automatiques, export, synchronisation",
+   "state": "Développement (tests sur Android)",
+   "access": "Non disponible",
+   "diffusion": "Version personnelle publique envisagée",
+   "license": "Propriétaire, modalités à confirmer",
+   "download": "Pas de version publique validée",
+   "tags": [
+    "Android",
+    "Flutter",
+    "Gestion",
+    "Quotidien",
+    "En développement"
+   ]
   },
   {
    "id": "perimgo-business",
-   "name": "Périm-Go Business",
-   "tags": [
-    "Gestion",
-    "Commerce"
-   ],
-   "features": [
-    "Inventaire professionnel",
-    "Scan des produits",
-    "Suivi des mouvements"
-   ],
+   "group": "Applications",
+   "name": "Périm-GO Business",
    "mark": "◷",
-   "platform": "Android",
-   "status": "Prototype en développement",
-   "visibility": "Diffusion privée",
-   "license": "À définir",
    "accent": "#71d9bc",
-   "summary": "Gestion des stocks et des péremptions pour les professionnels.",
-   "detail": "Déclinaison professionnelle de Périm-Go, distincte de l’édition personnelle. Les modalités de distribution et de licence restent à préciser."
+   "platform": "Android",
+   "summary": "Suivi des stocks et des dates pour un usage commercial.",
+   "detail": "Variante professionnelle de Périm-GO, conservée sur une fiche distincte de Home malgré une base technique commune.",
+   "features": [
+    "Gestion des références",
+    "Entrées et sorties",
+    "Suivi des dates",
+    "Import CSV et base locale"
+   ],
+   "tech": "Flutter, Dart, SQLite, codes-barres",
+   "next": "Sauvegardes, partage des données, synchronisation, protection des licences",
+   "state": "Prototype fonctionnel en test",
+   "access": "Privé",
+   "diffusion": "Réservée à un usage professionnel défini",
+   "license": "Privée, mécanisme de protection à finaliser",
+   "download": "Aucun APK public",
+   "tags": [
+    "Android",
+    "Flutter",
+    "Commerce",
+    "Stock",
+    "Accès privé"
+   ]
   },
   {
    "id": "dexlibera",
+   "group": "Applications",
    "name": "DexLibera",
-   "mark": "✧",
-   "platform": "Projet numérique",
-   "status": "À documenter",
-   "visibility": "Non publié",
-   "license": "À définir",
-   "accent": "#d8b6ff",
-   "summary": "Un projet à retrouver prochainement dans le Laboratoire.",
-   "detail": "La présentation détaillée, les fonctionnalités et les conditions de diffusion seront ajoutées lorsqu’elles seront prêtes.",
+   "mark": "❖",
+   "accent": "#e8c98a",
+   "platform": "Android (déclinaison Web/PWA envisagée)",
+   "summary": "Cataloguer, organiser et retrouver ses livres et ses collections.",
+   "detail": "Bibliothèque personnelle avec plusieurs thèmes graphiques, dont Classic et Égypte.",
+   "features": [
+    "Scan ISBN et fiches livres",
+    "Couvertures et bibliothèques multiples",
+    "Domaines, favoris et liste de souhaits",
+    "Recherche, sauvegarde et restauration"
+   ],
+   "tech": "Flutter, Dart, base locale, métadonnées par ISBN",
+   "next": "Enrichissement des métadonnées, couvertures, synchronisation, version PWA",
+   "state": "Fonctionnelle, en développement et tests",
+   "access": "Non disponible",
+   "diffusion": "Bêta envisagée, puis diffusion publique",
+   "license": "Modèle gratuit / Premium envisagé, non arrêté",
+   "download": "Non publié officiellement",
    "tags": [
-    "Création"
+    "Android",
+    "Flutter",
+    "Bibliothèque",
+    "Culture",
+    "Bêta"
    ]
   },
   {
-   "id": "ciel-etoile",
-   "name": "ChatGPT · Ciel étoilé",
-   "tags": [
-    "Création",
-    "Web"
+   "id": "codex-mental",
+   "group": "Sites et personnalisation",
+   "name": "Codex Mental",
+   "mark": "✦",
+   "accent": "#ffc27a",
+   "platform": "Navigateur, ordinateur et mobile",
+   "summary": "Plateforme personnelle d'exploration intellectuelle et créative : articles, expérimentations, applications et univers visuels.",
+   "detail": "Le site que vous parcourez. Univers immersifs, thèmes visuels, lecteur commun et navigation interactive.",
+   "features": [
+    "Codex, Atelier, Laboratoire, Observatoire, Portrait",
+    "Recherche et consultation d'articles",
+    "Quatre à six univers interchangeables"
    ],
-   "mark": "✦",
-   "platform": "Personnalisation CSS",
-   "status": "Fiche en préparation",
-   "visibility": "À définir",
-   "license": "À définir",
-   "accent": "#9fdfe6",
-   "summary": "Une personnalisation CSS qui transforme l’interface de ChatGPT en espace de travail nocturne et étoilé.",
-   "detail": "Premier objet du Lab dans la catégorie des personnalisations. La fiche complète sera ajoutée lorsqu’elle sera prête."
-  },
-  {
-   "id": "codex",
-   "name": "CODEX Mental",
-   "mark": "✦",
-   "platform": "Web",
-   "status": "En évolution",
-   "visibility": "Public",
-   "license": "Consultation libre",
-   "accent": "#f4c68b",
-   "summary": "Un univers interactif pour relier écriture, réflexion et expérimentation.",
-   "detail": "Quatre univers de navigation — Ciel profond, Héliosphère, Galactique et Champ stellaire — pour explorer le blog, l’Atelier, le Laboratoire, l’Observatoire et le Portrait de CODEX Mental.",
+   "tech": "HTML, CSS, JavaScript, moteurs graphiques Web",
+   "next": "",
+   "state": "V3 en développement",
+   "access": "Public",
+   "diffusion": "Site Web public",
+   "license": "À définir (code et contenus)",
+   "download": "Sans objet",
    "tags": [
     "Web",
-    "Création"
+    "Création",
+    "Immersif",
+    "Site public"
    ]
   },
   {
-   "id": "futur",
-   "name": "À venir",
-   "mark": "◇",
-   "platform": "Expérimentations",
-   "status": "Exploration",
-   "visibility": "À définir",
+   "id": "css-chatgpt",
+   "group": "Sites et personnalisation",
+   "name": "CSS ChatGPT personnalisé",
+   "mark": "❏",
+   "accent": "#f0a9d0",
+   "platform": "Navigateur Web",
+   "summary": "Personnaliser visuellement l'interface ChatGPT avec des styles CSS adaptés à ses préférences.",
+   "detail": "Ajustements de présentation, de couleurs, d'organisation et de lisibilité d'une interface existante.",
+   "features": [
+    "Couleurs et lisibilité",
+    "Organisation de l'interface"
+   ],
+   "tech": "CSS ; JavaScript envisagé pour une extension",
+   "next": "Gestion de profils CSS/JS, activation indépendante selon les sites",
+   "state": "Personnalisation expérimentale existante ; extension non finalisée",
+   "access": "Non disponible",
+   "diffusion": "Partage éventuel du CSS après nettoyage et vérification",
    "license": "À définir",
-   "accent": "#9fdfe6",
-   "summary": "Prototypes, idées et expériences en cours de conception.",
-   "detail": "Cet espace accueillera les futures applications, expériences et créations, sans annoncer de téléchargement avant leur disponibilité.",
+   "download": "Aucun paquet public confirmé",
    "tags": [
-    "Expérimentation"
+    "CSS",
+    "Navigateur",
+    "Personnalisation",
+    "UX/UI",
+    "Expérimental"
+   ]
+  },
+  {
+   "id": "heures-sacrees",
+   "group": "Concepts et expériences",
+   "name": "Heures Sacrées",
+   "mark": "◔",
+   "accent": "#d8b4a0",
+   "platform": "Python de bureau (version conservée à confirmer)",
+   "summary": "Les heures symboliques, leurs interprétations et leur suivi personnel.",
+   "detail": "Ancien prototype à reprendre et à vérifier. Onglets Journal, Lexique et Grilles ; thème jour/nuit envisagé.",
+   "features": [
+    "Consultation d'interprétations",
+    "Lexique",
+    "Journal personnel"
+   ],
+   "tech": "Python, fichiers JSON locaux",
+   "next": "",
+   "state": "Ancien prototype à reprendre",
+   "access": "Non disponible",
+   "diffusion": "Non définie",
+   "license": "À définir",
+   "download": "Aucun livrable complet confirmé",
+   "tags": [
+    "Python",
+    "Symbolisme",
+    "Journal",
+    "Prototype"
+   ]
+  },
+  {
+   "id": "widget-photo",
+   "group": "Concepts et expériences",
+   "name": "Widget photo Android",
+   "mark": "▣",
+   "accent": "#f0a9d0",
+   "platform": "Android",
+   "summary": "Un widget d'écran d'accueil qui fait tourner une sélection de photographies.",
+   "detail": "Rotation d'une grande collection, intervalle personnalisable, nom du widget, formes de cadres dessinées par l'utilisateur, lissage des contours.",
+   "features": [
+    "Rotation de photos",
+    "Intervalle personnalisable",
+    "Cadres dessinés et contours lissés"
+   ],
+   "tech": "À déterminer",
+   "next": "",
+   "state": "Concept en conception",
+   "access": "Non disponible",
+   "diffusion": "Version Lite gratuite et Premium envisagées",
+   "license": "Propriétaire envisagée, non arrêtée",
+   "download": "Aucun",
+   "tags": [
+    "Android",
+    "Widget",
+    "Photo",
+    "Personnalisation",
+    "Concept"
+   ]
+  },
+  {
+   "id": "mini-rpg",
+   "group": "Concepts et expériences",
+   "name": "Mini-RPG",
+   "mark": "⚔",
+   "accent": "#ff9fa8",
+   "platform": "À définir",
+   "summary": "Un jeu de rôle numérique dont les mécaniques et l'univers restent à concevoir.",
+   "detail": "Idée à l'état de concept.",
+   "features": [],
+   "tech": "À définir",
+   "next": "",
+   "state": "Idée / concept",
+   "access": "Non disponible",
+   "diffusion": "À définir",
+   "license": "À définir",
+   "download": "Aucun",
+   "tags": [
+    "Jeu",
+    "Création",
+    "Concept"
+   ]
+  },
+  {
+   "id": "nox-electron-lab",
+   "group": "Concepts et expériences",
+   "name": "NOX Electron Lab",
+   "mark": "⚛",
+   "accent": "#9fe3e8",
+   "platform": "Non définie (simulation numérique envisagée)",
+   "summary": "Expériences physiques miniaturisées, simulation et observation de phénomènes liés aux particules.",
+   "detail": "Exploration théorique, à ce stade purement conceptuelle.",
+   "features": [],
+   "tech": "À déterminer",
+   "next": "",
+   "state": "Recherche conceptuelle",
+   "access": "Non disponible",
+   "diffusion": "Non définie",
+   "license": "Sans objet à ce stade",
+   "download": "Aucun",
+   "tags": [
+    "Science",
+    "Physique",
+    "Recherche",
+    "Concept"
    ]
   }
  ]

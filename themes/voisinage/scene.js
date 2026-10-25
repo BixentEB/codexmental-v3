@@ -221,7 +221,7 @@ window.CodexScene = { ok: false };
     camera.setViewOffset(W, H, cam.shift * W, 0, W, H);
     starMat.uniforms.uTime.value = clock; sky.material.uniforms.uTime.value = clock; sky.position.copy(camera.position);
     renderer.render(scene, camera);
-    named.forEach(function (s) { project(s.p, o); var vis = o.z < 1 && o.x > -60 && o.x < W + 60 && o.y > -40 && o.y < H + 40; s.el.style.visibility = vis ? '' : 'hidden'; if (vis) s.el.style.transform = 'translate3d(' + o.x.toFixed(1) + 'px,' + o.y.toFixed(1) + 'px,0)'; });
+    named.forEach(function (s) { project(s.p, o); var vis = o.z < 1 && o.x > -60 && o.x < W + 60 && o.y > 64 && o.y < H + 40; s.el.style.visibility = vis ? '' : 'hidden'; if (vis) s.el.style.transform = 'translate3d(' + o.x.toFixed(1) + 'px,' + o.y.toFixed(1) + 'px,0)'; });
     (function () {   // désencombrement : les rubriques gardent leur nom, les autres étoiles s'effacent si elles se chevauchent
       var placed = [], list = named.filter(function (s) { return s.el.style.visibility !== 'hidden'; }).sort(function (a, b) { return (b.menu ? 1 : 0) - (a.menu ? 1 : 0); });
       list.forEach(function (s) {

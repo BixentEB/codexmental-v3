@@ -336,3 +336,8 @@ html[data-theme="heliosphere"] body.solar-settings-open #scene .under .ctrl { le
 #scene .pl.pl-menu .lbl b::before { content: '◆ '; font-size: .6em; vertical-align: .22em; opacity: .85; }
 #scene .pl.pl-info .lbl b { font-weight: 400; font-style: italic; opacity: .8; }
 body.nm-menus #scene .pl.pl-info .lbl, body.nm-objects #scene .pl.pl-menu .lbl { display: none !important; }
+
+#scene .pl .lbl em.objn { display: none; font-style: italic; font-weight: 400; color: var(--fg-soft); }
+body.nm-objects.nm-objn #scene .pl.pl-menu .lbl { display: block !important; }
+body.nm-objects.nm-objn #scene .pl.pl-menu .lbl b, body.nm-objects.nm-objn #scene .pl.pl-menu .lbl i { display: none; }
+body.nm-objects.nm-objn #scene .pl.pl-menu .lbl em.objn { display: block; }

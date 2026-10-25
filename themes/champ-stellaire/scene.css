@@ -23,3 +23,22 @@ html[data-theme="champ-stellaire"] { --void: #070b18; }
 #scene .hero .eyebrow, #scene .hero .cta { font-family: var(--font-body); }
 html.reading #scene .hero, html.reading #scene .status { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .35s, visibility 0s .35s; }
 #scene .hero, #scene .status { transition: opacity .5s .1s, visibility 0s; }
+
+/* Ciel vu de la Terre : Voie lactée, constellation des rubriques, horizon */
+#scene #cs-mw { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; mix-blend-mode: screen; opacity: .6; image-rendering: auto; }
+#scene #cs-fx { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+#scene #cs-const { position: fixed; inset: 0; z-index: 2; pointer-events: none; transition: opacity .5s .1s, transform .8s ease-out; }
+#scene #cs-lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+#scene #cs-lines line { stroke: rgba(190,205,255,.38); stroke-width: 1; stroke-dasharray: 2 5; }
+#scene .cs-star { position: absolute; width: 0; height: 0; pointer-events: none; }
+#scene .cs-star button { position: absolute; left: -22px; top: -22px; width: 44px; height: 44px; border: 0; padding: 0; background: transparent; cursor: pointer; pointer-events: auto; border-radius: 50%; }
+#scene .cs-star .core { position: absolute; left: -3px; top: -3px; width: 6px; height: 6px; border-radius: 50%; background: #fff; box-shadow: 0 0 6px 2px #fff, 0 0 18px 6px var(--c, #bcd0ff), 0 0 46px 16px color-mix(in srgb, var(--c, #bcd0ff) 45%, transparent); animation: csTw var(--tw, 3.2s) ease-in-out infinite; pointer-events: none; }
+#scene .cs-star .core::before, #scene .cs-star .core::after { content: ''; position: absolute; left: 50%; top: 50%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.75), transparent); transform: translate(-50%, -50%); }
+#scene .cs-star .core::before { width: 74px; height: 1px; } #scene .cs-star .core::after { width: 1px; height: 74px; background: linear-gradient(0deg, transparent, rgba(255,255,255,.75), transparent); }
+#scene .cs-star .lab { position: absolute; left: 14px; top: 12px; white-space: nowrap; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: #dfe6ff; text-shadow: 0 1px 8px #000; pointer-events: none; }
+#scene .cs-star:hover .core, #scene .cs-star button:focus-visible + .core { transform: scale(1.5); }
+#scene .cs-star button:focus-visible { outline: 1.5px solid var(--accent); }
+@keyframes csTw { 0%,100% { opacity: 1; filter: brightness(1); } 38% { opacity: .78; filter: brightness(.85); } 52% { opacity: 1; filter: brightness(1.25); } 71% { opacity: .88; } }
+#scene .cs-horizon { position: fixed; left: 0; right: 0; bottom: 0; height: 15vh; z-index: 1; pointer-events: none; background: radial-gradient(120% 100% at 50% 130%, rgba(120,150,210,.22), transparent 62%); -webkit-mask-image: linear-gradient(to top, #000 55%, transparent); mask-image: linear-gradient(to top, #000 55%, transparent); }
+html.reading #scene #cs-const, html.reading #scene .cs-horizon { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .35s, visibility 0s .35s; }
+@media (max-width: 800px) { #scene .cs-star .lab { font-size: .68rem; letter-spacing: .06em; } }
