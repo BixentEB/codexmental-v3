@@ -170,7 +170,7 @@
      "desc": "Pourquoi certaines questions résistent-elles aux réponses définitives ?"
     },
     {
-     "label": "États modifiés de conscience",
+     "label": "Conscience",
      "emoji": "🌌",
      "children": [
       {
@@ -185,7 +185,7 @@
      "desc": "Que devient notre perception lorsque l'état ordinaire de veille se transforme ?"
     },
     {
-     "label": "Symbolique & ésotérisme",
+     "label": "Symbolisme",
      "emoji": "🔮",
      "children": [
       {
@@ -198,6 +198,15 @@
       "La richesse d'une lecture symbolique n'implique pas qu'elle décrive objectivement le fonctionnement du monde : les croyances, les analogies et les faits vérifiables restent distingués."
      ],
      "desc": "Pourquoi les symboles traversent-ils les époques et continuent-ils de nous parler ?"
+    },
+    {
+     "label": "Spiritualité",
+     "desc": "Rubrique en préparation.",
+     "children": [
+      {
+       "article": "codex/spiritualite/bientot"
+      }
+     ]
     },
     {
      "label": "Introspection",
@@ -302,15 +311,6 @@
    "intro": "Projets en cours, expériences et prototypes en construction.",
    "tree": [
     {
-     "label": "Introduction",
-     "emoji": "🎬",
-     "children": [
-      {
-       "article": "atelier/intro"
-      }
-     ]
-    },
-    {
      "label": "Projets en cours",
      "emoji": "📖",
      "children": [
@@ -358,7 +358,8 @@
       }
      ]
     }
-   ]
+   ],
+   "introArticle": "atelier/intro"
   },
   {
    "id": "lab",
@@ -1020,7 +1021,8 @@
    "src": "content/atelier/atelier/intro.html",
    "base": "atelier",
    "words": 273,
-   "type": "page"
+   "type": "page",
+   "hidden": true
   },
   "atelier/projets/codexia": {
    "title": "Codex Mental",
@@ -1371,7 +1373,7 @@
    "type": "page"
   },
   "contact/form": {
-   "title": "Contact",
+   "title": "Entrons en contact",
    "type": "contact",
    "desc": "Une question, une proposition, une collaboration autour d'un projet ou simplement l'envie d'échanger ? Vous pouvez m'écrire ici.",
    "action": "https://formspree.io/f/mldnvpjq",
@@ -1385,6 +1387,11 @@
    "type": "article",
    "hidden": true,
    "within": "symbol/tarot/13"
+  },
+  "codex/spiritualite/bientot": {
+   "title": "Spiritualité",
+   "type": "pending",
+   "desc": "Cette rubrique accueillera ses premiers articles prochainement."
   }
  }
 }

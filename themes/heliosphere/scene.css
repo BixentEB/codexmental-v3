@@ -315,3 +315,12 @@ html[data-theme="heliosphere"] body.solar-settings-open .under .ctrl {width:min(
 /* La barre commune occupe le haut de l'écran */
 html[data-theme="heliosphere"] #scene .stage .bar { top: calc(var(--topbar-h) + 4px); }
 #scene #solar-observatory-themes { display: none; }
+
+/* Réglages (bouton ⚙ de la carte en bas à gauche) : le panneau doit passer devant les règles #scene .under .ctrl */
+html[data-theme="heliosphere"] body.solar-settings-open #scene .under .ctrl { display: flex !important; position: fixed !important; left: 12px !important; right: auto !important; bottom: 70px !important; top: auto !important; width: 340px !important; max-width: calc(100vw - 24px) !important; pointer-events: auto !important; z-index: 10030; }
+html[data-theme="heliosphere"] body.solar-settings-open #scene .under { pointer-events: none !important; }
+@media (max-width: 700px) { html[data-theme="heliosphere"] body.solar-settings-open #scene .under .ctrl { left: 8px !important; bottom: 62px !important; } }
+/* Objets d'information : étiquette plus discrète, fiche au-dessus du bouton de retour */
+#scene .pl.info .lbl b { font-weight: 500; font-size: 13px; opacity: .85; }
+#scene .pl.info .hit { opacity: .7; }
+#scene .solar-hover.is-info { bottom: calc(clamp(185px, 23vh, 235px) + 56px) !important; max-width: min(460px, 78vw); }

@@ -1,0 +1,64 @@
+/* Illustrations animées : elles prennent les couleurs du thème actif */
+figure.viz { --c1: var(--accent); --c2: var(--accent-2, var(--accent)); position: relative; margin: 1.8em auto 2.2em; max-width: 920px; border: 1px solid color-mix(in srgb, var(--c1) 26%, transparent); border-radius: 18px; background: radial-gradient(ellipse at 50% 50%, color-mix(in srgb, var(--c2) 9%, transparent), transparent 70%), rgba(3, 6, 16, .6); box-shadow: inset 0 0 55px rgba(0, 0, 0, .4); overflow: hidden; }
+figure.viz .viz-svg svg { display: block; width: 100%; height: auto; }
+figure.viz figcaption { margin: 0; padding: 0 18px 14px; text-align: center; font-size: .8em; line-height: 1.5; color: var(--muted); }
+figure.viz-creer { max-width: 760px; }
+figure.viz svg * { transform-box: fill-box; transform-origin: center; }
+figure.viz svg.off * { animation-play-state: paused !important; }
+figure.viz.still svg * { animation: none !important; }
+
+/* Imagination */
+.viz-imagination .branch { fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-dasharray: 7 9; animation: vzFlow 14s linear infinite; }
+.viz-imagination .branch.in { stroke: color-mix(in srgb, var(--c1) 62%, transparent); animation-direction: reverse; }
+.viz-imagination .branch.out { stroke: color-mix(in srgb, var(--c2) 66%, transparent); }
+.viz-imagination .branch.back { stroke: color-mix(in srgb, var(--c1) 42%, transparent); stroke-dasharray: 3 8; }
+.viz-imagination .spark { fill: var(--c1); filter: drop-shadow(0 0 5px var(--c1)); }
+.viz-imagination .spark.out { fill: var(--c2); filter: drop-shadow(0 0 5px var(--c2)); }
+.viz-imagination .spark.back { fill: #fff; opacity: .8; }
+.viz-imagination .node .dot { fill: var(--c2); }
+.viz-imagination .node .dot, .viz-imagination .node .halo { r: 7; }
+.viz-imagination .node .halo { r: 18; }
+.viz-imagination .node.in .dot { fill: var(--c1); }
+.viz-imagination .node .halo { fill: none; stroke: color-mix(in srgb, var(--c2) 45%, transparent); stroke-width: 1; animation: vzHalo 5s ease-in-out infinite; animation-delay: var(--d); }
+.viz-imagination .node .dot { animation: vzBreath 5s ease-in-out infinite; animation-delay: var(--d); filter: drop-shadow(0 0 7px var(--c2)); }
+.viz-imagination .aura { animation: vzAura 6s ease-in-out infinite; }
+.viz-imagination .core { fill: color-mix(in srgb, var(--c2) 22%, #080614); stroke: var(--c2); stroke-width: 1.6; filter: drop-shadow(0 0 14px var(--c2)); animation: vzCore 3.4s ease-in-out infinite; }
+.viz-imagination .core-in { fill: var(--c2); opacity: .9; animation: vzCore 3.4s ease-in-out infinite reverse; }
+.viz-imagination .ring { fill: none; stroke: var(--c2); stroke-width: 1; opacity: 0; animation: vzRing 5.2s ease-out infinite; }
+.viz-imagination .ring.r2 { animation-delay: 2.6s; }
+
+/* Concepts */
+.viz-concepts .link { fill: none; stroke: color-mix(in srgb, var(--c1) 30%, transparent); stroke-width: 1; stroke-dasharray: 3 7; animation: vzFlow 22s linear infinite; }
+.viz-concepts .spark { fill: var(--c1); filter: drop-shadow(0 0 5px var(--c1)); }
+.viz-concepts .spark.out { fill: var(--c2); filter: drop-shadow(0 0 5px var(--c2)); }
+.viz-concepts .cnode .dot { fill: var(--c1); filter: drop-shadow(0 0 7px var(--c1)); animation: vzTwinkle 4.8s ease-in-out infinite; animation-delay: var(--d); }
+.viz-concepts .cnode .halo { fill: none; stroke: color-mix(in srgb, var(--c1) 35%, transparent); stroke-width: 1; animation: vzHalo 6s ease-in-out infinite; animation-delay: var(--d); }
+.viz-concepts .cnode.f0 { animation: vzDrift0 11s ease-in-out infinite; }
+.viz-concepts .cnode.f1 { animation: vzDrift1 13s ease-in-out infinite; }
+.viz-concepts .cnode.f2 { animation: vzDrift2 9s ease-in-out infinite; }
+.viz-concepts .imp { fill: var(--c2); opacity: .55; animation: vzTwinkle 3.6s ease-in-out infinite; animation-delay: var(--d); filter: drop-shadow(0 0 4px var(--c2)); }
+
+/* Créer */
+.viz-creer svg { padding: 6px 0; }
+.viz-creer .rail { fill: none; stroke: color-mix(in srgb, var(--c1) 30%, transparent); stroke-width: 1.5; stroke-dasharray: 4 7; }
+.viz-creer .chev { fill: none; stroke: color-mix(in srgb, var(--c1) 45%, transparent); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.viz-creer .spark { fill: var(--c2); filter: drop-shadow(0 0 7px var(--c2)); }
+.viz-creer .disc { fill: color-mix(in srgb, var(--c1) 7%, #060a18); stroke: color-mix(in srgb, var(--c1) 55%, transparent); stroke-width: 1.4; animation: vzStepDisc var(--T) ease-in-out infinite; animation-delay: var(--delay); }
+.viz-creer .halo { fill: none; stroke: var(--c1); stroke-width: 1; opacity: 0; animation: vzStepHalo var(--T) ease-in-out infinite; animation-delay: var(--delay); }
+.viz-creer .glyph { fill: none; stroke: var(--c1); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; animation: vzStepGlyph var(--T) ease-in-out infinite; animation-delay: var(--delay); }
+.viz-creer .bloom { fill: none; stroke: var(--c2); stroke-width: 1.5; opacity: 0; animation: vzBloom var(--T) ease-out infinite; animation-delay: calc(var(--T) * .78); }
+
+@keyframes vzFlow { to { stroke-dashoffset: -160; } }
+@keyframes vzHalo { 0%, 100% { opacity: .3; transform: scale(.85); } 50% { opacity: .9; transform: scale(1.18); } }
+@keyframes vzBreath { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); } }
+@keyframes vzAura { 0%, 100% { opacity: .65; } 50% { opacity: 1; } }
+@keyframes vzCore { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+@keyframes vzRing { 0% { opacity: .6; transform: scale(1); } 100% { opacity: 0; transform: scale(3.6); } }
+@keyframes vzTwinkle { 0%, 100% { opacity: .55; transform: scale(.9); } 50% { opacity: 1; transform: scale(1.2); } }
+@keyframes vzDrift0 { 0%, 100% { translate: 0 0; } 50% { translate: 7px -9px; } }
+@keyframes vzDrift1 { 0%, 100% { translate: 0 0; } 50% { translate: -9px 6px; } }
+@keyframes vzDrift2 { 0%, 100% { translate: 0 0; } 50% { translate: 6px 8px; } }
+@keyframes vzStepDisc { 0%, 20%, 100% { stroke: color-mix(in srgb, var(--c1) 55%, transparent); fill: color-mix(in srgb, var(--c1) 7%, #060a18); } 6%, 14% { stroke: var(--c1); fill: color-mix(in srgb, var(--c1) 24%, #060a18); } }
+@keyframes vzStepHalo { 0%, 22%, 100% { opacity: 0; transform: scale(.9); } 8% { opacity: .75; transform: scale(1.1); } }
+@keyframes vzStepGlyph { 0%, 22%, 100% { transform: scale(1); filter: none; } 8%, 12% { transform: scale(1.18); filter: drop-shadow(0 0 7px var(--c1)); } }
+@keyframes vzBloom { 0% { opacity: .8; transform: scale(1); } 40%, 100% { opacity: 0; transform: scale(2.6); } }

@@ -1,0 +1,33 @@
+/* Page Contact : titre, formulaire et scène de la soucoupe */
+.pane.contact { position: relative; padding-top: 150px; }
+.contact-h { display: flex; align-items: center; gap: 16px; font-weight: 400; letter-spacing: .02em; }
+.contact-ufo { width: clamp(38px, 5vw, 54px); height: auto; flex: none; color: var(--accent); filter: drop-shadow(0 0 5px color-mix(in srgb, var(--accent) 22%, transparent)); transition: transform .3s ease, filter .3s ease; cursor: pointer; }
+.contact-h:hover .contact-ufo, .contact-ufo:focus-visible { transform: translateY(-3px) rotate(-5deg); filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent) 60%, transparent)); outline: none; }
+.pane.contact .a-lead { max-width: 56ch; }
+.pane.contact .cform { padding: clamp(18px, 3.5vw, 32px); border: 1px solid var(--line); border-radius: 16px; background: color-mix(in srgb, var(--panel-solid) 70%, transparent); max-width: none; }
+
+.ufo-sky { position: absolute; z-index: 1; left: 0; right: 0; top: 0; height: 150px; pointer-events: none; overflow: hidden; color: color-mix(in srgb, var(--fg) 88%, var(--accent)); }
+.ufo-sky .ground { position: absolute; left: 0; right: 0; bottom: 8px; height: 1px; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 38%, transparent) 20%, color-mix(in srgb, var(--accent) 38%, transparent) 80%, transparent); opacity: 0; transition: opacity .6s; }
+.ufo-sky.flying .ground { opacity: 1; }
+.ufo, .cow { position: absolute; left: 0; top: 0; opacity: 0; will-change: transform, opacity; }
+.ufo { width: 40px; height: 26px; filter: drop-shadow(0 0 5px color-mix(in srgb, var(--accent) 45%, transparent)); }
+.ufo svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.ufo .lt { fill: var(--accent); stroke: none; }
+.ufo-sky.lit .lt { animation: ufoBlink .6s steps(2, jump-none) infinite; }
+.ufo-sky.lit .lt.l2 { animation-delay: .2s; } .ufo-sky.lit .lt.l3 { animation-delay: .4s; }
+.beam { position: absolute; left: 50%; top: 17px; width: 78px; height: 90px; margin-left: -39px; opacity: 0; transform-origin: top center; pointer-events: none;
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--accent) 38%, #cfe0ff), color-mix(in srgb, var(--accent) 12%, transparent) 55%, transparent);
+  clip-path: polygon(40% 0, 60% 0, 100% 100%, 0 100%); filter: blur(5px); mask-image: linear-gradient(to bottom, #000 0, #000 55%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 55%, transparent 100%); }
+.cow { width: 40px; height: 27px; }
+.cow svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.ufo-sky.walk .cow .cow-in { animation: cowTrot .26s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center; }
+.ufo-sky.walk .cow .head { animation: cowNod .52s ease-in-out infinite; transform-box: fill-box; transform-origin: 30% 80%; }
+.ufo-sky.walk .cow .tail { animation: cowTail .26s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 100% 0; }
+.ufo-sky.lit .cow .cow-in { animation: cowWiggle .5s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center; }
+@keyframes ufoBlink { 0% { opacity: 1; } 100% { opacity: .15; } }
+@keyframes cowTrot { from { transform: rotate(-2deg); } to { transform: rotate(2deg); } }
+@keyframes cowNod { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(7deg); } }
+@keyframes cowTail { from { transform: rotate(-12deg); } to { transform: rotate(14deg); } }
+@keyframes cowWiggle { from { transform: rotate(-4deg) scaleY(.97); } to { transform: rotate(4deg) scaleY(1.03); } }
+@media (max-width: 640px) { .pane.contact { padding-top: 120px; } .ufo-sky { height: 120px; } }
+@media (prefers-reduced-motion: reduce) { .contact-ufo { transition: none; } .contact-h:hover .contact-ufo { transform: none; } }

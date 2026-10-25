@@ -438,6 +438,14 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
     profil:  { name: 'Portrait', sub: 'Découverte', rgb: '205,218,255', text: "Un espace pour découvrir mon parcours, mes inspirations, mes valeurs et les différentes facettes de CODEX Mental." }
   };
 
+  /* Objets d'information : ils ne mènent à aucune rubrique, mais on peut s'en approcher et lire une courte fiche. */
+  SECTIONS.asteroides = { info: 1, name: 'Ceinture d’astéroïdes', sub: 'Entre Mars et Jupiter', rgb: '190,170,140', text: "Entre Mars et Jupiter, des débris rocheux que l’attraction de Jupiter a empêchés de s’assembler en planète." };
+  SECTIONS.ceres = { info: 1, name: 'Cérès', sub: 'Planète naine', rgb: '170,165,155', text: "Planète naine de la ceinture principale, d’environ 940 km de diamètre. Elle concentre à elle seule à peu près un tiers de la masse de la ceinture d’astéroïdes." };
+  SECTIONS.kuiper = { info: 1, name: 'Ceinture de Kuiper', sub: 'Au-delà de Neptune', rgb: '150,185,255', text: "Un vaste anneau de corps glacés au-delà de Neptune, d’environ 30 à 50 unités astronomiques. Pluton, Hauméa et Makémaké en font partie." };
+  SECTIONS.haumea = { info: 1, name: 'Hauméa', sub: 'Planète naine', rgb: '210,220,240', text: "Planète naine de la ceinture de Kuiper, étirée par une rotation de moins de quatre heures. Elle possède deux lunes et un anneau." };
+  SECTIONS.makemake = { info: 1, name: 'Makémaké', sub: 'Planète naine', rgb: '220,150,110', text: "Planète naine de la ceinture de Kuiper, découverte en 2005. Sa surface rougeâtre est couverte de glace de méthane." };
+  SECTIONS.eris = { info: 1, name: 'Éris', sub: 'Planète naine', rgb: '225,230,240', text: "Planète naine du disque diffus, de la taille de Pluton mais un peu plus massive. Sa découverte, en 2005, a relancé le débat qui a conduit à redéfinir le mot « planète »." };
+  SECTIONS.planet9 = { info: 1, name: 'Planète 9', sub: 'Hypothétique', rgb: '150,165,255', text: "Hypothèse : l’orbite inhabituelle de certains objets lointains pourrait trahir une planète de 5 à 10 masses terrestres, à plusieurs centaines d’unités astronomiques. Elle n’a jamais été observée et son existence est débattue : sa place ici est symbolique." };
   var SOLAR_SUBTITLES = {
     codex:'La bibliothèque des connaissances',
     blog:'Le journal des réflexions',
@@ -480,7 +488,18 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
       c: [0x133f9c, 0x215fca, 0x4389e8, 0x0c2b75, 0xa7c8ff], atmoK: .65, atmo: 0x427bdf, shell: { k: 1.05, s: .7 },
       moons: [{ r: .37, d: 7.5, w: .2, ph: 1.3, c: [0x6b788a, 0x9aafbd, 0x46576b, 0xd3dce2], seed: 55 }] },
     { id: 'pluto', deco: true, a: 153, e: .248, inc: 17.1, node: 1.9, M0: 4.0, r: .9, tilt: 2.1, spin: .05, type: 0, scale: 1.2, seed: 24, relief: .04, ice: .75,
-      c: [0x9a7969, 0xc9a99a, 0x59463f, 0xe4d8c8], moons: [{ r: .3, d: 2.6, w: .18, ph: .5, c: [0x888078, 0xada39a, 0x58524d, 0xcac0b8], seed: 57 }] }
+      c: [0x9a7969, 0xc9a99a, 0x59463f, 0xe4d8c8], moons: [{ r: .3, d: 2.6, w: .18, ph: .5, c: [0x888078, 0xada39a, 0x58524d, 0xcac0b8], seed: 57 }] },
+    /* Planètes naines et objet hypothétique (info : étiquette et fiche, sans rubrique) */
+    { id: 'ceres', deco: true, info: true, a: 51.5, e: .08, inc: 10.6, node: 1.1, M0: 1.7, r: .55, tilt: .07, spin: .4, type: 0, scale: 1.6, seed: 61, relief: .05, ice: .15,
+      c: [0x6f6a64, 0x8d8780, 0x4a4642, 0xb3aca3] },
+    { id: 'haumea', deco: true, info: true, a: 178, e: .19, inc: 28.2, node: 2.6, M0: 1.1, r: .75, tilt: .3, spin: .9, type: 0, scale: 1.4, seed: 62, relief: .03, ice: .9,
+      c: [0xcfd3dc, 0xe9ecf3, 0x8f95a3, 0xffffff] },
+    { id: 'makemake', deco: true, info: true, a: 191, e: .16, inc: 29, node: 5.3, M0: 3.4, r: .8, tilt: .2, spin: .2, type: 0, scale: 1.2, seed: 63, relief: .03, ice: .55,
+      c: [0x8a4f35, 0xb87650, 0x5a3322, 0xe3c7a8] },
+    { id: 'eris', deco: true, info: true, a: 262, e: .44, inc: 44, node: .4, M0: .5, r: 1.0, tilt: .1, spin: .15, type: 0, scale: 1.1, seed: 64, relief: .03, ice: 1.0,
+      c: [0xd9dce4, 0xf2f4f8, 0x9aa0ad, 0xffffff] },
+    { id: 'planet9', deco: true, info: true, hypo: true, a: 430, e: .22, inc: 18, node: 3.9, M0: 2.0, r: 3.1, tilt: .4, spin: .6, type: 3, bands: 5, warp: .04, seed: 90,
+      c: [0x1b2260, 0x2d3a8f, 0x5864c4, 0x0e1440, 0x9aa8ff], atmoK: .55, atmo: 0x6d7de8, shell: { k: 1.05, s: .7 } }
   ];
 
   /* ---------- Scène, caméra, contrôles ---------- */
@@ -495,7 +514,7 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
   var controls = new T.OrbitControls(camera, canvas);
   controls.enableDamping = true; controls.dampingFactor = .07;
   controls.enablePan = true; controls.panSpeed = .85; controls.screenSpacePanning = true; controls.zoomSpeed = .8; controls.rotateSpeed = .6;
-  controls.minDistance = 10; controls.maxDistance = 620;
+  controls.minDistance = 10; controls.maxDistance = 1100;
 
   var ZERO = new T.Vector3();
   var W = 800, H = 600, PR = 1, mobile = false, homeDist = 195;
@@ -563,6 +582,7 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
     var sp = new T.Sprite(new T.SpriteMaterial({ map: tex, blending: T.AdditiveBlending, depthWrite: false, transparent: true }));
     sp.scale.set(size, size, 1); return sp;
   }
+  var glowTexV = glowTexture([[0, 'rgba(150,165,255,0.4)'], [.3, 'rgba(110,125,235,0.13)'], [1, 'rgba(90,100,220,0)']]);
   var sunGlowA = glowSprite(glowTexA, SUN_R * 5.2);
   var sunGlowB = glowSprite(glowTexB, SUN_R * 15);
   scene.add(sunGlowA); scene.add(sunGlowB);
@@ -650,9 +670,13 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
       var E = i / 256 * TAU;
       pts.push(new T.Vector3(d.a * (Math.cos(E) - d.e), 0, b * Math.sin(E)));
     }
-    var lineMat = new T.LineBasicMaterial({ color: 0x8fa4ff, transparent: true, opacity: .1, depthWrite: false });
+    var lineMat = d.hypo
+      ? new T.LineDashedMaterial({ color: 0xa7b4ff, dashSize: 6, gapSize: 5, transparent: true, opacity: .1, depthWrite: false })
+      : new T.LineBasicMaterial({ color: 0x8fa4ff, transparent: true, opacity: .1, depthWrite: false });
     var line = new T.LineLoop(new T.BufferGeometry().setFromPoints(pts), lineMat);
+    if (d.hypo && line.computeLineDistances) line.computeLineDistances();
     frame.add(line);
+    if (d.hypo) { var ghost = glowSprite(glowTexV, d.r * 11); ghost.material.opacity = .55; body.add(ghost); }
 
     var P = {
       id: d.id, def: d, frame: frame, body: body, tilt: tilt, mesh: mesh, mat: mat, shellMat: shellMat, ringMat: ringMat, hit: hit,
@@ -697,6 +721,44 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
       beltGroup.push({ obj: inst, w: speeds[g] });
     }
   })();
+
+  /* ---------- Ceinture de Kuiper : un anneau épais de corps glacés au-delà de Neptune ---------- */
+  (function makeKuiper() {
+    var geo = new T.IcosahedronGeometry(1, 0), p = geo.attributes.position;
+    for (var i = 0; i < p.count; i++) {
+      var x = p.getX(i), y = p.getY(i), z = p.getZ(i), hsh = Math.abs(Math.sin(x * 91.7 + y * 213.1 + z * 57.3) * 43758.5453) % 1, f = .7 + .5 * hsh;
+      p.setXYZ(i, x * f, y * f, z * f);
+    }
+    geo.computeVertexNormals();
+    var groups = [{ r: 176, w: 52, n: 1500, v: .0016 }, { r: 190, w: 70, n: 1100, v: .0011 }];
+    groups.forEach(function (G) {
+      var inst = new T.InstancedMesh(geo, new T.MeshStandardMaterial({ color: 0xffffff, roughness: 1, metalness: 0, flatShading: true }), G.n);
+      var m4 = new T.Matrix4(), q = new T.Quaternion(), e = new T.Euler(), s = new T.Vector3(), pp = new T.Vector3(), col = new T.Color();
+      for (var k = 0; k < G.n; k++) {
+        var ang = Math.random() * TAU, gauss = (Math.random() + Math.random() + Math.random() - 1.5) / 1.5, rr = G.r + gauss * G.w * .5;
+        var inc = (Math.random() + Math.random() - 1) * .2;                       // inclinaisons plus fortes qu'au cœur du système
+        pp.set(Math.cos(ang) * rr, Math.sin(inc) * rr * .5 + (Math.random() - .5) * 2, Math.sin(ang) * rr);
+        e.set(Math.random() * TAU, Math.random() * TAU, Math.random() * TAU); q.setFromEuler(e);
+        var sz = .14 + Math.pow(Math.random(), 4) * .6;
+        s.set(sz * (.6 + Math.random() * .8), sz * (.6 + Math.random() * .8), sz * (.6 + Math.random() * .8));
+        m4.compose(pp, q, s); inst.setMatrixAt(k, m4);
+        var tone = .42 + Math.random() * .4, red = Math.random() < .22;      // quelques corps rougeâtres, la plupart bleutés
+        if (red) col.setRGB(tone * 1.0, tone * .72, tone * .58); else col.setRGB(tone * .82, tone * .9, tone);
+        inst.setColorAt(k, col);
+      }
+      inst.instanceMatrix.needsUpdate = true;
+      if (inst.instanceColor) inst.instanceColor.needsUpdate = true;
+      inst.frustumCulled = false;
+      scene.add(inst);
+      beltGroup.push({ obj: inst, w: G.v });
+    });
+  })();
+  /* repères d'étiquette pour les ceintures (pas de corps : un point fixe où la caméra peut aller) */
+  var anchors = [];
+  [['asteroides', 52, 2.3, 7], ['kuiper', 186, 2.45, 18]].forEach(function (a) {
+    var A = { id: a[0], def: { r: a[3] }, pos: new T.Vector3(Math.cos(a[2]) * a[1], 0, Math.sin(a[2]) * a[1]) };
+    anchors.push(A); byId[a[0]] = A;
+  });
 
   /* ---------- Comète ---------- */
   var comet = { a: 82, e: .84, inc: 24 * DEG, node: 1.4, M: 3.2, pos: new T.Vector3(), prev: new T.Vector3() };
@@ -764,11 +826,11 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
 
   /* ---------- Étiquettes et onglets ---------- */
   var els = {};
-  planets.forEach(function (P) {
-    if (P.def.deco) return;
+  function makeLabel(P) {
     var s = SECTIONS[P.id];
     var d = document.createElement('div');
-    d.className = 'pl right';
+    d._k = (s.info ? ' info' : '');
+    d.className = 'pl right' + d._k;
     d.innerHTML = '<button class="hit" type="button" aria-label="' + s.name + (s.sub ? ' : ' + s.sub : '') + '"></button>' +
       '<span class="lbl"><b>' + s.name + '</b>' + (s.sub ? '<i>' + s.sub + '</i>' : '') + '</span>';
     labelsEl.appendChild(d);
@@ -777,7 +839,9 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
     hit.addEventListener('blur', function () { if (hover === P.id) hover = null; showSolarHover(null); });
     hit.addEventListener('click', function () { select(P.id); });
     els[P.id] = d;
-  });
+  }
+  planets.forEach(function (P) { if (!P.def.deco || P.def.info) makeLabel(P); });
+  anchors.forEach(makeLabel);
   // One navigation only: the header controls the camera, not legacy pages.
   var tabButtons = {};
   // La barre commune demande une rubrique : la caméra y vole, puis le lecteur s'ouvre.
@@ -901,6 +965,13 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
     document.body.classList.toggle('solar-selected',!!id);
     document.getElementById('solar-hover').hidden=true;
     var key = id || 'home', s = SECTIONS[key];
+    if (s.info) {   // fiche d'un objet d'information : elle reste affichée pendant qu'on s'en approche
+      var hp = document.getElementById('solar-hover');
+      document.getElementById('solar-hover-name').textContent = s.name;
+      document.getElementById('solar-hover-sub').textContent = s.sub || '';
+      document.getElementById('solar-hover-desc').textContent = s.text;
+      hp.classList.add('is-info'); hp.hidden = false;
+    } else document.getElementById('solar-hover').classList.remove('is-info');
     document.getElementById('infoTitle').textContent = s.name;
     document.getElementById('infoText').textContent = s.text;
     document.getElementById('infoDot').style.setProperty('--c', 'rgb(' + s.rgb + ')');
@@ -955,15 +1026,17 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
   function showSolarHover(id){
     var panel=document.getElementById('solar-hover');
     if(!panel)return;
+    if(selected && SECTIONS[selected] && SECTIONS[selected].info)return;   // la fiche de l'objet choisi reste affichée
     if(!id || selected || !SECTIONS[id]){panel.hidden=true;return;}
+    panel.classList.remove('is-info');
     document.getElementById('solar-hover-name').textContent=SECTIONS[id].name;
-    document.getElementById('solar-hover-sub').textContent=SOLAR_SUBTITLES[id]||'';
+    document.getElementById('solar-hover-sub').textContent=SOLAR_SUBTITLES[id]||SECTIONS[id].sub||'';
     document.getElementById('solar-hover-desc').textContent=SECTIONS[id].text||'';
     panel.hidden=false;
   }
   /* ---------- Picking ---------- */
   var ray = new T.Raycaster(), ndc = new T.Vector2(), pointerIn = false, needPick = false, downX = 0, downY = 0;
-  var hitMeshes = planets.filter(function (P) { return !P.def.deco; }).map(function (P) { return P.hit; });
+  var hitMeshes = planets.filter(function (P) { return !P.def.deco || P.def.info; }).map(function (P) { return P.hit; });
   function pickAt(cx, cy) {
     var r = canvas.getBoundingClientRect();
     ndc.set(((cx - r.left) / r.width) * 2 - 1, -((cy - r.top) / r.height) * 2 + 1);
@@ -1119,7 +1192,8 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
     camera.updateMatrixWorld();
     var sunDist = camera.position.length();
     var placements = [];
-    planets.forEach(function (P) {
+    anchors.forEach(function (A) { A.rPx = 6; });
+    planets.concat(anchors).forEach(function (P) {
       var el = els[P.id]; if (!el) return;
       camSpace.copy(P.pos).applyMatrix4(camera.matrixWorldInverse);
       var behind = camSpace.z > 0;
@@ -1160,7 +1234,7 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
       if (!item.hid) {
         for(var ci=0;ci<preferred.length;ci++){
           var cls=preferred[ci];
-          el.className='pl '+cls+(selected===P.id?' active':'')+(hover===P.id?' hov':'');
+          el.className='pl '+cls+(el._k||'')+(selected===P.id?' active':'')+(hover===P.id?' hov':'');
           var rect=el.querySelector('.lbl').getBoundingClientRect();
           var box={left:rect.left-stageRect.left,top:rect.top-stageRect.top,
                    right:rect.right-stageRect.left,bottom:rect.bottom-stageRect.top};
@@ -1170,7 +1244,7 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
           chosen={cls:cls,box:box};break;
         }
       }
-      var full='pl '+(chosen?chosen.cls:preferred[0])+
+      var full='pl '+(chosen?chosen.cls:preferred[0])+(el._k||'')+
         (selected===P.id?' active':'')+(hover===P.id?' hov':'')+
         (selected&&selected!==P.id?' dim':'')+(!chosen?' hid':'');
       if(el.className!==full)el.className=full;

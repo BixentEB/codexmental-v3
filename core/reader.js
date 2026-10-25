@@ -14,7 +14,7 @@
   var DB = null, idx = {}, groups = {}, order = {}, searchText = null, searchP = null;
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var FS = [15, 16, 17, 18, 19, 20, 21];
-  var R = { open: false, sec: null, view: 'hub', gid: null, aid: null, expanded: {}, treeOpen: true,
+  var R = { open: false, sec: null, view: 'hub', gid: null, tab: null, aid: null, expanded: {}, treeOpen: true,
             focus: false, mview: 'tree', opener: null, q: '', token: 0 };
   var state = { fs: 17 };
   try { var saved = JSON.parse(localStorage.getItem('codex.reader') || '{}'); if (FS.indexOf(saved.fs) >= 0) state.fs = saved.fs; } catch (e) {}
@@ -29,7 +29,8 @@
   function plural(n, w) { return n + ' ' + w + (n > 1 ? 's' : ''); }
   function fmtDate(a) { if (!a.date) return ''; try { return new Date(a.date + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }); } catch (e) { return a.date; } }
   function mins(a) { return Math.max(1, Math.round((a.words || 0) / 200)); }
-  function emoji(n) { return n.emoji ? '<span class="emoji" aria-hidden="true">' + esc(n.emoji) + '</span>' : ''; }
+  var SHOW_EMOJI = false;   // les émojis de rubriques restent dans le catalogue ; l'interface ne les affiche plus
+  function emoji(n) { return SHOW_EMOJI && n.emoji ? '<span class="emoji" aria-hidden="true">' + esc(n.emoji) + '</span>' : ''; }
 
   /* ---------- catalogue ---------- */
   function prep() {
@@ -55,7 +56,7 @@
     });
   }
   function secById(id) { if (!DB) return null; for (var i = 0; i < DB.sections.length; i++) if (DB.sections[i].id === id) return DB.sections[i]; return null; }
-  function countOf(g) { var n = 0; (g.children || []).forEach(function (c) { n += c.article ? (DB.articles[c.article] ? 1 : 0) : countOf(c); }); return n; }
+  function countOf(g) { var n = 0; (g.children || []).forEach(function (c) { n += c.article ? (DB.articles[c.article] && DB.articles[c.article].type !== 'pending' ? 1 : 0) : countOf(c); }); return n; }
   function loadSearch() {
     if (!searchP) searchP = fetch('content/search.json').then(function (r) { return r.json(); }).then(function (j) { searchText = j; }, function () { searchText = {}; });
     return searchP;
@@ -77,6 +78,7 @@
     var tpl = document.createElement('template'); tpl.innerHTML = html;
     var root = tpl.content;
     root.querySelectorAll(DROP).forEach(function (el) { el.remove(); });
+    root.querySelectorAll('.ref-image-viewer').forEach(function (el) { el.remove(); });   // l'agrandissement est géré par le lecteur (media.js)
     root.querySelectorAll('iframe').forEach(function (f) {
       var src = f.getAttribute('src') || '';
       if (!/^https:\/\//.test(src)) { f.remove(); return; }
@@ -162,9 +164,29 @@
     return true;
   }
   function goHub() { R.view = 'hub'; R.gid = null; R.aid = null; R.mview = 'tree'; render(); mainTop(); }
+  /* Sous-rubriques en onglets : « Psychologie » affiche ses onglets « Psychologie » et « Haut potentiel » ;
+     les séries (ex. « Miroir de l'humanité ») restent des sections à l'intérieur d'un onglet. */
+  function subGroups(g) { return (g.children || []).filter(function (n) { return !n.article && !n.series; }); }
+  function directArts(g) { return (g.children || []).filter(function (n) { return n.article && DB.articles[n.article]; }); }
+  function tabHost(g) {
+    if (!g || g.series) return null;
+    if (subGroups(g).length) return { host: g, active: null };
+    var p = g.parent && groups[g.parent];
+    if (p && !p.series && subGroups(p).length) return { host: p, active: g };
+    return null;
+  }
+  function tabList(host) {
+    var tabs = [], d = directArts(host);
+    if (d.length) tabs.push({ id: host.id, label: 'Général', n: d.length, direct: true });
+    subGroups(host).forEach(function (s) { tabs.push({ id: s.id, label: s.label, n: countOf(s), g: s }); });
+    return tabs;
+  }
   function goGroup(id) {
     var g = groups[id]; if (!g) return;
-    R.sec = g.sec; R.view = 'group'; R.gid = id; R.aid = null; R.expanded[id] = true;
+    var th = tabHost(g);
+    R.tab = null;
+    if (th) { g = th.host; id = g.id; R.tab = th.active ? th.active.id : ((tabList(g)[0] || {}).id || null); }
+    R.sec = g.sec; R.view = 'group'; R.gid = id; R.aid = null; R.expanded[id] = true; if (R.tab) R.expanded[R.tab] = true;
     var p = g.parent; while (p) { R.expanded[p] = true; p = groups[p] && groups[p].parent; }
     if (isTablet()) R.treeOpen = false;
     render(); mainTop();
@@ -208,7 +230,7 @@
     if (sec.layout === 'page') parts.push('<span class="cur">' + esc(sec.label) + '</span>');
     else {
       var chain = [];
-      if (R.view === 'article') chain = idx[R.aid].path; else if (R.view === 'group') { var cur = groups[R.gid]; while (cur) { chain.unshift(cur); cur = cur.parent ? groups[cur.parent] : null; } }
+      if (R.view === 'article') chain = idx[R.aid].path; else if (R.view === 'group') { var cur = groups[R.tab && R.tab !== R.gid ? R.tab : R.gid]; while (cur) { chain.unshift(cur); cur = cur.parent ? groups[cur.parent] : null; } }
       parts.push(R.view === 'hub' ? '<span class="cur">' + esc(sec.label) + '</span>' : '<button type="button" data-act="hub">' + esc(sec.label) + '</button>');
       chain.forEach(function (c, i) {
         var last = R.view === 'group' && i === chain.length - 1;
@@ -233,7 +255,7 @@
           '<span class="dt"></span><span class="lt">' + esc(a.title) + '</span>' +
           (a.status === 'draft' ? '<span class="st">brouillon</span>' : (a.words ? '<span class="mn">' + mins(a) + ' min</span>' : '')) + '</button></li>';
       } else {
-        var open = !!R.expanded[n.id], on = R.view === 'group' && R.gid === n.id;
+        var open = !!R.expanded[n.id], on = R.view === 'group' && (R.tab ? R.tab === n.id : R.gid === n.id);
         h += '<li class="g"><div class="row"><button type="button" class="chev" data-act="tog" data-id="' + esc(n.id) + '" aria-expanded="' + open + '" aria-label="' + (open ? 'Replier ' : 'Déplier ') + esc(n.label) + '">' + ICO_CH + '</button>' +
           '<button type="button" class="glabel' + (on ? ' on' : '') + '" data-act="group" data-id="' + esc(n.id) + '"><span>' + emoji(n) + esc(n.label) + (n.series ? '<i>série</i>' : '') + '</span><span class="n">' + countOf(n) + '</span></button></div>' +
           (open ? treeHTML(n.children || [], depth + 1) : '') + '</li>';
@@ -283,12 +305,29 @@
     });
     return h;
   }
+  function tabbedHTML(sec, host) {
+    var tabs = tabList(host), act = null, i;
+    tabs.forEach(function (t) { if (t.id === R.tab) act = t; }); if (!act) act = tabs[0];
+    var h = '<div class="pane"><p class="kicker">' + esc(sec.label) + ' · ' + plural(countOf(host), 'article') + '</p>' +
+      '<div class="grp-head"><h1 class="h-sec">' + esc(host.label) + '</h1>' +
+      '<div class="tabs" role="tablist" aria-label="Rubriques de ' + esc(host.label) + '">' + tabs.map(function (t, k) {
+        var on = t === act;
+        return '<button type="button" role="tab" id="rtab-' + k + '" class="tab' + (on ? ' on' : '') + '" aria-selected="' + on + '" aria-controls="rtabpanel" tabindex="' + (on ? 0 : -1) + '" data-act="tab" data-id="' + esc(t.id) + '"><span>' + esc(t.label) + '</span><span class="n">' + t.n + '</span></button>';
+      }).join('') + '</div></div>' + introHTML(host) +
+      '<div class="tabpanel" role="tabpanel" id="rtabpanel" aria-labelledby="rtab-' + tabs.indexOf(act) + '">' +
+      (act.direct ? '<ul class="alist">' + directArts(host).map(function (n) { return '<li>' + arow(DB.articles[n.article]) + '</li>'; }).join('') + '</ul>'
+                  : (act.g.series || JSON.stringify(act.g.intro || null) === JSON.stringify(host.intro || null) ? '' : introHTML(act.g)) + listHTML(act.g)) + '</div></div>';
+    return h;
+  }
   function renderMain() {
+    if (window.Codex.ufo) window.Codex.ufo.stop();
     var sec = secById(R.sec), h = '';
     if (R.view === 'hub') {
       var tops = (sec.tree || []).filter(function (n) { return !n.article; });
       var lone = (sec.tree || []).filter(function (n) { return n.article; });
-      h += '<div class="pane"><p class="kicker">' + esc(sec.kicker) + '</p><h1 class="h-sec">' + esc(sec.label) + '</h1><p class="intro">' + esc(sec.intro) + '</p>';
+      var introA = sec.introArticle && DB.articles[sec.introArticle];
+      h += '<div class="pane"><p class="kicker">' + esc(sec.kicker) + '</p><h1 class="h-sec">' + esc(sec.label) + '</h1>' +
+        (introA ? '<div class="prose hub-intro" id="hub-intro"></div>' : '<p class="intro">' + esc(sec.intro) + '</p>');
       if (lone.length) h += '<ul class="alist">' + lone.map(function (n) { return '<li>' + arow(DB.articles[n.article]) + '</li>'; }).join('') + '</ul>';
       if (tops.length) h += '<h2 class="sub">Parcourir</h2><div class="cards">' + tops.map(function (g) {
         var firsts = []; (function pick(n) { (n.children || []).forEach(function (c) { if (firsts.length < 3) { if (c.article) { if (DB.articles[c.article]) firsts.push(DB.articles[c.article].title); } else pick(c); } }); })(g);
@@ -298,10 +337,16 @@
       var latest = (order[sec.id] || []).map(function (id) { return DB.articles[id]; }).filter(function (a) { return a.date; }).sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); }).slice(0, 4);
       if (latest.length) h += '<h2 class="sub">Derniers ajouts</h2><ul class="alist">' + latest.map(function (a) { return '<li>' + arow(a) + '</li>'; }).join('') + '</ul>';
       h += '</div>';
-      rdMain.innerHTML = h; updateProg(); return;
+      rdMain.innerHTML = h; updateProg();
+      if (introA) { var tk = ++R.token; fetchArticle(introA).then(function (html) {
+        var box = $('hub-intro'); if (tk !== R.token || !box || R.view !== 'hub') return;
+        box.innerHTML = withToc(html).html; afterRender();
+      }, function () {}); }
+      return;
     }
     if (R.view === 'group') {
       var g = groups[R.gid];
+      if (tabHost(g) && tabHost(g).host === g) { rdMain.innerHTML = tabbedHTML(sec, g); updateProg(); return; }
       h += '<div class="pane"><p class="kicker">' + esc(sec.label) + ' · ' + plural(countOf(g), 'article') + (g.series ? ' · série' : '') + '</p><h1 class="h-sec">' + emoji(g) + esc(g.label) + '</h1>' +
         (introHTML(g) || '<div style="height:18px"></div>') + listHTML(g) + '</div>';
       rdMain.innerHTML = h; updateProg(); return;
@@ -315,7 +360,13 @@
     var title = '<h1 class="a-title">' + esc(a.title) + '</h1>' + (a.desc && a.type !== 'pending' ? '<p class="a-lead">' + esc(a.desc) + '</p>' : '');
     var solo = sec.layout === 'page';
     if (a.type === 'pending') { rdMain.innerHTML = '<article class="pane">' + title.replace(/<p class="a-lead">.*?<\/p>/, '') + '<div class="msgbox">' + esc(a.desc || '') + '</div></article>'; updateProg(); return; }
-    if (a.type === 'contact') { rdMain.innerHTML = '<article class="pane">' + title + contactForm(a) + '</article>'; bindContact(a); updateProg(); return; }
+    if (a.type === 'contact') {
+      rdMain.innerHTML = '<article class="pane contact"><div class="ufo-sky" aria-hidden="true"></div><p class="kicker">Codex Mental · Correspondance</p>' +
+        '<h1 class="a-title contact-h">' + UFO_ICON + '<span>' + esc(a.title) + '</span></h1>' + (a.desc ? '<p class="a-lead">' + esc(a.desc) + '</p>' : '') + contactForm(a) + '</article>';
+      bindContact(a); updateProg();
+      if (Codex.ufo) Codex.ufo.mount(rdMain.querySelector('.pane.contact'));
+      return;
+    }
     rdMain.innerHTML = '<article class="pane">' + (solo ? '' : head) + title + '<p class="t-empty">Chargement…</p></article>';
     fetchArticle(a).then(function (html) {
       if (token !== R.token || R.view !== 'article' || R.aid !== a.id) return;
@@ -330,12 +381,17 @@
         if (p < ord.length - 1) h += '<button type="button" class="nx" data-act="art" data-id="' + esc(ord[p + 1]) + '"><span class="l">Suivant →</span><span class="t">' + esc(DB.articles[ord[p + 1]].title) + '</span></button>';
         h += '</nav>';
       }
-      rdMain.innerHTML = h + '</article>'; updateProg();
+      rdMain.innerHTML = h + '</article>'; afterRender(); updateProg();
     }, function () {
       if (token !== R.token) return;
       rdMain.innerHTML = '<article class="pane">' + title + '<div class="msgbox">Cet article n\'a pas pu être chargé. Réessayez dans un instant.</div></article>';
     });
   }
+  function afterRender() {   // miniatures + pop-up, illustrations animées (core/media.js, core/viz.js)
+    if (Codex.media) Codex.media.enhance(rdMain);
+    if (Codex.viz) Codex.viz.mount(rdMain);
+  }
+  var UFO_ICON = '<svg class="contact-ufo" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 30c1-9 5-14 10-14s9 5 10 14"/><ellipse cx="32" cy="35" rx="25" ry="9"/><path d="M10 39c3 8 41 8 44 0"/><path d="M21 46l-4 8m15-7v9m11-10 4 8"/><circle cx="20" cy="35" r="1.5"/><circle cx="32" cy="37" r="1.5"/><circle cx="44" cy="35" r="1.5"/><path d="M9 17h4m-2-2v4M52 13h4m-2-2v4"/></svg>';
   function contactForm(a) {
     return '<form class="cform" id="cform" action="' + esc(a.action) + '" method="POST"><label>Votre nom<input name="name" autocomplete="name" required maxlength="120"></label>' +
       '<label>Votre adresse e-mail<input name="email" type="email" autocomplete="email" required maxlength="254"></label>' +
@@ -369,6 +425,7 @@
     if (act === 'close') closeReader();
     else if (act === 'hub') goHub();
     else if (act === 'group') { if (isMobile() && el.closest('.tree')) { R.expanded[id] = !R.expanded[id]; renderTreeList(); } else goGroup(id); }
+    else if (act === 'tab') { R.tab = id; render(); var tb = rdMain.querySelector('.tab.on'); if (tb) tb.focus({ preventScroll: true }); }
     else if (act === 'tog') { R.expanded[id] = !R.expanded[id]; renderTreeList(); }
     else if (act === 'art') goArticle(id);
     else if (act === 'back') { R.mview = 'tree'; render(); }
@@ -380,6 +437,13 @@
       state.fs = FS[i]; persist(); rd.style.setProperty('--fs', state.fs + 'px'); updateProg();
     }
     else if (act === 'anchor') { var t = rdMain.querySelector('#' + (window.CSS && CSS.escape ? CSS.escape(id) : id)); if (t) t.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); }
+  });
+  rdMain.addEventListener('keydown', function (e) {
+    var tb = e.target.closest && e.target.closest('[role="tab"]'); if (!tb) return;
+    var all = Array.prototype.slice.call(rdMain.querySelectorAll('[role="tab"]')), i = all.indexOf(tb), n = -1;
+    if (e.key === 'ArrowRight') n = (i + 1) % all.length; else if (e.key === 'ArrowLeft') n = (i - 1 + all.length) % all.length;
+    else if (e.key === 'Home') n = 0; else if (e.key === 'End') n = all.length - 1;
+    if (n < 0) return; e.preventDefault(); all[n].click();
   });
   tQ.addEventListener('input', function () { R.q = tQ.value; loadSearch().then(renderTreeList); renderTreeList(); });
   tQ.addEventListener('keydown', function (e) {

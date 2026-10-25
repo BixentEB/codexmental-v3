@@ -7,7 +7,9 @@ Usage : python3 tools/import_from_v2.py /chemin/vers/codexmental-v2
 - Chaque article devient un fragment HTML dans content/<rubrique>/...
 - content/catalog.json décrit l'arbre (rubriques > groupes > articles).
 - content/search.json contient le texte brut, chargé seulement à la première recherche.
-Relancer le script est sans danger : content/ est régénéré.
+ATTENTION — ne plus relancer : depuis la mise en ligne de v3, content/ et catalog.json ont
+été retouchés à la main (rubriques renommées, Atelier, visuels animés, émojis…). Relancer le
+script écraserait ces modifications. Il reste là pour mémoire.
 """
 import json, os, re, shutil, sys, unicodedata
 from bs4 import BeautifulSoup

@@ -20,7 +20,10 @@ python3 -m http.server 8000      # puis http://localhost:8000
 | `content/catalog.json` | Arbre des rubriques → groupes → articles |
 | `content/<rubrique>/…html` | Un fragment HTML par article (texte tel quel) |
 | `content/search.json` | Texte brut pour la recherche (chargé à la première recherche) |
-| `tools/import_from_v2.py` | Importe/rafraîchit les contenus depuis le dépôt v2 |
+| `core/media.js`, `media.css` | Images d'articles en miniatures + fenêtre d'agrandissement (croix, flèches, Échap) ; un seul bloc `<details>` ouvert à la fois |
+| `core/viz.js`, `viz.css` | Illustrations animées sans texte (`<figure class="viz" data-viz="imagination|concepts|creer">`), aux couleurs du thème |
+| `core/ufo.js`, `ufo.css` | Page Contact : la soucoupe (passage, balayage, salut, enlèvement de la vache) |
+| `tools/import_from_v2.py` | Import initial depuis v2 (**ne plus relancer** : le contenu de v3 a été retouché à la main) |
 
 ## Principe
 - **Les couleurs de l'interface viennent du thème** : `theme.json › palette` est posé en variables CSS (`--accent`, `--panel`, `--line`…). Changer de thème change la barre, le lecteur et les menus.
@@ -41,3 +44,9 @@ Mettre le fragment dans `content/<rubrique>/…` et l'ajouter à l'arbre de `con
 
 ## État
 Voir `docs/ETAT-v3.md`.
+
+## Rubriques, onglets et accueil
+- Une rubrique qui a des sous-rubriques s'affiche avec des **onglets** à côté de son titre (ex. Psychologie : *Psychologie* · *Haut potentiel*). Les séries restent des sections à l'intérieur d'un onglet.
+- Une rubrique peut avoir un texte d'accueil tiré d'un article : `"introArticle": "<id>"` dans `catalog.json` (utilisé par l'Atelier).
+- Les émojis des rubriques restent dans le catalogue mais l'interface ne les affiche plus (`SHOW_EMOJI` dans `core/reader.js`).
+- Les images d'un article n'ont rien à déclarer : toutes deviennent des miniatures cliquables.
