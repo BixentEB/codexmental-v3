@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "default": "ciel-profond",
+  "themes": [
+    { "id": "ciel-profond", "label": "Ciel profond", "description": "Un instrument d'astronome : galaxie, nébuleuses, grille et relevés.", "swatch": ["#f2b866", "#5a7bd0"] },
+    { "id": "heliosphere", "label": "Héliosphère", "description": "Le système solaire en 3D : chaque planète est une rubrique.", "swatch": ["#ffb23e", "#7a4a2c"] },
+    { "id": "galactique", "label": "Galactique", "description": "Une galaxie spirale vivante dont chaque système est une rubrique.", "swatch": ["#b9a4ff", "#5cb4ff"] },
+    { "id": "champ-stellaire", "label": "Champ stellaire", "description": "Un champ d'étoiles calme pour lire.", "swatch": ["#c5a1ff", "#2a3566"] }
+  ]
+}

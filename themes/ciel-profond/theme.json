@@ -1,0 +1,19 @@
+{
+  "label": "Ciel profond",
+  "palette": {
+    "bg": "#02030a", "fg": "#e9edf8", "fgSoft": "#cdd3e6", "muted": "#8e98b5", "hud": "rgba(222, 234, 255, 0.88)",
+    "accent": "#f2b866", "accent2": "#5a7bd0", "line": "rgba(150, 170, 215, 0.2)",
+    "panel": "rgba(5, 8, 18, 0.86)", "panelSolid": "rgba(4, 6, 15, 0.98)", "panelDeep": "rgba(2, 3, 10, 0.38)"
+  },
+  "fonts": {
+    "display": "'Michroma', 'Eurostile', 'Arial', sans-serif",
+    "body": "'Sora', system-ui, -apple-system, 'Segoe UI', sans-serif",
+    "mono": "'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace",
+    "href": "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Michroma&family=Sora:wght@300;400;500;600&display=swap"
+  },
+  "reader": { "layout": "side" },
+  "markup": "scene.html",
+  "css": ["scene.css"],
+  "scripts": [],
+  "scene": "scene.js"
+}

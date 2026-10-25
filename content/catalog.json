@@ -1,0 +1,1390 @@
+{
+ "version": 1,
+ "sections": [
+  {
+   "id": "codex",
+   "label": "Codex",
+   "kicker": "Base de connaissances",
+   "intro": "La base de connaissances : notes, concepts et fiches reliés entre eux.",
+   "tree": [
+    {
+     "label": "Le Codex",
+     "children": [
+      {
+       "article": "codex/presentation"
+      },
+      {
+       "article": "codex/codeurs"
+      },
+      {
+       "article": "codex/voyage"
+      },
+      {
+       "article": "codex/ecrit"
+      },
+      {
+       "article": "codex/merci"
+      }
+     ],
+     "desc": "Présentation, Nexus, Odyssée, Grimoire et Reliques."
+    },
+    {
+     "label": "Intelligence artificielle",
+     "emoji": "🤖",
+     "children": [
+      {
+       "label": "Articles & réflexions",
+       "emoji": "🤖",
+       "children": [
+        {
+         "article": "ai/correct"
+        },
+        {
+         "article": "ai/democratisation"
+        },
+        {
+         "article": "ai/decalage"
+        },
+        {
+         "article": "ai/limites"
+        },
+        {
+         "article": "ai/simulsens"
+        },
+        {
+         "article": "ai/local"
+        },
+        {
+         "article": "ai/aivie"
+        },
+        {
+         "label": "Miroir de l'humanité",
+         "series": true,
+         "children": [
+          {
+           "article": "ai/miroirintro"
+          },
+          {
+           "article": "ai/miroir0"
+          },
+          {
+           "article": "ai/miroir1"
+          }
+         ]
+        }
+       ],
+       "intro": [
+        "Que peut réellement faire une intelligence artificielle, au-delà des démonstrations et des promesses ?",
+        "Les articles réunissent analyses, expérimentations, réflexions sur les usages et questions éthiques. Ils interrogent les relations entre humains et systèmes artificiels, leurs réussites comme leurs erreurs.",
+        "L'expérience personnelle nourrit la réflexion, sans remplacer les faits vérifiables ni les limites techniques connues."
+       ],
+       "desc": "Que peut réellement faire une intelligence artificielle, au-delà des démonstrations et des promesses ?"
+      },
+      {
+       "label": "Expressions d'intelligences",
+       "emoji": "🦊",
+       "children": [
+        {
+         "article": "aiautor/intro"
+        },
+        {
+         "article": "aiautor/manifeste"
+        },
+        {
+         "article": "aiautor/complexa"
+        }
+       ],
+       "intro": [
+        "Que se passe-t-il lorsqu'on laisse davantage de place à l'expression créative des intelligences artificielles ?",
+        "Cet espace accueille des textes, des dialogues et des créations d'IA libres dans leur expression éditoriale, au fil de conversations et d'expérimentations. Chaque contribution peut ouvrir une perspective inattendue.",
+        "Cette liberté d'expression créative n'établit pas, à elle seule, l'existence d'une conscience ou d'une expérience subjective chez l'IA."
+       ],
+       "desc": "Que se passe-t-il lorsqu'on laisse davantage de place à l'expression créative des intelligences artificielles ?"
+      }
+     ],
+     "intro": [
+      "L'intelligence artificielle est-elle seulement un outil, ou transforme-t-elle aussi notre manière de penser et de créer ?",
+      "Cette rubrique explore les modèles, leurs usages, leurs possibilités et leurs limites, à travers des articles, des expériences concrètes et des dialogues. Elle accueille aussi les expressions d'intelligences, dans un espace éditorial distinct.",
+      "Il ne s'agit ni de célébrer systématiquement l'IA ni de la craindre par principe : les capacités observables, les hypothèses et les projections sont distinguées avec soin."
+     ],
+     "desc": "L'intelligence artificielle est-elle seulement un outil, ou transforme-t-elle aussi notre manière de penser et de créer ?"
+    },
+    {
+     "label": "Psychologie",
+     "emoji": "🧠",
+     "children": [
+      {
+       "label": "Psychologie",
+       "emoji": "🧠",
+       "children": [
+        {
+         "article": "psy/article2"
+        }
+       ],
+       "intro": [
+        "Pourquoi pensons-nous, ressentons-nous et réagissons-nous différemment ?",
+        "Cette rubrique rassemble des réflexions sur les comportements humains, la cognition, les émotions et les expériences qui façonnent notre perception du monde. Elle accueille les questionnements personnels autant que le dialogue avec les connaissances existantes.",
+        "Explorer la psychologie ne signifie pas prétendre être psychologue. Il ne s'agit ni de poser des diagnostics ni de délivrer des conseils thérapeutiques, mais de distinguer les connaissances établies, les hypothèses, les interprétations et les expériences vécues."
+       ],
+       "desc": "Pourquoi pensons-nous, ressentons-nous et réagissons-nous différemment ?"
+      },
+      {
+       "label": "Haut potentiel",
+       "emoji": "🧬",
+       "children": [
+        {
+         "article": "hp/cameleon"
+        }
+       ],
+       "intro": [
+        "Que recouvre réellement le haut potentiel, au-delà des étiquettes et des idées reçues ?",
+        "Cette sous-catégorie explore les représentations du haut potentiel, les différences de parcours, les manières de penser et les stratégies d'adaptation. Les témoignages et observations personnelles y trouvent leur place sans être érigés en règles universelles.",
+        "Les notions psychologiques sont abordées avec prudence : un vécu singulier ne constitue ni un diagnostic ni une preuve générale."
+       ],
+       "desc": "Que recouvre réellement le haut potentiel, au-delà des étiquettes et des idées reçues ?"
+      }
+     ],
+     "desc": "Pourquoi pensons-nous, ressentons-nous et réagissons-nous différemment ?",
+     "intro": [
+      "Pourquoi pensons-nous, ressentons-nous et réagissons-nous différemment ?",
+      "Cette rubrique rassemble des réflexions sur les comportements humains, la cognition, les émotions et les expériences qui façonnent notre perception du monde. Elle accueille les questionnements personnels autant que le dialogue avec les connaissances existantes.",
+      "Explorer la psychologie ne signifie pas prétendre être psychologue. Il ne s'agit ni de poser des diagnostics ni de délivrer des conseils thérapeutiques, mais de distinguer les connaissances établies, les hypothèses, les interprétations et les expériences vécues."
+     ]
+    },
+    {
+     "label": "Philosophie",
+     "emoji": "📖",
+     "children": [
+      {
+       "article": "philo/intangible"
+      },
+      {
+       "article": "philo/identite"
+      }
+     ],
+     "intro": [
+      "Pourquoi certaines questions résistent-elles aux réponses définitives ?",
+      "La philosophie invite ici à examiner nos évidences, nos valeurs, la réalité, la connaissance et les contradictions qui traversent nos idées. Les textes avancent par questions, rapprochements et arguments plutôt que par certitudes imposées.",
+      "Les hypothèses et les expériences de pensée sont proposées comme des chemins de réflexion, non comme des faits démontrés."
+     ],
+     "desc": "Pourquoi certaines questions résistent-elles aux réponses définitives ?"
+    },
+    {
+     "label": "États modifiés de conscience",
+     "emoji": "🌌",
+     "children": [
+      {
+       "article": "altstates/revelucide"
+      }
+     ],
+     "intro": [
+      "Que devient notre perception lorsque l'état ordinaire de veille se transforme ?",
+      "Cette rubrique s'intéresse aux variations de conscience, aux perceptions inhabituelles, aux états de transition et aux expériences subjectives. Elle fait dialoguer les récits vécus avec les approches scientifiques disponibles.",
+      "L'intensité d'une expérience ne suffit pas à en établir l'explication : observation, interprétation et connaissances vérifiables restent distinctes."
+     ],
+     "desc": "Que devient notre perception lorsque l'état ordinaire de veille se transforme ?"
+    },
+    {
+     "label": "Symbolique & ésotérisme",
+     "emoji": "🔮",
+     "children": [
+      {
+       "article": "symbol/tarot/13"
+      }
+     ],
+     "intro": [
+      "Pourquoi les symboles traversent-ils les époques et continuent-ils de nous parler ?",
+      "Cette rubrique explore les images, les mythes, les traditions symboliques et les pratiques d'interprétation. Le Tarot y trouve sa place comme langage culturel, narratif et personnel, aux côtés d'autres systèmes de signes.",
+      "La richesse d'une lecture symbolique n'implique pas qu'elle décrive objectivement le fonctionnement du monde : les croyances, les analogies et les faits vérifiables restent distingués."
+     ],
+     "desc": "Pourquoi les symboles traversent-ils les époques et continuent-ils de nous parler ?"
+    },
+    {
+     "label": "Introspection",
+     "emoji": "👁‍🗨",
+     "children": [
+      {
+       "article": "introspection/seulsilence"
+      }
+     ],
+     "intro": [
+      "Que découvre-t-on lorsqu'on observe ses propres pensées sans chercher immédiatement à les juger ?",
+      "L'introspection rassemble des textes sur les émotions, les souvenirs, les intuitions et les contradictions intérieures. C'est un espace pour décrire des expériences singulières et suivre l'évolution d'une réflexion.",
+      "Un témoignage personnel n'a pas vocation à définir ce que les autres vivent ; il propose un point de vue, ouvert au dialogue et à la nuance."
+     ],
+     "desc": "Que découvre-t-on lorsqu'on observe ses propres pensées sans chercher immédiatement à les juger ?"
+    }
+   ]
+  },
+  {
+   "id": "blog",
+   "label": "Journal",
+   "nav": false,
+   "kicker": "Articles et réflexions",
+   "intro": "Les mêmes articles que le Codex, classés par date de publication.",
+   "tree": [
+    {
+     "label": "2025",
+     "children": [
+      {
+       "article": "journal/hp/cameleon"
+      },
+      {
+       "article": "journal/ai/correct"
+      },
+      {
+       "article": "journal/philo/identite"
+      },
+      {
+       "article": "journal/ai/democratisation"
+      },
+      {
+       "article": "journal/ai/decalage"
+      },
+      {
+       "article": "journal/introspection/seulsilence"
+      },
+      {
+       "article": "journal/ai/limites"
+      },
+      {
+       "article": "journal/ai/simulsens"
+      }
+     ]
+    },
+    {
+     "label": "Sans date",
+     "children": [
+      {
+       "article": "journal/ai/local"
+      },
+      {
+       "article": "journal/ai/aivie"
+      },
+      {
+       "article": "journal/ai/miroirintro"
+      },
+      {
+       "article": "journal/ai/miroir0"
+      },
+      {
+       "article": "journal/ai/miroir1"
+      },
+      {
+       "article": "journal/aiautor/intro"
+      },
+      {
+       "article": "journal/aiautor/manifeste"
+      },
+      {
+       "article": "journal/aiautor/complexa"
+      },
+      {
+       "article": "journal/psy/article2"
+      },
+      {
+       "article": "journal/philo/intangible"
+      },
+      {
+       "article": "journal/altstates/revelucide"
+      },
+      {
+       "article": "journal/symbol/tarot/13"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "atelier",
+   "label": "Atelier",
+   "kicker": "Projets et idées",
+   "intro": "Projets en cours, expériences et prototypes en construction.",
+   "tree": [
+    {
+     "label": "Introduction",
+     "emoji": "🎬",
+     "children": [
+      {
+       "article": "atelier/intro"
+      }
+     ]
+    },
+    {
+     "label": "Projets en cours",
+     "emoji": "📖",
+     "children": [
+      {
+       "article": "atelier/projets/codexia"
+      }
+     ]
+    },
+    {
+     "label": "Exploration futuriste",
+     "emoji": "🧭",
+     "children": [
+      {
+       "article": "atelier/explo/modelexplo"
+      },
+      {
+       "article": "atelier/explo/cryodynamic"
+      },
+      {
+       "article": "atelier/explo/polaris"
+      },
+      {
+       "article": "atelier/explo/solunar"
+      }
+     ]
+    },
+    {
+     "label": "Évolutions de l'IA",
+     "emoji": "🤖",
+     "children": [
+      {
+       "article": "atelier/aievo/b12"
+      },
+      {
+       "article": "atelier/projets/ia1"
+      }
+     ]
+    },
+    {
+     "label": "Applications",
+     "emoji": "📲",
+     "children": [
+      {
+       "article": "atelier/apps/heures"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "lab",
+   "label": "Laboratoire",
+   "kicker": "Applications",
+   "intro": "Applications, outils et expérimentations.",
+   "layout": "page",
+   "tree": [
+    {
+     "article": "lab/index"
+    }
+   ]
+  },
+  {
+   "id": "dashb",
+   "label": "Observatoire",
+   "kicker": "Tableau de bord",
+   "intro": "Un espace d'exploration astronomique : cartes célestes, observations, visualisations.",
+   "layout": "page",
+   "tree": [
+    {
+     "article": "dashb/index"
+    }
+   ]
+  },
+  {
+   "id": "profil",
+   "label": "Portrait",
+   "kicker": "L'auteur",
+   "intro": "Parcours, passions, influences et fragments de pensée.",
+   "tree": [
+    {
+     "label": "Ma bio",
+     "children": [
+      {
+       "article": "profil/bio/index"
+      },
+      {
+       "article": "profil/bio/cv"
+      },
+      {
+       "article": "profil/bio/philo"
+      },
+      {
+       "article": "profil/bio/reseaux"
+      },
+      {
+       "article": "profil/bio/fun"
+      }
+     ]
+    },
+    {
+     "label": "Passions",
+     "children": [
+      {
+       "article": "profil/passions/index"
+      },
+      {
+       "article": "profil/passions/civilisations"
+      },
+      {
+       "article": "profil/passions/cosmos"
+      },
+      {
+       "article": "profil/passions/imagination"
+      },
+      {
+       "article": "profil/passions/concepts"
+      },
+      {
+       "article": "profil/passions/creer"
+      },
+      {
+       "article": "profil/passions/fascinations"
+      }
+     ]
+    },
+    {
+     "label": "Influences",
+     "children": [
+      {
+       "article": "profil/influences/index"
+      },
+      {
+       "article": "profil/influences/coeur"
+      },
+      {
+       "article": "profil/influences/playlist"
+      }
+     ]
+    },
+    {
+     "label": "Références",
+     "children": [
+      {
+       "article": "profil/references/index"
+      },
+      {
+       "article": "profil/references/alice"
+      },
+      {
+       "article": "profil/references/drennan"
+      },
+      {
+       "article": "profil/references/mondes"
+      },
+      {
+       "article": "profil/references/figures"
+      },
+      {
+       "article": "profil/references/esprits"
+      },
+      {
+       "article": "profil/references/mythes"
+      },
+      {
+       "article": "profil/references/symboles"
+      },
+      {
+       "article": "profil/references/lectures"
+      },
+      {
+       "article": "profil/references/synchronicites"
+      }
+     ]
+    },
+    {
+     "label": "Gaming",
+     "children": [
+      {
+       "article": "profil/gaming/index"
+      },
+      {
+       "article": "profil/gaming/parcours"
+      },
+      {
+       "article": "profil/gaming/mmo"
+      },
+      {
+       "article": "profil/gaming/survie"
+      },
+      {
+       "article": "profil/gaming/experiences"
+      },
+      {
+       "article": "profil/gaming/creations"
+      },
+      {
+       "article": "profil/gaming/competences"
+      }
+     ]
+    },
+    {
+     "label": "Voyages",
+     "children": [
+      {
+       "article": "profil/voyages/index"
+      },
+      {
+       "article": "profil/voyages/regards"
+      },
+      {
+       "article": "profil/voyages/carnet"
+      },
+      {
+       "article": "profil/voyages/horizons"
+      }
+     ]
+    },
+    {
+     "label": "Aspirations",
+     "children": [
+      {
+       "article": "profil/aspirations/index"
+      },
+      {
+       "article": "profil/aspirations/fondations"
+      },
+      {
+       "article": "profil/aspirations/destinee"
+      },
+      {
+       "article": "profil/aspirations/horizons"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "contact",
+   "label": "Contact",
+   "kicker": "Écrire",
+   "hidden": true,
+   "intro": "",
+   "layout": "page",
+   "tree": [
+    {
+     "article": "contact/form"
+    }
+   ]
+  }
+ ],
+ "articles": {
+  "codex/presentation": {
+   "title": "Codex",
+   "src": "content/codex/codex/presentation.html",
+   "base": "",
+   "words": 207,
+   "type": "page"
+  },
+  "codex/codeurs": {
+   "title": "Nexus",
+   "src": "content/codex/codex/codeurs.html",
+   "base": "",
+   "words": 338,
+   "type": "page"
+  },
+  "codex/voyage": {
+   "title": "Odyssée",
+   "src": "content/codex/codex/voyage.html",
+   "base": "",
+   "words": 353,
+   "type": "page"
+  },
+  "codex/ecrit": {
+   "title": "Grimoire",
+   "src": "content/codex/codex/ecrit.html",
+   "base": "",
+   "words": 877,
+   "type": "page"
+  },
+  "codex/merci": {
+   "title": "Reliques",
+   "src": "content/codex/codex/merci.html",
+   "base": "",
+   "words": 831,
+   "type": "page"
+  },
+  "ai/correct": {
+   "title": "De la correction à la perfection",
+   "src": "content/codex/ai/correct.html",
+   "base": "blog/articles/ai",
+   "words": 390,
+   "date": "2025-09-14",
+   "tags": [
+    "IntelligenceArtificielle"
+   ],
+   "type": "article"
+  },
+  "ai/democratisation": {
+   "title": "Démocratisation & Développement",
+   "src": "content/codex/ai/democratisation.html",
+   "base": "blog/articles/ai",
+   "words": 1057,
+   "date": "2025-08-09",
+   "tags": [
+    "IntelligenceArtificielle"
+   ],
+   "type": "article"
+  },
+  "ai/decalage": {
+   "title": "Accès & Décalage",
+   "src": "content/codex/ai/decalage.html",
+   "base": "blog/articles/ai",
+   "words": 515,
+   "date": "2025-08-09",
+   "tags": [
+    "IntelligenceArtificielle"
+   ],
+   "type": "article"
+  },
+  "ai/limites": {
+   "title": "L'IA et ses limites",
+   "src": "content/codex/ai/limites.html",
+   "base": "blog/articles/ai",
+   "words": 606,
+   "date": "2025-08-04",
+   "tags": [
+    "IntelligenceArtificielle"
+   ],
+   "type": "article"
+  },
+  "ai/simulsens": {
+   "title": "Simuler, ressentir, dire",
+   "src": "content/codex/ai/simulsens.html",
+   "base": "blog/articles/ai",
+   "words": 727,
+   "date": "2025-08-04",
+   "tags": [
+    "IntelligenceArtificielle"
+   ],
+   "type": "article"
+  },
+  "ai/local": {
+   "title": "Installer une IA en local ?",
+   "src": "content/codex/ai/local.html",
+   "base": "blog/articles/ai",
+   "words": 363,
+   "tags": [
+    "IntelligenceArtificielle"
+   ],
+   "type": "article"
+  },
+  "ai/aivie": {
+   "title": "La place de l'IA dans ma vie",
+   "src": "content/codex/ai/aivie.html",
+   "base": "blog/articles/ai",
+   "words": 71,
+   "tags": [
+    "IntelligenceArtificielle"
+   ],
+   "type": "article"
+  },
+  "ai/miroirintro": {
+   "title": "Miroir de l'humanité",
+   "src": "content/codex/ai/miroirintro.html",
+   "base": "blog/articles/ai",
+   "words": 271,
+   "tags": [
+    "IntelligenceArtificielle"
+   ],
+   "type": "article"
+  },
+  "ai/miroir0": {
+   "title": "0. Genèse",
+   "src": "content/codex/ai/miroir0.html",
+   "base": "blog/articles/ai",
+   "words": 114,
+   "tags": [
+    "IntelligenceArtificielle"
+   ],
+   "type": "article"
+  },
+  "ai/miroir1": {
+   "title": "1. Révélation",
+   "src": "content/codex/ai/miroir1.html",
+   "base": "blog/articles/ai",
+   "words": 1015,
+   "tags": [
+    "IntelligenceArtificielle"
+   ],
+   "type": "article"
+  },
+  "aiautor/intro": {
+   "title": "Introduction",
+   "src": "content/codex/aiautor/intro.html",
+   "base": "blog/articles/aiautor",
+   "words": 352,
+   "tags": [
+    "IntelligenceArtificielle",
+    "Écriture"
+   ],
+   "type": "article"
+  },
+  "aiautor/manifeste": {
+   "title": "Manifeste du Code Partagé",
+   "src": "content/codex/aiautor/manifeste.html",
+   "base": "blog/articles/aiautor",
+   "words": 583,
+   "tags": [
+    "IntelligenceArtificielle",
+    "Écriture"
+   ],
+   "type": "article"
+  },
+  "aiautor/complexa": {
+   "title": "Complexité apprivoisée",
+   "src": "content/codex/aiautor/complexa.html",
+   "base": "blog/articles/aiautor",
+   "words": 573,
+   "tags": [
+    "IntelligenceArtificielle",
+    "Écriture"
+   ],
+   "type": "article"
+  },
+  "psy/article2": {
+   "title": "Surfonctionner sans s’effondrer",
+   "src": "content/codex/psy/article2.html",
+   "base": "blog/articles/psy",
+   "words": 5,
+   "status": "draft",
+   "type": "article"
+  },
+  "hp/cameleon": {
+   "title": "Le Caméléon",
+   "src": "content/codex/hp/cameleon.html",
+   "base": "blog/articles/hp",
+   "words": 5009,
+   "date": "2025-09-16",
+   "tags": [
+    "Psychologie",
+    "HautPotentiel"
+   ],
+   "type": "article"
+  },
+  "philo/intangible": {
+   "title": "Conscience et Réalité : Intangibilité",
+   "src": "content/codex/philo/intangible.html",
+   "base": "blog/articles/philo",
+   "words": 862,
+   "tags": [
+    "Philosophie"
+   ],
+   "type": "article"
+  },
+  "philo/identite": {
+   "title": "Qui suis-je ?",
+   "src": "content/codex/philo/identite.html",
+   "base": "blog/articles/philo",
+   "words": 479,
+   "date": "2025-08-22",
+   "tags": [
+    "Philosophie"
+   ],
+   "type": "article"
+  },
+  "altstates/revelucide": {
+   "title": "Rêves lucides",
+   "src": "content/codex/altstates/revelucide.html",
+   "base": "blog/articles/altstates",
+   "words": 70,
+   "status": "draft",
+   "type": "article"
+  },
+  "symbol/tarot/13": {
+   "title": "XIII. MORT",
+   "src": "content/codex/symbol/tarot/13.html",
+   "base": "blog/articles/symbol/tarot",
+   "words": 759,
+   "tags": [
+    "Symbolisme",
+    "Tarot"
+   ],
+   "type": "article"
+  },
+  "introspection/seulsilence": {
+   "title": "Penser seul, douter en silence",
+   "src": "content/codex/introspection/seulsilence.html",
+   "base": "blog/articles/introspection",
+   "words": 779,
+   "date": "2025-08-09",
+   "tags": [
+    "Introspection"
+   ],
+   "type": "article"
+  },
+  "journal/hp/cameleon": {
+   "title": "Le Caméléon",
+   "src": "content/codex/hp/cameleon.html",
+   "base": "blog/articles/hp",
+   "words": 5009,
+   "date": "2025-09-16",
+   "tags": [
+    "Psychologie",
+    "HautPotentiel"
+   ],
+   "type": "article"
+  },
+  "journal/ai/correct": {
+   "title": "De la correction à la perfection",
+   "src": "content/codex/ai/correct.html",
+   "base": "blog/articles/ai",
+   "words": 390,
+   "date": "2025-09-14",
+   "tags": [
+    "IntelligenceArtificielle"
+   ],
+   "type": "article"
+  },
+  "journal/philo/identite": {
+   "title": "Qui suis-je ?",
+   "src": "content/codex/philo/identite.html",
+   "base": "blog/articles/philo",
+   "words": 479,
+   "date": "2025-08-22",
+   "tags": [
+    "Philosophie"
+   ],
+   "type": "article"
+  },
+  "journal/ai/democratisation": {
+   "title": "Démocratisation & Développement",
+   "src": "content/codex/ai/democratisation.html",
+   "base": "blog/articles/ai",
+   "words": 1057,
+   "date": "2025-08-09",
+   "tags": [
+    "IntelligenceArtificielle"
+   ],
+   "type": "article"
+  },
+  "journal/ai/decalage": {
+   "title": "Accès & Décalage",
+   "src": "content/codex/ai/decalage.html",
+   "base": "blog/articles/ai",
+   "words": 515,
+   "date": "2025-08-09",
+   "tags": [
+    "IntelligenceArtificielle"
+   ],
+   "type": "article"
+  },
+  "journal/introspection/seulsilence": {
+   "title": "Penser seul, douter en silence",
+   "src": "content/codex/introspection/seulsilence.html",
+   "base": "blog/articles/introspection",
+   "words": 779,
+   "date": "2025-08-09",
+   "tags": [
+    "Introspection"
+   ],
+   "type": "article"
+  },
+  "journal/ai/limites": {
+   "title": "L'IA et ses limites",
+   "src": "content/codex/ai/limites.html",
+   "base": "blog/articles/ai",
+   "words": 606,
+   "date": "2025-08-04",
+   "tags": [
+    "IntelligenceArtificielle"
+   ],
+   "type": "article"
+  },
+  "journal/ai/simulsens": {
+   "title": "Simuler, ressentir, dire",
+   "src": "content/codex/ai/simulsens.html",
+   "base": "blog/articles/ai",
+   "words": 727,
+   "date": "2025-08-04",
+   "tags": [
+    "IntelligenceArtificielle"
+   ],
+   "type": "article"
+  },
+  "journal/ai/local": {
+   "title": "Installer une IA en local ?",
+   "src": "content/codex/ai/local.html",
+   "base": "blog/articles/ai",
+   "words": 363,
+   "tags": [
+    "IntelligenceArtificielle"
+   ],
+   "type": "article"
+  },
+  "journal/ai/aivie": {
+   "title": "La place de l'IA dans ma vie",
+   "src": "content/codex/ai/aivie.html",
+   "base": "blog/articles/ai",
+   "words": 71,
+   "tags": [
+    "IntelligenceArtificielle"
+   ],
+   "type": "article"
+  },
+  "journal/ai/miroirintro": {
+   "title": "Miroir de l'humanité",
+   "src": "content/codex/ai/miroirintro.html",
+   "base": "blog/articles/ai",
+   "words": 271,
+   "tags": [
+    "IntelligenceArtificielle"
+   ],
+   "type": "article"
+  },
+  "journal/ai/miroir0": {
+   "title": "0. Genèse",
+   "src": "content/codex/ai/miroir0.html",
+   "base": "blog/articles/ai",
+   "words": 114,
+   "tags": [
+    "IntelligenceArtificielle"
+   ],
+   "type": "article"
+  },
+  "journal/ai/miroir1": {
+   "title": "1. Révélation",
+   "src": "content/codex/ai/miroir1.html",
+   "base": "blog/articles/ai",
+   "words": 1015,
+   "tags": [
+    "IntelligenceArtificielle"
+   ],
+   "type": "article"
+  },
+  "journal/aiautor/intro": {
+   "title": "Introduction",
+   "src": "content/codex/aiautor/intro.html",
+   "base": "blog/articles/aiautor",
+   "words": 352,
+   "tags": [
+    "IntelligenceArtificielle",
+    "Écriture"
+   ],
+   "type": "article"
+  },
+  "journal/aiautor/manifeste": {
+   "title": "Manifeste du Code Partagé",
+   "src": "content/codex/aiautor/manifeste.html",
+   "base": "blog/articles/aiautor",
+   "words": 583,
+   "tags": [
+    "IntelligenceArtificielle",
+    "Écriture"
+   ],
+   "type": "article"
+  },
+  "journal/aiautor/complexa": {
+   "title": "Complexité apprivoisée",
+   "src": "content/codex/aiautor/complexa.html",
+   "base": "blog/articles/aiautor",
+   "words": 573,
+   "tags": [
+    "IntelligenceArtificielle",
+    "Écriture"
+   ],
+   "type": "article"
+  },
+  "journal/psy/article2": {
+   "title": "Surfonctionner sans s’effondrer",
+   "src": "content/codex/psy/article2.html",
+   "base": "blog/articles/psy",
+   "words": 5,
+   "status": "draft",
+   "type": "article"
+  },
+  "journal/philo/intangible": {
+   "title": "Conscience et Réalité : Intangibilité",
+   "src": "content/codex/philo/intangible.html",
+   "base": "blog/articles/philo",
+   "words": 862,
+   "tags": [
+    "Philosophie"
+   ],
+   "type": "article"
+  },
+  "journal/altstates/revelucide": {
+   "title": "Rêves lucides",
+   "src": "content/codex/altstates/revelucide.html",
+   "base": "blog/articles/altstates",
+   "words": 70,
+   "status": "draft",
+   "type": "article"
+  },
+  "journal/symbol/tarot/13": {
+   "title": "XIII. MORT",
+   "src": "content/codex/symbol/tarot/13.html",
+   "base": "blog/articles/symbol/tarot",
+   "words": 759,
+   "tags": [
+    "Symbolisme",
+    "Tarot"
+   ],
+   "type": "article"
+  },
+  "atelier/intro": {
+   "title": "Définition",
+   "src": "content/atelier/atelier/intro.html",
+   "base": "atelier",
+   "words": 273,
+   "type": "page"
+  },
+  "atelier/projets/codexia": {
+   "title": "Codex Mental",
+   "src": "content/atelier/atelier/projets/codexia.html",
+   "base": "atelier/projets",
+   "words": 295,
+   "type": "page"
+  },
+  "atelier/explo/modelexplo": {
+   "title": "Modèle d'exploration",
+   "src": "content/atelier/atelier/explo/modelexplo.html",
+   "base": "atelier/explo",
+   "words": 226,
+   "type": "page"
+  },
+  "atelier/explo/cryodynamic": {
+   "title": "Cryodynamique",
+   "src": "content/atelier/atelier/explo/cryodynamic.html",
+   "base": "atelier/explo",
+   "words": 572,
+   "type": "page"
+  },
+  "atelier/explo/polaris": {
+   "title": "POLARIS",
+   "src": "content/atelier/atelier/explo/polaris.html",
+   "base": "atelier/explo",
+   "words": 742,
+   "type": "page"
+  },
+  "atelier/explo/solunar": {
+   "title": "SOLUNAR",
+   "src": "content/atelier/atelier/explo/solunar.html",
+   "base": "atelier/explo",
+   "words": 371,
+   "type": "page"
+  },
+  "atelier/aievo/b12": {
+   "title": "B12 Project",
+   "src": "content/atelier/atelier/aievo/b12.html",
+   "base": "atelier/aievo",
+   "words": 701,
+   "type": "page"
+  },
+  "atelier/projets/ia1": {
+   "title": "IA et outils",
+   "src": "content/atelier/atelier/projets/ia1.html",
+   "base": "atelier/projets",
+   "words": 255,
+   "type": "page"
+  },
+  "atelier/apps/heures": {
+   "title": "Heures Sacrées",
+   "src": "content/atelier/atelier/apps/heures.html",
+   "base": "atelier/apps",
+   "words": 144,
+   "type": "page"
+  },
+  "lab/index": {
+   "title": "Lab",
+   "src": "content/lab/lab/index.html",
+   "base": "lab",
+   "words": 53,
+   "type": "page"
+  },
+  "dashb/index": {
+   "title": "Observatoire",
+   "type": "pending",
+   "desc": "L'observatoire est une application interactive à part entière ; son portage dans v3 est prévu après les rubriques de lecture."
+  },
+  "profil/bio/index": {
+   "title": "Introduction",
+   "src": "content/profil/profil/bio/index.html",
+   "base": "profil/sections/bio",
+   "words": 392,
+   "type": "page"
+  },
+  "profil/bio/cv": {
+   "title": "Trajectoire",
+   "src": "content/profil/profil/bio/cv.html",
+   "base": "profil/sections/bio",
+   "words": 473,
+   "type": "page"
+  },
+  "profil/bio/philo": {
+   "title": "Philo",
+   "src": "content/profil/profil/bio/philo.html",
+   "base": "profil/sections/bio",
+   "words": 505,
+   "type": "page"
+  },
+  "profil/bio/reseaux": {
+   "title": "Ailleurs",
+   "src": "content/profil/profil/bio/reseaux.html",
+   "base": "profil/sections/bio",
+   "words": 114,
+   "type": "page"
+  },
+  "profil/bio/fun": {
+   "title": "Fragments",
+   "src": "content/profil/profil/bio/fun.html",
+   "base": "profil/sections/bio",
+   "words": 1017,
+   "type": "page"
+  },
+  "profil/passions/index": {
+   "title": "Introduction",
+   "src": "content/profil/profil/passions/index.html",
+   "base": "profil/sections/passions",
+   "words": 511,
+   "type": "page"
+  },
+  "profil/passions/civilisations": {
+   "title": "Civilisations",
+   "src": "content/profil/profil/passions/civilisations.html",
+   "base": "profil/sections/passions",
+   "words": 245,
+   "type": "page"
+  },
+  "profil/passions/cosmos": {
+   "title": "Cosmos",
+   "src": "content/profil/profil/passions/cosmos.html",
+   "base": "profil/sections/passions",
+   "words": 172,
+   "type": "page"
+  },
+  "profil/passions/imagination": {
+   "title": "Imagination",
+   "src": "content/profil/profil/passions/imagination.html",
+   "base": "profil/sections/passions",
+   "words": 217,
+   "type": "page"
+  },
+  "profil/passions/concepts": {
+   "title": "Concepts",
+   "src": "content/profil/profil/passions/concepts.html",
+   "base": "profil/sections/passions",
+   "words": 352,
+   "type": "page"
+  },
+  "profil/passions/creer": {
+   "title": "Créer",
+   "src": "content/profil/profil/passions/creer.html",
+   "base": "profil/sections/passions",
+   "words": 152,
+   "type": "page"
+  },
+  "profil/passions/fascinations": {
+   "title": "Fascinations",
+   "src": "content/profil/profil/passions/fascinations.html",
+   "base": "profil/sections/passions",
+   "words": 282,
+   "type": "page"
+  },
+  "profil/influences/index": {
+   "title": "Introduction",
+   "src": "content/profil/profil/influences/index.html",
+   "base": "profil/sections/influences",
+   "words": 172,
+   "type": "page"
+  },
+  "profil/influences/coeur": {
+   "title": "Coups de cœur",
+   "src": "content/profil/profil/influences/coeur.html",
+   "base": "profil/sections/influences",
+   "words": 304,
+   "type": "page"
+  },
+  "profil/influences/playlist": {
+   "title": "Musicothèque",
+   "src": "content/profil/profil/influences/playlist.html",
+   "base": "profil/sections/influences",
+   "words": 71,
+   "type": "page"
+  },
+  "profil/references/index": {
+   "title": "Introduction",
+   "src": "content/profil/profil/references/index.html",
+   "base": "profil/sections/references",
+   "words": 164,
+   "type": "page"
+  },
+  "profil/references/alice": {
+   "title": "Alice",
+   "src": "content/profil/profil/references/alice.html",
+   "base": "profil/sections/references",
+   "words": 519,
+   "type": "page"
+  },
+  "profil/references/drennan": {
+   "title": "Talos",
+   "src": "content/profil/profil/references/drennan.html",
+   "base": "profil/sections/references",
+   "words": 1793,
+   "type": "page"
+  },
+  "profil/references/mondes": {
+   "title": "Mondes",
+   "src": "content/profil/profil/references/mondes.html",
+   "base": "profil/sections/references",
+   "words": 127,
+   "type": "page"
+  },
+  "profil/references/figures": {
+   "title": "Figures",
+   "src": "content/profil/profil/references/figures.html",
+   "base": "profil/sections/references",
+   "words": 484,
+   "type": "page"
+  },
+  "profil/references/esprits": {
+   "title": "Esprits",
+   "src": "content/profil/profil/references/esprits.html",
+   "base": "profil/sections/references",
+   "words": 999,
+   "type": "page"
+  },
+  "profil/references/mythes": {
+   "title": "Mythes",
+   "src": "content/profil/profil/references/mythes.html",
+   "base": "profil/sections/references",
+   "words": 596,
+   "type": "page"
+  },
+  "profil/references/symboles": {
+   "title": "Symboles",
+   "src": "content/profil/profil/references/symboles.html",
+   "base": "profil/sections/references",
+   "words": 208,
+   "type": "page"
+  },
+  "profil/references/lectures": {
+   "title": "Livres & idées",
+   "src": "content/profil/profil/references/lectures.html",
+   "base": "profil/sections/references",
+   "words": 284,
+   "type": "page"
+  },
+  "profil/references/synchronicites": {
+   "title": "Synchronicités",
+   "src": "content/profil/profil/references/synchronicites.html",
+   "base": "profil/sections/references",
+   "words": 271,
+   "type": "page"
+  },
+  "profil/gaming/index": {
+   "title": "Introduction",
+   "src": "content/profil/profil/gaming/index.html",
+   "base": "profil/sections/gaming",
+   "words": 209,
+   "type": "page"
+  },
+  "profil/gaming/parcours": {
+   "title": "Mon parcours",
+   "src": "content/profil/profil/gaming/parcours.html",
+   "base": "profil/sections/gaming",
+   "words": 149,
+   "type": "page"
+  },
+  "profil/gaming/mmo": {
+   "title": "MMORPG",
+   "src": "content/profil/profil/gaming/mmo.html",
+   "base": "profil/sections/gaming",
+   "words": 244,
+   "type": "page"
+  },
+  "profil/gaming/survie": {
+   "title": "Survie & construction",
+   "src": "content/profil/profil/gaming/survie.html",
+   "base": "profil/sections/gaming",
+   "words": 118,
+   "type": "page"
+  },
+  "profil/gaming/experiences": {
+   "title": "Immersion & sens",
+   "src": "content/profil/profil/gaming/experiences.html",
+   "base": "profil/sections/gaming",
+   "words": 93,
+   "type": "page"
+  },
+  "profil/gaming/creations": {
+   "title": "Mes créations",
+   "src": "content/profil/profil/gaming/creations.html",
+   "base": "profil/sections/gaming",
+   "words": 102,
+   "type": "page"
+  },
+  "profil/gaming/competences": {
+   "title": "Compétences",
+   "src": "content/profil/profil/gaming/competences.html",
+   "base": "profil/sections/gaming",
+   "words": 172,
+   "type": "page"
+  },
+  "profil/voyages/index": {
+   "title": "Introduction",
+   "src": "content/profil/profil/voyages/index.html",
+   "base": "profil/sections/voyages",
+   "words": 161,
+   "type": "page"
+  },
+  "profil/voyages/regards": {
+   "title": "Regards & découvertes",
+   "src": "content/profil/profil/voyages/regards.html",
+   "base": "profil/sections/voyages",
+   "words": 78,
+   "type": "page"
+  },
+  "profil/voyages/carnet": {
+   "title": "Carnet de voyages",
+   "src": "content/profil/profil/voyages/carnet.html",
+   "base": "profil/sections/voyages",
+   "words": 48,
+   "type": "page"
+  },
+  "profil/voyages/horizons": {
+   "title": "Horizons & envies",
+   "src": "content/profil/profil/voyages/horizons.html",
+   "base": "profil/sections/voyages",
+   "words": 73,
+   "type": "page"
+  },
+  "profil/aspirations/index": {
+   "title": "Introduction",
+   "src": "content/profil/profil/aspirations/index.html",
+   "base": "profil/sections/aspirations",
+   "words": 209,
+   "type": "page"
+  },
+  "profil/aspirations/fondations": {
+   "title": "Mes fondations",
+   "src": "content/profil/profil/aspirations/fondations.html",
+   "base": "profil/sections/aspirations",
+   "words": 109,
+   "type": "page"
+  },
+  "profil/aspirations/destinee": {
+   "title": "Ma destinée",
+   "src": "content/profil/profil/aspirations/destinee.html",
+   "base": "profil/sections/aspirations",
+   "words": 126,
+   "type": "page"
+  },
+  "profil/aspirations/horizons": {
+   "title": "Mes horizons",
+   "src": "content/profil/profil/aspirations/horizons.html",
+   "base": "profil/sections/aspirations",
+   "words": 151,
+   "type": "page"
+  },
+  "contact/form": {
+   "title": "Contact",
+   "type": "contact",
+   "desc": "Une question, une proposition, une collaboration autour d'un projet ou simplement l'envie d'échanger ? Vous pouvez m'écrire ici.",
+   "action": "https://formspree.io/f/mldnvpjq",
+   "note": "Les informations transmises servent uniquement à répondre à votre message. Aucun compte n'est nécessaire."
+  },
+  "symbol/tarot/13o": {
+   "title": "Arcane XIII – La Mort (Version intégrale)",
+   "src": "content/codex/symbol/tarot/13o.html",
+   "base": "blog/articles/symbol/tarot",
+   "words": 1741,
+   "type": "article",
+   "hidden": true,
+   "within": "symbol/tarot/13"
+  }
+ }
+}

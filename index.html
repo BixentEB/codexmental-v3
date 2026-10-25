@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#03040a">
+<meta name="description" content="Codex Mental — un espace vivant d'idées, d'articles et d'expériences.">
+<title>Codex Mental</title>
+<link rel="icon" type="image/png" sizes="96x96" href="img/favicon-96x96.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="core/shell.css">
+<link rel="stylesheet" href="core/reader.css">
+</head>
+<body>
+<a class="skip" href="#reader">Aller à la lecture</a>
+
+<div class="scene" id="scene" aria-live="polite"></div>
+<p class="scene-status" id="scene-status" role="status" hidden></p>
+
+<header class="topbar" id="topbar"></header>
+
+<section class="reader" id="reader" role="dialog" aria-label="Lecteur d'articles" aria-modal="false" inert>
+  <div class="rd-top">
+    <button class="ibtn back" type="button" data-act="back" aria-label="Retour au sommaire"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <button class="ibtn tbtn" type="button" data-act="tree" aria-label="Afficher ou masquer le sommaire" aria-expanded="true"><svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><path d="M9.5 4.5v15"/></svg></button>
+    <nav class="crumbs" id="rd-crumbs" aria-label="Fil d'Ariane"></nav>
+    <div class="fs">
+      <button class="ibtn" type="button" data-act="fs-" aria-label="Réduire la taille du texte"><span class="aa s">A</span></button>
+      <button class="ibtn" type="button" data-act="fs+" aria-label="Agrandir la taille du texte"><span class="aa l">A</span></button>
+    </div>
+    <button class="ibtn xbtn" type="button" data-act="focus" aria-label="Plein cadre" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M9 4H4v5M15 4h5v5M9 20H4v-5M15 20h5v-5"/></svg></button>
+    <button class="ibtn" type="button" data-act="close" aria-label="Fermer le lecteur"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
+  <div class="rd-prog" id="rd-prog"></div>
+  <div class="rd-body">
+    <aside class="rd-tree" id="rd-tree" aria-label="Sommaire">
+      <div id="t-head"></div>
+      <div class="t-search">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+        <input id="t-q" type="search" placeholder="Rechercher dans le site" autocomplete="off" aria-label="Rechercher un article">
+        <kbd>/</kbd>
+      </div>
+      <div class="tree" id="t-list"></div>
+    </aside>
+    <main class="rd-main" id="rd-main" tabindex="-1"></main>
+  </div>
+</section>
+
+<noscript><p style="position:fixed;inset:auto 16px 16px;padding:14px;background:#111;color:#eee;border-radius:10px">Codex Mental a besoin de JavaScript pour afficher la scène et le lecteur d'articles.</p></noscript>
+
+<script src="core/host.js"></script>
+<script src="core/reader.js"></script>
+<script src="core/shell.js"></script>
+</body>
+</html>
