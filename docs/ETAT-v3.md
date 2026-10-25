@@ -3,7 +3,7 @@
 ## Fait
 - Interface commune (barre, bouton de thème, lecteur) alimentée par `content/catalog.json`.
 - Quatre thèmes branchés : Ciel profond, Héliosphère, Galactique, Champ stellaire.
-- Contenus importés de v2 sans modification de texte : Codex (5 pages + 20 articles), Atelier (9), Lab (1), Portrait (7 sections, 48 pages), Contact (formulaire).
+- Contenus importés de v2 sans modification de texte : Codex (5 pages + 20 articles), Atelier (9), Lab (1), Portrait (7 sections, 40 pages), Contact (formulaire).
 - Le Journal (`blog`) reprend les articles du Codex classés par année ; il n'est pas dans la barre (comme en v2) mais s'ouvre depuis la planète « Blog » d'Héliosphère.
 
 ## À vérifier à l'œil (non testé dans l'environnement de développement)
