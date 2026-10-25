@@ -24,3 +24,6 @@
 ## Passe « références & thèmes » (octobre 2026)
 - Portrait : séparateurs entre fiches (Coups de cœur, Esprits, Mythes, Mondes, Symboles, Livres & idées) ; illustrations Wikimedia résolues à l'ouverture (`figure.wk[data-q]`, cache `codex.wk`, crédit et licence affichés ; la figure disparaît si rien n'est trouvé) ; « Gaming » devient « Jeu », numéros et icônes retirés (numéros conservés uniquement dans Synchronicités), Compétences en tableau.
 - Héliosphère : description, titre en haut à gauche, Soleil plus réaliste. Champ stellaire : constellation de Persée (Algol variable). Vie d'une étoile : disque/jets/cavité de la protoétoile et nébuleuse planétaire refaits.
+
+## Thème « Ciel d'ailleurs » (octobre 2026)
+Vue depuis la terre ferme : un seul shader WebGL (ciel jour/crépuscule/nuit selon l'heure réelle, étoiles et Voie lactée, aurores, planète à anneaux, lune, planète bleue, nuages, crêtes). Réglages : heure réelle / journée accélérée / heure choisie, intensité des aurores. `?hour=` force l'heure (tests). Menus : planète à anneaux = Codex, lune = Atelier, planète bleue = Laboratoire, étoile = Observatoire, aurore = Portrait. Mémorisation : `codex.ailleurs`.

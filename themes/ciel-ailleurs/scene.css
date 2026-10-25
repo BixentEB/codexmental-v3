@@ -1,0 +1,23 @@
+/* Ciel d'ailleurs */
+#scene #ca-cv { position: fixed; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; background: linear-gradient(#050914, #0b1630 70%, #0c1a22); touch-action: none; cursor: grab; }
+#scene .ca-hero { position: fixed; z-index: 3; left: clamp(18px, 5vw, 80px); top: calc(var(--topbar-h) + 34px); max-width: 440px; pointer-events: none; transition: opacity .5s .1s; text-shadow: 0 2px 18px #02060c, 0 0 3px #02060c; }
+#scene .ca-kicker { margin: 0 0 10px; font-family: var(--font-mono); font-size: .66rem; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); }
+#scene .ca-hero h1 { margin: 0 0 14px; font-family: var(--font-display); font-size: clamp(1.6rem, 3.6vw, 2.7rem); font-weight: 400; line-height: 1.1; }
+#scene .ca-lead { margin: 0; font-size: .92rem; line-height: 1.65; color: var(--fg-soft); }
+#scene .ca-sub { margin: 14px 0 0; font-size: .76rem; line-height: 1.6; color: var(--muted); }
+#scene .ca-marks { position: fixed; inset: 0; z-index: 2; pointer-events: none; transition: opacity .5s; }
+#scene .ca-mk { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+#scene .ca-mk button { position: absolute; left: -26px; top: -26px; width: 52px; height: 52px; padding: 0; border: 0; border-radius: 50%; background: transparent; cursor: pointer; pointer-events: auto; }
+#scene .ca-mk .ring { position: absolute; left: -17px; top: -17px; width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(255,255,255,.6); box-shadow: 0 0 14px color-mix(in srgb, var(--c) 70%, transparent), inset 0 0 8px color-mix(in srgb, var(--c) 40%, transparent); pointer-events: none; transition: transform .25s, border-color .25s; animation: caPulse 3.4s ease-in-out infinite; }
+#scene .ca-mk .ring::after { content: ''; position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; margin: -2px; border-radius: 50%; background: var(--c); }
+#scene .ca-mk button:hover ~ .ring, #scene .ca-mk button:focus-visible ~ .ring { transform: scale(1.25); border-color: #fff; }
+#scene .ca-mk button:focus-visible { outline: 1.5px solid var(--accent); }
+#scene .ca-mk .lab { position: absolute; left: 26px; top: -8px; white-space: nowrap; font-size: .76rem; letter-spacing: .14em; text-transform: uppercase; color: #eaf2f6; text-shadow: 0 1px 8px #000, 0 0 3px #000; pointer-events: none; }
+#scene .ca-mk .tip { position: absolute; left: 26px; top: 14px; min-width: 190px; max-width: 250px; padding: 9px 12px; border-radius: 9px; background: rgba(5,12,22,.92); border: 1px solid color-mix(in srgb, var(--c) 45%, transparent); box-shadow: 0 8px 26px rgba(0,0,0,.5); opacity: 0; transform: translateY(4px); transition: opacity .2s, transform .2s; pointer-events: none; z-index: 3; }
+#scene .ca-mk .tip em { display: block; font-style: normal; font-size: .76rem; line-height: 1.4; color: #b9cbd3; }
+#scene .ca-mk button:hover ~ .tip, #scene .ca-mk button:focus-visible ~ .tip { opacity: 1; transform: none; }
+@keyframes caPulse { 0%, 100% { opacity: .85; } 50% { opacity: .5; } }
+#scene .ca-clock { position: fixed; z-index: 3; left: clamp(18px, 5vw, 80px); bottom: 20px; margin: 0; font-family: var(--font-mono); font-size: .66rem; letter-spacing: .16em; text-transform: uppercase; color: rgba(205,225,232,.7); text-shadow: 0 1px 8px #000; pointer-events: none; transition: opacity .4s; }
+html.reading #scene .ca-hero, html.reading #scene .ca-clock { opacity: 0; visibility: hidden; transition: opacity .35s, visibility 0s .35s; }
+@media (max-width: 800px) { #scene .ca-sub { display: none; } #scene .ca-mk .lab { font-size: .64rem; letter-spacing: .08em; } }
+@media (prefers-reduced-motion: reduce) { #scene * { transition: none !important; animation: none !important; } }

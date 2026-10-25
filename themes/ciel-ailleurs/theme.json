@@ -1,0 +1,17 @@
+{
+  "label": "Ciel d'ailleurs",
+  "palette": {
+    "bg": "#04070f", "fg": "#eef4f6", "fgSoft": "#cfdde2", "muted": "#91a9b3", "hud": "#cdeee0",
+    "accent": "#7fe6b0", "accent2": "#b690ff", "line": "rgba(127, 230, 176, 0.24)",
+    "panel": "rgba(7, 14, 24, 0.9)", "panelSolid": "rgba(5, 10, 18, 0.98)", "panelDeep": "rgba(3, 7, 13, 0.45)"
+  },
+  "fonts": {
+    "display": "'Michroma', 'Trebuchet MS', system-ui, sans-serif",
+    "body": "'Sora', system-ui, -apple-system, 'Segoe UI', sans-serif"
+  },
+  "customize": { "title": "Ciel d'ailleurs", "sub": "Heure, aurores et vue" },
+  "reader": { "layout": "side" },
+  "markup": "scene.html",
+  "css": ["scene.css"],
+  "scene": "scene.js"
+}
