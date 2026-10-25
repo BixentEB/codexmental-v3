@@ -46,6 +46,15 @@
         "#8fd0ff",
         "#ffc27a"
       ]
+    },
+    {
+      "id": "vie-etoile",
+      "label": "Vie d'une étoile",
+      "description": "De la nébuleuse à la naine blanche (ou à la supernova) : chaque rubrique est un stade de la vie d'une étoile.",
+      "swatch": [
+        "#ffb870",
+        "#a9c4ff"
+      ]
     }
   ]
 }

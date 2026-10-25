@@ -1,0 +1,17 @@
+{
+  "label": "Vie d'une étoile",
+  "palette": {
+    "bg": "#05030a", "fg": "#f3ecf7", "fgSoft": "#dccfe6", "muted": "#a592b5", "hud": "#f0dcd0",
+    "accent": "#ffb870", "accent2": "#a9c4ff", "line": "rgba(255, 190, 150, 0.22)",
+    "panel": "rgba(14, 8, 20, 0.9)", "panelSolid": "rgba(10, 5, 15, 0.98)", "panelDeep": "rgba(6, 3, 10, 0.45)"
+  },
+  "fonts": {
+    "display": "'Michroma', 'Trebuchet MS', system-ui, sans-serif",
+    "body": "'Sora', system-ui, -apple-system, 'Segoe UI', sans-serif"
+  },
+  "customize": { "title": "Destin de l'étoile", "sub": "Parcours, rythme et lecture auto" },
+  "reader": { "layout": "side" },
+  "markup": "scene.html",
+  "css": ["scene.css"],
+  "scene": "scene.js"
+}

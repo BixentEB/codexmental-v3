@@ -15,3 +15,8 @@
 ## Décisions à prendre
 - Identité de l'éditeur et licence de réutilisation à préciser dans « Mentions légales ».
 - Avenir du thème Champ stellaire (voir la proposition).
+
+
+## Univers ajoutés
+- **Voisinage stellaire** (`themes/voisinage`) : carte 3D des étoiles proches ; chaque étoile dorée est une rubrique.
+- **Vie d'une étoile** (`themes/vie-etoile`) : six stades et deux destins (Soleil / étoile massive) ; chaque rubrique est un stade.
