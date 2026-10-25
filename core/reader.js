@@ -355,9 +355,9 @@
         (introA ? '<div class="prose hub-intro" id="hub-intro"></div>' : '<p class="intro">' + esc(sec.intro) + '</p>');
       if (lone.length) h += '<ul class="alist">' + lone.map(function (n) { return '<li>' + arow(DB.articles[n.article]) + '</li>'; }).join('') + '</ul>';
       if (tops.length) h += '<h2 class="sub">Parcourir</h2><div class="cards">' + tops.map(function (g) {
-        var firsts = []; (function pick(n) { (n.children || []).forEach(function (c) { if (firsts.length < 3) { if (c.article) { if (DB.articles[c.article]) firsts.push(DB.articles[c.article].title); } else pick(c); } }); })(g);
-        return '<button type="button" class="gcard" data-act="group" data-id="' + esc(g.id) + '"><span class="gc-n">' + plural(countOf(g), 'article') + '</span><span class="gc-t">' + emoji(g) + esc(g.label) + '</span>' +
-          (g.desc ? '<span class="gc-d">' + esc(g.desc) + '</span>' : '') + '<span class="gc-l">' + esc(firsts.join(' · ')) + '</span></button>';
+        var fresh = false, lim = Date.now() - 45 * 864e5; (function nw(n) { (n.children || []).forEach(function (c) { if (c.article) { var A = DB.articles[c.article]; if (A && A.date && Date.parse(A.date) > lim) fresh = true; } else nw(c); }); })(g);
+        return '<button type="button" class="gcard" data-act="group" data-id="' + esc(g.id) + '"><span class="gc-n">' + plural(countOf(g), 'article') + (fresh ? '<i class="gc-new">Nouveau</i>' : '') + '</span><span class="gc-t">' + emoji(g) + esc(g.label) + '</span>' +
+          (g.desc ? '<span class="gc-d">' + esc(g.desc) + '</span>' : '') + '</button>';
       }).join('') + '</div>';
       var latest = (order[sec.id] || []).map(function (id) { return DB.articles[id]; }).filter(function (a) { return a.date; }).sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); }).slice(0, 4);
       if (latest.length) h += '<h2 class="sub">Derniers ajouts</h2><ul class="alist">' + latest.map(function (a) { return '<li>' + arow(a) + '</li>'; }).join('') + '</ul>';

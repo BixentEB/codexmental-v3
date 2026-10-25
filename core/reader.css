@@ -266,3 +266,8 @@
 @media (max-width: 1099px) { :root[data-reader-layout="side"] .reader { width: auto; } }
 /* le second affichage d'un article (après chargement) ne rejoue pas l'animation d'entrée */
 .pane.still { animation: none; }
+
+.cards { grid-auto-rows: 1fr; }
+.gcard { min-height: 158px; }
+.gc-d { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.gc-new { margin-left: 10px; padding: 1px 7px; border: 1px solid color-mix(in srgb, var(--accent) 60%, transparent); border-radius: 99px; font-style: normal; font-size: .9em; letter-spacing: .1em; }

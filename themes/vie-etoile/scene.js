@@ -70,7 +70,7 @@ float vn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f); re
 float fbm(vec2 p){ float v = 0., a = .5; for (int i = 0; i < 6; i++) { v += a * vn(p); p = p * 2.02 + vec2(5.2, 1.3); a *= .5; } return v; }
 vec2 rot(vec2 p, float a){ float c = cos(a), s = sin(a); return vec2(c * p.x - s * p.y, s * p.x + c * p.y); }
 void main(){
-  float m = min(uRes.x, uRes.y); vec2 uv = (gl_FragCoord.xy - uCen) / m / uZoom; float r = length(uv), ang = atan(uv.y, uv.x); float dA = -.38 + uYaw * .55, dRatio = mix(7., 1.15, smoothstep(0., 1.25, abs(uPitch + .1)));
+  float m = min(uRes.x, uRes.y); vec2 uv = (gl_FragCoord.xy - uCen) / m / uZoom; float r = length(uv), ang = atan(uv.y, uv.x); float dA = -.38 + uYaw * .55, dRatio = mix(4.2, 1.15, smoothstep(0., 1.25, abs(uPitch + .1)));
   vec3 col = vec3(.004, .003, .009);
   // champ d'étoiles lointaines
   vec2 sp = (gl_FragCoord.xy + vec2(uYaw, -uPitch) * 60.) / 3.5; float s = h21(floor(sp)); 
@@ -101,8 +101,12 @@ void main(){
     vec3 dcol = mix(vec3(1., .78, .5), uH, smoothstep(.05, .32, rd)) * (1. + 2.4 * exp(-(rd - .05) * 22.));
     col += dcol * disc * (.12 + .62 * rings) * gaps * uDisc * (.55 + .45 * smoothstep(-.1, .1, -p.y));
     // bande de poussière : l'avant du disque occulte le cœur
-    float lane = exp(-pow(e.y / (.012 + .02 * rd), 2.)) * smoothstep(.34, .06, rd) * smoothstep(.03, .06, rd);
-    col *= 1. - .6 * lane * uDisc;
+    float edgeOn = smoothstep(1.8, 3.6, dRatio);
+    float lane = exp(-pow(e.y / (.02 + .05 * rd), 2.)) * smoothstep(edge, .08, rd) * smoothstep(.03, .07, rd) * edgeOn;
+    col *= 1. - .5 * lane * uDisc;
+    // voile de lumière diffusée : le disque a une épaisseur, plus marquée au bord
+    float flare = exp(-pow(p.y / (.02 + .13 * abs(p.x)), 2.)) * smoothstep(.05, .14, abs(p.x)) * smoothstep(edge * 1.15, edge * .5, abs(p.x));
+    col += mix(uH, vec3(1., .88, .75), .4) * flare * (.1 + .12 * fbm(vec2(p.x * 8., p.y * 10. + uT * .02))) * uDisc * edgeOn;
     // jet : mince, dentelé en nœuds de choc (objet Herbig-Haro), léger balancement
     float wob = sin(p.y * 7. + uT * .25) * .006 * abs(p.y);
     float jw = .0045 + abs(p.y) * .02;
