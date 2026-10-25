@@ -8,12 +8,20 @@
   var ICONS = {"codex": "<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/><path d=\"M7 7h10M7 11h10M7 15h6\"/></svg>", "atelier": "<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m16 5 3 3M4 20l4.5-1 11-11a2.12 2.12 0 0 0-3-3l-11 11L4 20Z\"/></svg>", "lab": "<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M9 3h6M10 3v7l-5.5 8.5A2 2 0 0 0 6.2 21h11.6a2 2 0 0 0 1.7-2.5L14 10V3M8 15h8\"/></svg>", "dashb": "<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"3\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"14\" y=\"3\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"3\" y=\"14\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"14\" y=\"14\" width=\"7\" height=\"7\" rx=\"1\"/></svg>", "profil": "<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 21a8 8 0 0 1 16 0\"/></svg>", "contact": "<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"2\" y=\"4\" width=\"20\" height=\"16\" rx=\"2\"/><path d=\"m22 7-10 7L2 7\"/></svg>", "blog": "<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 4h14v16H5z\"/><path d=\"M8.5 8.5h7M8.5 12h7M8.5 15.5h4\"/></svg>"};
   function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 
-  function themeMenu() {
-    return Codex.themes.map(function (t) {
-      var cur = t.id === Codex.theme.id;
-      return '<li><a role="menuitemradio" aria-checked="' + cur + '"' + (cur ? ' aria-current="true"' : '') + ' href="?theme=' + esc(t.id) + '" data-theme-id="' + esc(t.id) + '">' +
-        '<span class="sw" style="--sw1:' + esc((t.swatch || [])[0] || '#999') + ';--sw2:' + esc((t.swatch || [])[1] || '#555') + '" aria-hidden="true"></span>' +
-        '<span class="tx"><b>' + esc(t.label) + (t.preview ? ' <i>aperçu</i>' : '') + '</b><small>' + esc(t.description || '') + '</small></span></a></li>';
+  function themeItem(t) {
+    var cur = t.id === Codex.theme.id;
+    return '<li><a role="menuitemradio" aria-checked="' + cur + '"' + (cur ? ' aria-current="true"' : '') + ' href="?theme=' + esc(t.id) + '" data-theme-id="' + esc(t.id) + '">' +
+      '<span class="sw" style="--sw1:' + esc((t.swatch || [])[0] || '#999') + ';--sw2:' + esc((t.swatch || [])[1] || '#555') + '" aria-hidden="true"></span>' +
+      '<span class="tx"><b>' + esc(t.label) + (t.preview ? ' <i>aperçu</i>' : '') + '</b><small>' + esc(t.description || '') + '</small></span></a></li>';
+  }
+  function themeMenu() {   // catégories repliables ; celle du thème actif est ouverte
+    var order = [], groups = {};
+    Codex.themes.forEach(function (t) { var c = t.category || 'Thèmes'; if (!groups[c]) { groups[c] = []; order.push(c); } groups[c].push(t); });
+    if (order.length < 2) return Codex.themes.map(themeItem).join('');
+    return order.map(function (c, i) {
+      var open = groups[c].some(function (t) { return t.id === Codex.theme.id; });
+      return '<li class="cat"><button type="button" class="cat-btn" aria-expanded="' + open + '" aria-controls="tc-' + i + '"><span>' + esc(c) + '</span><em>' + groups[c].length + '</em></button>' +
+        '<ul class="cat-list" id="tc-' + i + '" role="group" aria-label="' + esc(c) + '"' + (open ? '' : ' hidden') + '>' + groups[c].map(themeItem).join('') + '</ul></li>';
     }).join('');
   }
 
@@ -41,12 +49,14 @@
     document.addEventListener('pointerdown', function (e) { if (!menu.hidden && !menu.contains(e.target) && e.target !== btn && !btn.contains(e.target)) setOpen(false); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) { setOpen(false); btn.focus(); e.stopPropagation(); } }, true);
     menu.addEventListener('keydown', function (e) {
-      var items = Array.prototype.slice.call(menu.querySelectorAll('a')), i = items.indexOf(document.activeElement);
+      var items = Array.prototype.slice.call(menu.querySelectorAll('.cat-btn, .cat-list:not([hidden]) a, :scope > li > a')), i = items.indexOf(document.activeElement);
       if (e.key === 'ArrowDown') { e.preventDefault(); items[(i + 1) % items.length].focus(); }
       else if (e.key === 'ArrowUp') { e.preventDefault(); items[(i - 1 + items.length) % items.length].focus(); }
     });
     // changer de thème = recharger avec le nouveau thème en conservant la lecture en cours (#adresse)
     menu.addEventListener('click', function (e) {
+      var cb = e.target.closest('.cat-btn');
+      if (cb) { var ul = document.getElementById(cb.getAttribute('aria-controls')), op = cb.getAttribute('aria-expanded') !== 'true'; menu.querySelectorAll('.cat-btn').forEach(function (o) { o.setAttribute('aria-expanded', 'false'); document.getElementById(o.getAttribute('aria-controls')).hidden = true; }); cb.setAttribute('aria-expanded', String(op)); ul.hidden = !op; return; }
       var a = e.target.closest('a[data-theme-id]'); if (!a) return;
       e.preventDefault();
       if (a.dataset.themeId === Codex.theme.id) { setOpen(false); return; }

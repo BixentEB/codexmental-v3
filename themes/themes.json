@@ -9,7 +9,8 @@
       "swatch": [
         "#f2b866",
         "#5a7bd0"
-      ]
+      ],
+      "category": "Ciels"
     },
     {
       "id": "heliosphere",
@@ -18,7 +19,8 @@
       "swatch": [
         "#ffb23e",
         "#7a4a2c"
-      ]
+      ],
+      "category": "Astronomie"
     },
     {
       "id": "galactique",
@@ -27,7 +29,8 @@
       "swatch": [
         "#b9a4ff",
         "#5cb4ff"
-      ]
+      ],
+      "category": "Astronomie"
     },
     {
       "id": "champ-stellaire",
@@ -36,7 +39,8 @@
       "swatch": [
         "#c5a1ff",
         "#2a3566"
-      ]
+      ],
+      "category": "Ciels"
     },
     {
       "id": "voisinage",
@@ -45,7 +49,8 @@
       "swatch": [
         "#8fd0ff",
         "#ffc27a"
-      ]
+      ],
+      "category": "Astronomie"
     },
     {
       "id": "vie-etoile",
@@ -54,7 +59,8 @@
       "swatch": [
         "#ffb870",
         "#a9c4ff"
-      ]
+      ],
+      "category": "Astronomie"
     },
     {
       "id": "ciel-ailleurs",
@@ -63,7 +69,20 @@
       "swatch": [
         "#7fe6b0",
         "#b690ff"
-      ]
+      ],
+      "category": "Ciels"
+    }
+  ],
+  "categories": [
+    {
+      "id": "Ciels",
+      "label": "Ciels",
+      "description": "Le ciel vu d'ici"
+    },
+    {
+      "id": "Astronomie",
+      "label": "Astronomie",
+      "description": "Systèmes, galaxies et étoiles"
     }
   ]
 }

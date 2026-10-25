@@ -21,3 +21,6 @@
 html.reading #scene .ca-hero, html.reading #scene .ca-clock { opacity: 0; visibility: hidden; transition: opacity .35s, visibility 0s .35s; }
 @media (max-width: 800px) { #scene .ca-sub { display: none; } #scene .ca-mk .lab { font-size: .64rem; letter-spacing: .08em; } }
 @media (prefers-reduced-motion: reduce) { #scene * { transition: none !important; animation: none !important; } }
+#scene .ca-lead, #scene .ca-sub { transition: opacity .8s; }
+html.ca-moved #scene .ca-lead { opacity: .35; }
+html.ca-moved #scene .ca-sub { opacity: 0; }
