@@ -1,0 +1,137 @@
+{
+ "intro": "Versions, téléchargements, tutoriels, historique des mises à jour et informations de licence seront regroupés dans un espace indépendant.",
+ "repo": "https://github.com/BixentEB/codexmental-lab",
+ "repoLabel": "Explorer le dépôt du Lab ↗",
+ "palette": {
+  "Multimédia": "#8cc7ff",
+  "Automatisation": "#e5b5ff",
+  "Gestion": "#8ee0b7",
+  "Quotidien": "#f4ce91",
+  "Commerce": "#f4b68d",
+  "Création": "#d3b3ff",
+  "Web": "#a6d9f5",
+  "Expérimentation": "#b3d9dc"
+ },
+ "projects": [
+  {
+   "id": "noxdl",
+   "name": "NoxDL",
+   "mark": "↓",
+   "platform": "Windows",
+   "status": "Développement",
+   "visibility": "Diffusion publique envisagée",
+   "license": "Gratuit envisagé",
+   "accent": "#94c8ff",
+   "summary": "Télécharger, classer et automatiser ses médias depuis une interface unique.",
+   "detail": "Trois modes complémentaires : Standard pour un téléchargement à la demande, Chasseur pour les listes de liens et Radar pour la détection automatisée. Le projet s’appuie sur Python, yt-dlp et FFmpeg.",
+   "tags": [
+    "Multimédia",
+    "Automatisation"
+   ]
+  },
+  {
+   "id": "perimgo-home",
+   "name": "Périm-Go Home",
+   "tags": [
+    "Gestion",
+    "Quotidien"
+   ],
+   "features": [
+    "Scan des codes-barres",
+    "Inventaire local",
+    "Suivi des entrées et sorties"
+   ],
+   "mark": "◷",
+   "platform": "Android",
+   "status": "Prototype fonctionnel",
+   "visibility": "Tests privés",
+   "license": "Licences envisagées",
+   "accent": "#92e5b5",
+   "summary": "Suivi des stocks et des dates de péremption, directement depuis un smartphone.",
+   "detail": "Scan des codes-barres, inventaire local et gestion des entrées et sorties. Cette édition est destinée à un usage personnel. Aucune version publique n’est proposée à ce stade."
+  },
+  {
+   "id": "perimgo-business",
+   "name": "Périm-Go Business",
+   "tags": [
+    "Gestion",
+    "Commerce"
+   ],
+   "features": [
+    "Inventaire professionnel",
+    "Scan des produits",
+    "Suivi des mouvements"
+   ],
+   "mark": "◷",
+   "platform": "Android",
+   "status": "Prototype en développement",
+   "visibility": "Diffusion privée",
+   "license": "À définir",
+   "accent": "#71d9bc",
+   "summary": "Gestion des stocks et des péremptions pour les professionnels.",
+   "detail": "Déclinaison professionnelle de Périm-Go, distincte de l’édition personnelle. Les modalités de distribution et de licence restent à préciser."
+  },
+  {
+   "id": "dexlibera",
+   "name": "DexLibera",
+   "mark": "✧",
+   "platform": "Projet numérique",
+   "status": "À documenter",
+   "visibility": "Non publié",
+   "license": "À définir",
+   "accent": "#d8b6ff",
+   "summary": "Un projet à retrouver prochainement dans le Laboratoire.",
+   "detail": "La présentation détaillée, les fonctionnalités et les conditions de diffusion seront ajoutées lorsqu’elles seront prêtes.",
+   "tags": [
+    "Création"
+   ]
+  },
+  {
+   "id": "ciel-etoile",
+   "name": "ChatGPT · Ciel étoilé",
+   "tags": [
+    "Création",
+    "Web"
+   ],
+   "mark": "✦",
+   "platform": "Personnalisation CSS",
+   "status": "Fiche en préparation",
+   "visibility": "À définir",
+   "license": "À définir",
+   "accent": "#9fdfe6",
+   "summary": "Une personnalisation CSS qui transforme l’interface de ChatGPT en espace de travail nocturne et étoilé.",
+   "detail": "Premier objet du Lab dans la catégorie des personnalisations. La fiche complète sera ajoutée lorsqu’elle sera prête."
+  },
+  {
+   "id": "codex",
+   "name": "CODEX Mental",
+   "mark": "✦",
+   "platform": "Web",
+   "status": "En évolution",
+   "visibility": "Public",
+   "license": "Consultation libre",
+   "accent": "#f4c68b",
+   "summary": "Un univers interactif pour relier écriture, réflexion et expérimentation.",
+   "detail": "Deux univers de navigation, Galactique et Héliosphère, pour explorer les publications, créations et expériences de CODEX Mental.",
+   "tags": [
+    "Web",
+    "Création"
+   ]
+  },
+  {
+   "id": "futur",
+   "name": "À venir",
+   "mark": "◇",
+   "platform": "Expérimentations",
+   "status": "Exploration",
+   "visibility": "À définir",
+   "license": "À définir",
+   "accent": "#9fdfe6",
+   "summary": "Prototypes, idées et expériences en cours de conception.",
+   "detail": "Cet espace accueillera les futures applications, expériences et créations, sans annoncer de téléchargement avant leur disponibilité.",
+   "tags": [
+    "Expérimentation"
+   ]
+  }
+ ]
+}

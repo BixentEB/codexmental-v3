@@ -1,7 +1,7 @@
 /* ======================================================================
    Petit clin d'œil de la page Contact : une soucoupe passe de temps en temps
    au-dessus du titre. Au survol de l'icône, un passage ; au clic, une
-   séquence au hasard : passage, balayage, salut… ou l'enlèvement d'une
+   séquence au hasard : passage, balayage, salut, zigzag, looping… ou l'enlèvement d'une
    vache qui est tout à fait volontaire.
    Rien ne bouge si l'utilisateur préfère moins d'animations.
    ====================================================================== */
@@ -111,18 +111,58 @@
         .then(function () { sky.classList.remove('lit'); return go(ufo, [{ transform: 'translate(' + ux + 'px,' + uy + 'px) rotate(0)', opacity: 1 }, { transform: 'translate(' + ux + 'px,' + (uy - 3) + 'px) rotate(-6deg)', opacity: 1, offset: .12 }, { transform: 'translate(' + (w + 90) + 'px,' + (uy - 24) + 'px) rotate(14deg)', opacity: 0 }], { duration: 1700, easing: 'cubic-bezier(.7,0,.9,.4)' }); });
     });
 
-    var seq = { passage: passage, scan: scan, salut: salut, vache: enlevement };
-    function pick() { var all = ['passage', 'scan', 'salut', 'vache', 'vache']; return all[Math.floor(Math.random() * all.length)]; }
+
+    /* --- vieux films : mouvements brusques, arrêts nets, ressorts --- */
+    function T(x, y, r, o) { return 'translate(' + x + 'px,' + y + 'px) rotate(' + (r || 0) + 'deg)'; }
+    function R(a, b) { return a + Math.random() * (b - a); }
+    function trail(pts, dur, ease) {   // suit une liste de points {x,y,r,o}, répartis régulièrement
+      var n = pts.length - 1;
+      return go(ufo, pts.map(function (q, i) { return { transform: T(q.x, q.y, q.r), opacity: q.o == null ? 1 : q.o, offset: i / n }; }), { duration: dur, easing: ease || 'ease-in-out' });
+    }
+    /* zigzag : fonce, s'arrête net, repart dans l'autre sens, comme sur un fil */
+    var zigzag = guard(function () {
+      var w = W(), fromLeft = Math.random() < .5, k = fromLeft ? 1 : -1, x0 = fromLeft ? -70 : w + 60, pts = [{ x: x0, y: R(30, 60), r: -8 * k, o: 0 }], x = x0, y;
+      for (var i = 0; i < 5; i++) { x += k * R(w * .12, w * .22) * (i % 2 ? -.5 : 1); x = Math.max(10, Math.min(w - UW - 10, x)); y = R(14, H() - UH - 56); pts.push({ x: x, y: y, r: R(-14, 14) }); }
+      pts.push({ x: fromLeft ? w + 80 : -80, y: R(10, 50), r: 10 * k, o: 0 });
+      return trail(pts, 5200, 'cubic-bezier(.5,0,.3,1)');
+    });
+    /* looping : une boucle complète, la soucoupe est un peu fière */
+    var looping = guard(function () {
+      var w = W(), cx = w * R(.3, .6), cy = 58, rad = 26, pts = [{ x: -70, y: cy + rad, r: -6, o: 0 }, { x: cx - rad * 2, y: cy + rad, r: 0 }], a;
+      for (var i = 0; i <= 12; i++) { a = Math.PI / 2 + i / 12 * Math.PI * 2; pts.push({ x: cx + Math.cos(a) * rad - (i / 12) * 0, y: cy + Math.sin(a) * rad * -1 + 0, r: i / 12 * 360 }); }
+      pts.push({ x: cx + rad * 2, y: cy + rad, r: 360 }, { x: w + 80, y: cy, r: 360 + 8, o: 0 });
+      return trail(pts, 4600, 'linear');
+    });
+    /* hésitation : elle se pose à mi-hauteur, tangue, repart en trombe */
+    var hesite = guard(function () {
+      var w = W(), x = w * R(.25, .7), y = R(30, 56);
+      return trail([{ x: -70, y: y - 18, r: -8, o: 0 }, { x: x + 40, y: y, r: 6 }, { x: x - 8, y: y + 4, r: -9 }, { x: x, y: y, r: 0 }], 1900, 'cubic-bezier(.2,.9,.3,1.1)')
+        .then(function () { sky.classList.add('lit'); return go(ufo, [{ transform: T(x, y, 0) }, { transform: T(x, y - 7, 5) }, { transform: T(x, y + 5, -5) }, { transform: T(x, y - 4, 3) }, { transform: T(x, y, 0) }], { duration: 2200, easing: 'ease-in-out' }); })
+        .then(function () { sky.classList.remove('lit'); return wait(350); })
+        .then(function () { return go(ufo, [{ transform: T(x, y, 0), opacity: 1 }, { transform: T(x - 14, y + 2, -14), opacity: 1, offset: .2 }, { transform: T(w + 90, y - 30, 16), opacity: 0 }], { duration: 900, easing: 'cubic-bezier(.7,0,1,.5)' }); });
+    });
+    /* piqué : descend vers l'icône puis se redresse en vrille */
+    var pique = guard(function () {
+      var r = icon.getBoundingClientRect(), s = sky.getBoundingClientRect(), x = Math.max(0, r.left - s.left + r.width / 2 - UW / 2), y = H() - UH - 34, w = W();
+      return trail([{ x: x - w * .3, y: 8, r: -20, o: 0 }, { x: x - 30, y: y * .5, r: 15 }, { x: x, y: y, r: 0 }, { x: x + 10, y: y - 2, r: 4 }, { x: x + w * .25, y: 6, r: 28, o: 0 }], 3600, 'cubic-bezier(.5,0,.4,1)');
+    });
+
+    var seq = { passage: passage, scan: scan, salut: salut, vache: enlevement, zigzag: zigzag, looping: looping, hesite: hesite, pique: pique };
+    var last = '';
+    function pick() {   // au hasard, jamais deux fois la même d'affilée
+      var all = ['passage', 'scan', 'salut', 'vache', 'zigzag', 'zigzag', 'looping', 'hesite', 'pique'], n;
+      do { n = all[Math.floor(Math.random() * all.length)]; } while (n === last); return (last = n);
+    }
     function schedule() {
       clearTimeout(timer);
-      timer = setTimeout(function () { if (dead) return; (document.hidden ? Promise.resolve() : seq[pick()]()).then(schedule); }, 45000 + Math.random() * 45000);
+      timer = setTimeout(function () { if (dead) return; (document.hidden ? Promise.resolve() : seq[pick()]()).then(schedule); }, 14000 + Math.random() * 26000);
     }
     function onClick() { clicks++; seq[clicks % 3 === 0 ? 'vache' : pick()](); }
     icon.setAttribute('role', 'button'); icon.setAttribute('tabindex', '0'); icon.setAttribute('aria-label', 'Faire revenir le vaisseau spatial');
     icon.addEventListener('mouseenter', function () { if (!playing) passage(); });
     icon.addEventListener('click', onClick);
     icon.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } });
-    try { if (!sessionStorage.getItem('codex-contact-ufo-seen')) { sessionStorage.setItem('codex-contact-ufo-seen', '1'); setTimeout(function () { if (!dead) passage(); }, 900); } } catch (e) { setTimeout(passage, 900); }
+    setTimeout(function () { if (!dead) seq[pick()](); }, 900);   // à chaque ouverture de la page, elle arrive toute seule
     schedule();
     cur = { stop: function () { dead = true; clearTimeout(timer); reset(); }, play: function (n) { return seq[n] && seq[n](); } };
   }

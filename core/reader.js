@@ -390,6 +390,7 @@
   function afterRender() {   // miniatures + pop-up, illustrations animées (core/media.js, core/viz.js)
     if (Codex.media) Codex.media.enhance(rdMain);
     if (Codex.viz) Codex.viz.mount(rdMain);
+    if (Codex.lab) Codex.lab.mount(rdMain);
   }
   var UFO_ICON = '<svg class="contact-ufo" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 30c1-9 5-14 10-14s9 5 10 14"/><ellipse cx="32" cy="35" rx="25" ry="9"/><path d="M10 39c3 8 41 8 44 0"/><path d="M21 46l-4 8m15-7v9m11-10 4 8"/><circle cx="20" cy="35" r="1.5"/><circle cx="32" cy="37" r="1.5"/><circle cx="44" cy="35" r="1.5"/><path d="M9 17h4m-2-2v4M52 13h4m-2-2v4"/></svg>';
   function contactForm(a) {
