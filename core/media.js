@@ -43,7 +43,7 @@
   }
   function moveGalleries(root) {     // Civilisations, Fascinations : la galerie descend sous le premier paragraphe
     root.querySelectorAll('[class*="gallery"]').forEach(function (g) {
-      if (g.closest('.th-row') || g.querySelector('.th-row')) return;
+      if (g.dataset.place === 'keep' || g.closest('.th-row') || g.querySelector('.th-row')) return;
       if (!g.querySelector('img') || g.parentNode.closest('[class*="gallery"]')) return;
       var after = null;   // premier paragraphe d'une <section> de l'article (et pas du lecteur lui-même, qui est une <section> aussi)
       g.parentNode.querySelectorAll('p').forEach(function (p) {
@@ -165,6 +165,19 @@
       if (r.top < m.top + 6 || r.top > m.bottom - 80) main.scrollBy({ top: r.top - m.top - 14, behavior: reduce ? 'auto' : 'smooth' });
     });
   }, true);
+
+  /* ---------- YouTube à la demande : l'iframe n'existe qu'après un clic ---------- */
+  main.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.yt-facade .yt-play'); if (!b) return;
+    var box = b.parentNode, id = box.getAttribute('data-yt'); if (!id) return;
+    var f = document.createElement('iframe');
+    f.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) + '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+    f.title = b.getAttribute('aria-label') || 'Lecture YouTube';
+    f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen'; f.allowFullscreen = true;
+    f.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+    f.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation allow-popups allow-popups-to-escape-sandbox');
+    box.classList.add('on'); box.replaceChildren(f);
+  });
 
   Codex.media = { enhance: enhance, close: close };
 })();

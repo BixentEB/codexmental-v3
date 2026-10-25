@@ -330,3 +330,9 @@ html[data-theme="heliosphere"] body.solar-settings-open #scene .under { pointer-
 html[data-theme="heliosphere"] body.solar-settings-open #scene .under .ctrl { left: auto !important; right: 20px !important; bottom: 96px !important; width: min(340px, calc(100vw - 32px)) !important; }
 #scene #solar-return-sun:not([hidden]) { right: 20px !important; bottom: auto !important; top: 76px !important; }
 @media (max-width: 700px) { html[data-theme="heliosphere"] body.solar-settings-open #scene .under .ctrl { left: 10px !important; right: 10px !important; bottom: 84px !important; width: auto !important; } }
+
+/* Rubriques du site (menus 3D) bien distinctes des objets astronomiques */
+#scene .pl.pl-menu .lbl b { color: #ffe0a0; font-weight: 700; letter-spacing: .02em; }
+#scene .pl.pl-menu .lbl b::before { content: '◆ '; font-size: .6em; vertical-align: .22em; opacity: .85; }
+#scene .pl.pl-info .lbl b { font-weight: 400; font-style: italic; opacity: .8; }
+body.nm-menus #scene .pl.pl-info .lbl, body.nm-objects #scene .pl.pl-menu .lbl { display: none !important; }

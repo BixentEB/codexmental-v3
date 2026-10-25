@@ -432,7 +432,7 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
     home:    { name: 'Accueil', sub: '', rgb: '255,178,62', text: "Chaque planète est une section du site. Glissez pour tourner, zoomez, puis cliquez une planète pour voler jusqu'à elle." },
     codex:   { name: 'Codex', sub: '', rgb: '190,205,255', text: "Le blog : articles et réflexions sur l’IA, la psychologie, la philosophie et l’esprit. Un monde argenté, creusé de cratères." },
     atelier: { name: 'Atelier', sub: '', rgb: '255,150,50', text: "Le lieu où je range mes idées farfelues : la cryodynamique, Polaris et autres explorations. Un monde rouille, avec deux petites lunes." },
-    lab:     { name: 'Laboratoire', sub: 'Applications', rgb: '60,230,140', text: "La vitrine de mes créations qui se matérialisent : outils, personnalisations CSS et applications. Une géante verte sous un voile de gaz." },
+    lab:     { name: 'Laboratoire', sub: 'Applications', rgb: '60,230,140', text: "La vitrine de mes créations : outils, personnalisations CSS et applications. Une géante verte sous un voile de gaz." },
     dashb:   { name: 'Observatoire', sub: 'Tableau de bord', rgb: '60,160,255', text: "Un espace d’exploration astronomique : cartes célestes, observations, visualisations et hypothèses personnelles accompagnées de croquis." },
     profil:  { name: 'Portrait', sub: 'Découverte', rgb: '205,218,255', text: "Un espace pour découvrir mon parcours, mes inspirations, mes valeurs et les différentes facettes de CODEX Mental." }
   };
@@ -444,6 +444,10 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
   SECTIONS.haumea = { info: 1, name: 'Hauméa', sub: 'Planète naine', rgb: '210,220,240', text: "Planète naine de la ceinture de Kuiper, étirée par une rotation de moins de quatre heures. Elle possède deux lunes et un anneau." };
   SECTIONS.makemake = { info: 1, name: 'Makémaké', sub: 'Planète naine', rgb: '220,150,110', text: "Planète naine de la ceinture de Kuiper, découverte en 2005. Sa surface rougeâtre est couverte de glace de méthane." };
   SECTIONS.eris = { info: 1, name: 'Éris', sub: 'Planète naine', rgb: '225,230,240', text: "Planète naine du disque diffus, de la taille de Pluton mais un peu plus massive. Sa découverte, en 2005, a relancé le débat qui a conduit à redéfinir le mot « planète »." };
+  SECTIONS.d2 = { info: 1, name: 'Vénus', sub: 'Planète', rgb: '235,205,150', text: "Deuxième planète du Système solaire, enveloppée d’une épaisse atmosphère de gaz carbonique. Sa surface atteint environ 460 °C : c’est la plus chaude de toutes les planètes." };
+  SECTIONS.d3 = { info: 1, name: 'Jupiter', sub: 'Planète géante', rgb: '225,190,150', text: "La plus grande planète du Système solaire : plus de 1 300 Terres tiendraient dans son volume. Sa Grande Tache rouge est une tempête observée depuis plus de trois siècles." };
+  SECTIONS.neptune = { info: 1, name: 'Neptune', sub: 'Planète géante de glace', rgb: '90,140,235', text: "Dernière planète du Système solaire, d’un bleu profond. Ses vents comptent parmi les plus rapides connus, au-delà de 2 000 km/h." };
+  SECTIONS.pluto = { info: 1, name: 'Pluton', sub: 'Planète naine', rgb: '215,190,170', text: "Planète naine de la ceinture de Kuiper, d’environ 2 380 km de diamètre, reclassée en 2006. Son orbite très inclinée l’amène parfois plus près du Soleil que Neptune." };
   SECTIONS.planet9 = { info: 1, name: 'Planète 9', sub: 'Hypothétique', rgb: '150,165,255', text: "Hypothèse : l’orbite inhabituelle de certains objets lointains pourrait trahir une planète de 5 à 10 masses terrestres, à plusieurs centaines d’unités astronomiques. Elle n’a jamais été observée et son existence est débattue : sa place ici est symbolique." };
   var SOLAR_SUBTITLES = {
     codex:'Le blog : articles et réflexions',
@@ -459,7 +463,7 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
     { id: 'codex', a: 15.5, e: .05, inc: 2, node: 2.1, M0: 4.2, r: 1.6, tilt: .1, spin: .18, type: 0, scale: 1.2, seed: 9.0, relief: .04, ice: .6,
       c: [0x8a909b, 0xc7ccd6, 0x555b69, 0xeef2fa],
       moons: [{ r: .26, d: 3.6, w: .45, ph: 1.0, c: [0x7d7d80, 0xb0b0b4, 0x4a4a50, 0xdddddd], seed: 5 }] },
-    { id: 'd2', deco: true, a: 26, e: .007, inc: 3.4, node: 4.0, M0: 2.2, r: 2.15, tilt: .05, spin: .07, type: 0, scale: 1.3, seed: 2.0, relief: .018, ice: 0,
+    { id: 'd2', deco: true, info: true, a: 26, e: .007, inc: 3.4, node: 4.0, M0: 2.2, r: 2.15, tilt: .05, spin: .07, type: 0, scale: 1.3, seed: 2.0, relief: .018, ice: 0,
       c: [0xa57d53, 0xd7b68a, 0xe6d2ad, 0x7c6048], atmoK: .8, atmo: 0xe9c88d, shell: { k: 1.05, s: .55 } },
     { id: 'dashb', a: 35, e: .04, inc: 0, node: 0, M0: 5.4, r: 2.5, tilt: .41, spin: .5, type: 2, scale: 1.1, seed: 4.2, relief: .02,
       sea: .1, cloud: .55, city: 1.0, gloss: 1.0, ice: 1.0,
@@ -470,7 +474,7 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
       c: [0xb5562c, 0xd98c4f, 0x4a2a22, 0xffffff], atmoK: .28, atmo: 0xffa56b, shell: { k: 1.05, s: .6 },
       moons: [{ r: .22, d: 3.6, w: .9, ph: .5, c: [0x6a5a50, 0x8c7a6c, 0x3e3430, 0xaaa090], seed: 21 },
               { r: .16, d: 5.0, w: .6, ph: 3.1, c: [0x6a5a50, 0x8c7a6c, 0x3e3430, 0xaaa090], seed: 22 }] },
-    { id: 'd3', deco: true, a: 63, e: .05, inc: 1.3, node: 3.2, M0: 3.3, r: 6.0, tilt: .05, spin: .9, type: 3, bands: 9, warp: .055, seed: 6.0,
+    { id: 'd3', deco: true, info: true, a: 63, e: .05, inc: 1.3, node: 3.2, M0: 3.3, r: 6.0, tilt: .05, spin: .9, type: 3, bands: 9, warp: .055, seed: 6.0,
       storm: 1.0, stormLat: -.3, stormLon: 1.0,
       c: [0x7a4a2c, 0xc79a6b, 0xefe0c8, 0xa3522f, 0xb8482a], atmoK: .4, atmo: 0xe0b890, shell: { k: 1.04, s: .55 },
       moons: [{ r: .5, d: 9.5, w: .5, ph: 0.3, c: [0xc9a64a, 0xe6d27a, 0x7a5a2a, 0xffe9a0], seed: 31 },
@@ -482,10 +486,10 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
               { r: .3, d: 19.0, w: .16, ph: 4.9, c: [0x8a8075, 0xb4a89a, 0x4e463e, 0xd8cdbd], seed: 42 }] },
     { id: 'lab', a: 104, e: .03, inc: 1.7, node: 0.9, M0: 5.8, r: 3.4, tilt: 1.68, spin: .72, type: 3, bands: 5, warp: .05, seed: 15.0,
       c: [0x1f7f5a, 0x35b684, 0x8fe3b9, 0x14503a, 0xffffff], atmoK: .75, atmo: 0x4fe6a0, shell: { k: 1.06, s: .8 }, ring: [1.55, 1.85] },
-    { id: 'neptune', deco: true, a: 132, e: .009, inc: 1.77, node: 2.3, M0: 2.7, r: 3.25, tilt: .49, spin: .7, type: 3, bands: 6, warp: .04, seed: 18.0,
+    { id: 'neptune', deco: true, info: true, a: 132, e: .009, inc: 1.77, node: 2.3, M0: 2.7, r: 3.25, tilt: .49, spin: .7, type: 3, bands: 6, warp: .04, seed: 18.0,
       c: [0x133f9c, 0x215fca, 0x4389e8, 0x0c2b75, 0xa7c8ff], atmoK: .65, atmo: 0x427bdf, shell: { k: 1.05, s: .7 },
       moons: [{ r: .37, d: 7.5, w: .2, ph: 1.3, c: [0x6b788a, 0x9aafbd, 0x46576b, 0xd3dce2], seed: 55 }] },
-    { id: 'pluto', deco: true, a: 153, e: .248, inc: 17.1, node: 1.9, M0: 4.0, r: .9, tilt: 2.1, spin: .05, type: 0, scale: 1.2, seed: 24, relief: .04, ice: .75,
+    { id: 'pluto', deco: true, info: true, a: 153, e: .248, inc: 17.1, node: 1.9, M0: 4.0, r: .9, tilt: 2.1, spin: .05, type: 0, scale: 1.2, seed: 24, relief: .04, ice: .75,
       c: [0x9a7969, 0xc9a99a, 0x59463f, 0xe4d8c8], moons: [{ r: .3, d: 2.6, w: .18, ph: .5, c: [0x888078, 0xada39a, 0x58524d, 0xcac0b8], seed: 57 }] },
     /* Planètes naines et objet hypothétique (info : étiquette et fiche, sans rubrique) */
     { id: 'ceres', deco: true, info: true, a: 51.5, e: .08, inc: 10.6, node: 1.1, M0: 1.7, r: .55, tilt: .07, spin: .4, type: 0, scale: 1.6, seed: 61, relief: .05, ice: .15,
@@ -827,7 +831,7 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
   function makeLabel(P) {
     var s = SECTIONS[P.id];
     var d = document.createElement('div');
-    d._k = (s.info ? ' pl-info' : '');
+    d._k = (s.info ? ' pl-info' : ' pl-menu');
     d.className = 'pl right' + d._k;
     d.innerHTML = '<button class="hit" type="button" aria-label="' + s.name + (s.sub ? ' : ' + s.sub : '') + '"></button>' +
       '<span class="lbl"><b>' + s.name + '</b>' + (s.sub ? '<i>' + s.sub + '</i>' : '') + '</span>';
@@ -1286,4 +1290,14 @@ toggle?.addEventListener('click',function(){
  document.addEventListener('pointerdown',function(e){if(!bar.contains(e.target)&&!theme.contains(e.target)&&!panel.contains(e.target)){closeThemes();closeSettings()}});
  document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeThemes();closeSettings()}});
  const orbit=document.getElementById('orbits');if(orbit){try{const v=localStorage.getItem('codex.solar.orbits');if(v!==null){orbit.checked=v==='true';orbit.dispatchEvent(new Event('change'))}}catch(e){}orbit.addEventListener('change',function(){try{localStorage.setItem('codex.solar.orbits',String(orbit.checked))}catch(e){}})}
+})();
+
+/* Réglage : quels noms afficher (rubriques du site / objets astronomiques) */
+(function () {
+  var sel = document.getElementById('names'); if (!sel) return;
+  var KEY = 'codex.solar.names', MODES = ['all', 'menus', 'objects'];
+  function apply(m) { MODES.forEach(function (k) { document.body.classList.toggle('nm-' + k, k === m); }); }
+  var v = 'all'; try { var r = localStorage.getItem(KEY); if (MODES.indexOf(r) >= 0) v = r; } catch (e) {}
+  sel.value = v; apply(v);
+  sel.addEventListener('change', function () { apply(sel.value); try { localStorage.setItem(KEY, sel.value); } catch (e) {} });
 })();

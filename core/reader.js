@@ -82,7 +82,15 @@
     root.querySelectorAll('iframe').forEach(function (f) {
       var src = f.getAttribute('src') || '';
       if (!/^https:\/\//.test(src)) { f.remove(); return; }
-      f.setAttribute('loading', 'lazy'); f.setAttribute('referrerpolicy', 'no-referrer');
+      var yt = src.match(/^https:\/\/(?:www\.)?youtube(?:-nocookie)?\.com\/embed\/([\w-]{6,20})/);
+      if (yt) {   // YouTube : rien n'est chargé tant que le visiteur ne demande pas la lecture (media.js)
+        var fc = document.createElement('div'); fc.className = 'yt-facade'; fc.setAttribute('data-yt', yt[1]);
+        var bt = document.createElement('button'); bt.type = 'button'; bt.className = 'yt-play';
+        bt.setAttribute('aria-label', (f.getAttribute('title') || 'Lire la vidéo'));
+        bt.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg><span>Écouter</span><small>Lecture via YouTube</small>';
+        fc.appendChild(bt); f.replaceWith(fc); return;
+      }
+      f.setAttribute('loading', 'lazy'); f.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
       f.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation allow-popups');
       f.removeAttribute('style');
     });
@@ -360,8 +368,10 @@
     var solo = sec.layout === 'page';
     if (a.type === 'pending') { rdMain.innerHTML = '<article class="pane">' + title.replace(/<p class="a-lead">.*?<\/p>/, '') + '<div class="msgbox">' + esc(a.desc || '') + '</div></article>'; updateProg(); return; }
     if (a.type === 'contact') {
-      rdMain.innerHTML = '<article class="pane contact"><div class="ufo-sky" aria-hidden="true"></div><p class="kicker">Codex Mental · Correspondance</p>' +
-        '<h1 class="a-title contact-h">' + UFO_ICON + '<span>' + esc(a.title) + '</span></h1>' + (a.desc ? '<p class="a-lead">' + esc(a.desc) + '</p>' : '') + contactForm(a) + '<p class="legal-link"><a href="#codex/legal">Mentions légales et vie privée</a></p></article>';
+      rdMain.innerHTML = '<article class="pane contact"><div class="contact-grid"><div class="contact-intro"><p class="kicker">Codex Mental · Correspondance</p>' +
+        '<h1 class="a-title contact-h">' + UFO_ICON + '<span>' + esc(a.title) + '</span></h1>' + (a.desc ? '<p class="a-lead">' + esc(a.desc) + '</p>' : '') +
+        '<div class="ufo-sky" aria-hidden="true"></div></div><div class="contact-formcol">' + contactForm(a) + '</div></div>' +
+        '<p class="legal-link"><a href="#legal">Mentions légales et vie privée</a></p></article>';
       bindContact(a); updateProg();
       if (Codex.ufo) Codex.ufo.mount(rdMain.querySelector('.pane.contact'));
       return;

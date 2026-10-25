@@ -24,12 +24,9 @@
       },
       {
        "article": "codex/merci"
-      },
-      {
-       "article": "codex/legal"
       }
      ],
-     "desc": "Présentation, Nexus, Odyssée, Grimoire, Reliques et mentions légales."
+     "desc": "Présentation, Nexus, Odyssée, Grimoire et Reliques."
     },
     {
      "label": "Intelligence artificielle",
@@ -237,11 +234,7 @@
     {
      "label": "Projets en cours",
      "emoji": "📖",
-     "children": [
-      {
-       "article": "atelier/projets/codexia"
-      }
-     ]
+     "children": []
     },
     {
      "label": "Exploration futuriste",
@@ -482,6 +475,19 @@
    "tree": [
     {
      "article": "contact/form"
+    }
+   ]
+  },
+  {
+   "id": "legal",
+   "label": "Mentions légales",
+   "kicker": "Informations",
+   "intro": "Éditeur, hébergement et vie privée.",
+   "layout": "page",
+   "hidden": true,
+   "tree": [
+    {
+     "article": "codex/legal"
     }
    ]
   }
@@ -738,13 +744,6 @@
    "words": 273,
    "type": "page",
    "hidden": true
-  },
-  "atelier/projets/codexia": {
-   "title": "Codex Mental",
-   "src": "content/atelier/atelier/projets/codexia.html",
-   "base": "atelier/projets",
-   "words": 295,
-   "type": "page"
   },
   "atelier/explo/modelexplo": {
    "title": "Modèle d'exploration",

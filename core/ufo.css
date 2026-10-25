@@ -1,12 +1,15 @@
 /* Page Contact : titre, formulaire et scène de la soucoupe */
-.pane.contact { position: relative; padding-top: 150px; }
+.pane.contact { position: relative; }
+.contact-grid { display: grid; gap: 22px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 1200px) { .contact-grid { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 34px; align-items: start; } }
+.pane.contact .a-title { margin-top: 6px; }
 .contact-h { display: flex; align-items: center; gap: 16px; font-weight: 400; letter-spacing: .02em; }
 .contact-ufo { width: clamp(38px, 5vw, 54px); height: auto; flex: none; color: var(--accent); filter: drop-shadow(0 0 5px color-mix(in srgb, var(--accent) 22%, transparent)); transition: transform .3s ease, filter .3s ease; cursor: pointer; }
 .contact-h:hover .contact-ufo, .contact-ufo:focus-visible { transform: translateY(-3px) rotate(-5deg); filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent) 60%, transparent)); outline: none; }
 .pane.contact .a-lead { max-width: 56ch; }
 .pane.contact .cform { padding: clamp(18px, 3.5vw, 32px); border: 1px solid var(--line); border-radius: 16px; background: color-mix(in srgb, var(--panel-solid) 70%, transparent); max-width: none; }
 
-.ufo-sky { position: absolute; z-index: 1; left: 0; right: 0; top: 0; height: 150px; pointer-events: none; overflow: hidden; color: color-mix(in srgb, var(--fg) 88%, var(--accent)); }
+.ufo-sky { position: relative; z-index: 1; margin-top: 14px; height: 170px; pointer-events: none; overflow: hidden; color: color-mix(in srgb, var(--fg) 88%, var(--accent)); }
 .ufo-sky .ground { position: absolute; left: 0; right: 0; bottom: 8px; height: 1px; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 38%, transparent) 20%, color-mix(in srgb, var(--accent) 38%, transparent) 80%, transparent); opacity: 0; transition: opacity .6s; }
 .ufo-sky.flying .ground { opacity: 1; }
 .ufo, .cow { position: absolute; left: 0; top: 0; opacity: 0; will-change: transform, opacity; }
@@ -29,5 +32,8 @@
 @keyframes cowNod { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(7deg); } }
 @keyframes cowTail { from { transform: rotate(-12deg); } to { transform: rotate(14deg); } }
 @keyframes cowWiggle { from { transform: rotate(-4deg) scaleY(.97); } to { transform: rotate(4deg) scaleY(1.03); } }
-@media (max-width: 640px) { .pane.contact { padding-top: 120px; } .ufo-sky { height: 120px; } }
+@media (max-width: 640px) { .ufo-sky { height: 110px; } }
 @media (prefers-reduced-motion: reduce) { .contact-ufo { transition: none; } .contact-h:hover .contact-ufo { transform: none; } }
+.pane.contact .cform { align-content: start; gap: 12px; }
+.pane.contact .legal-link { margin-top: 14px; }
+@media (min-width: 1200px) { .pane.contact .cform { padding: 20px 22px; } .pane.contact .cform textarea { min-height: 104px; } }

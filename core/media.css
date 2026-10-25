@@ -42,3 +42,15 @@
   .prose img.th { height: 112px; }
 }
 @media (prefers-reduced-motion: reduce) { .lb { animation: none; } .prose img.th { transition: none; } }
+
+/* YouTube à la demande */
+.yt-facade { position: relative; width: min(100%, 420px); aspect-ratio: 16 / 9; margin: 14px 0 8px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: radial-gradient(ellipse at 30% 20%, color-mix(in srgb, var(--accent-2, var(--accent)) 22%, transparent), transparent 65%), var(--panel-deep, rgba(0,0,0,.35)); }
+.yt-facade iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.yt-play { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 4px; width: 100%; background: none; border: 0; color: var(--fg); font: inherit; cursor: pointer; }
+.yt-play svg { width: 46px; height: 46px; padding: 11px; fill: currentColor; border: 1px solid color-mix(in srgb, var(--accent) 60%, transparent); border-radius: 50%; color: var(--accent); transition: transform .2s, background .2s; }
+.yt-play:hover svg, .yt-play:focus-visible svg { transform: scale(1.08); background: color-mix(in srgb, var(--accent) 16%, transparent); }
+.yt-play span { font-weight: 600; font-size: .9rem; }
+.yt-play small { font-size: .68rem; color: var(--muted); }
+
+/* Petite icône posée dans le texte (le lapin du Nexus) : pas une image à agrandir */
+.prose img.inline-icon { display: inline-block; height: 1.5em; width: auto; max-width: none; vertical-align: -.3em; margin: 0 .15em; border-radius: 0; image-rendering: pixelated; }

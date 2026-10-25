@@ -452,9 +452,9 @@ window.CodexScene = { ok: true };
   var REG_NAMES = [['Nébuleuse des Idées', 'Région de formation des concepts'], ['Amas des Hypothèses', 'Là où les questions se regroupent'], ['Ceinture des Paradoxes', 'Zone de turbulences fertiles']];
   var ri = 0;
   function drawThumb() {
-    var t = $('nebula-thumb'), c = t.getContext('2d'), r = regions[ri % Math.max(1, regions.length)];
+    var t = $('nebula-thumb'), c = t.getContext('2d'), r = regions[ri % (regions.length + 1)];
     c.fillStyle = '#03040c'; c.fillRect(0, 0, t.width, t.height);
-    if (!r) return;
+    if (!r) { c.imageSmoothingQuality = 'high'; c.drawImage(bgEl, 0, 0, bgEl.width, bgEl.height, 0, 0, t.width, t.height); return; }   // dernier pas : le ciel complet
     var sw = bgEl.width / 6, sh = bgEl.height / 4, sx = r.x * sw, sy = r.y * sh;
     var cw = Math.min(sw, sh * 4 / 3), ch = cw * 3 / 4;
     c.imageSmoothingQuality = 'high';
@@ -714,4 +714,25 @@ window.CodexScene = { ok: true };
   sizeCanvases(); layout();
   setTimeout(bakeAll, 30);
   requestAnimationFrame(frame);
+/* Carte « région du ciel » : chaque clic rapproche le fond d'une région dense, puis revient au ciel complet */
+(function () {
+  var card = document.getElementById('nebula'), bg = document.getElementById('bg'); if (!card || !bg) return;
+  var tt = document.getElementById('nebula-t'), ts = document.getElementById('nebula-s');
+  function label() {
+    var r = regions[ri % (regions.length + 1)], n = REG_NAMES[ri % (regions.length + 1)];
+    if (r && n) { tt.textContent = n[0]; ts.textContent = n[1]; card.setAttribute('aria-label', 'Rapprocher la région : ' + n[0]); }
+    else { tt.textContent = 'Le ciel complet'; ts.textContent = 'Revenir à la vue d’ensemble'; card.setAttribute('aria-label', 'Revenir à la vue d’ensemble du ciel'); }
+    drawThumb();
+  }
+  card.addEventListener('click', function () {
+    var r = regions[ri % (regions.length + 1)];
+    if (r) { bg.style.transformOrigin = ((r.x + .5) / 6 * 100) + '% ' + ((r.y + .5) / 4 * 100) + '%'; bg.style.scale = '2.3'; }
+    else { bg.style.scale = ''; }
+    ri = (ri + 1) % (regions.length + 1); label();
+  });
+  bg.style.transition = 'scale 1.4s cubic-bezier(.2,.7,.2,1)';
+  if (reduce) bg.style.transition = 'none';
+  var wt = setInterval(function () { if (regions.length) { clearInterval(wt); label(); } }, 300); setTimeout(function () { clearInterval(wt); }, 30000);
 })();
+})();
+
