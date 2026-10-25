@@ -795,7 +795,7 @@
    "type": "page"
   },
   "lab/index": {
-   "title": "Lab",
+   "title": "Laboratoire",
    "src": "content/lab/lab/index.html",
    "base": "lab",
    "words": 53,
