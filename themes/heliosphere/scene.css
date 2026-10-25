@@ -321,6 +321,12 @@ html[data-theme="heliosphere"] body.solar-settings-open #scene .under .ctrl { di
 html[data-theme="heliosphere"] body.solar-settings-open #scene .under { pointer-events: none !important; }
 @media (max-width: 700px) { html[data-theme="heliosphere"] body.solar-settings-open #scene .under .ctrl { left: 8px !important; bottom: 62px !important; } }
 /* Objets d'information : étiquette plus discrète, fiche au-dessus du bouton de retour */
-#scene .pl.info .lbl b { font-weight: 500; font-size: 13px; opacity: .85; }
-#scene .pl.info .hit { opacity: .7; }
+#scene .pl.pl-info .lbl b { font-weight: 500; font-size: 13px; opacity: .85; }
+#scene .pl.pl-info .hit { opacity: .7; }
 #scene .solar-hover.is-info { bottom: calc(clamp(185px, 23vh, 235px) + 56px) !important; max-width: min(460px, 78vw); }
+
+/* Bouton de personnalisation commun (core/custom.js) : l'ancienne carte et l'ancien bouton sont masqués */
+#scene #solar-observatory, #scene #solar-settings-toggle { display: none !important; }
+html[data-theme="heliosphere"] body.solar-settings-open #scene .under .ctrl { left: auto !important; right: 20px !important; bottom: 96px !important; width: min(340px, calc(100vw - 32px)) !important; }
+#scene #solar-return-sun:not([hidden]) { right: 20px !important; bottom: auto !important; top: 76px !important; }
+@media (max-width: 700px) { html[data-theme="heliosphere"] body.solar-settings-open #scene .under .ctrl { left: 10px !important; right: 10px !important; bottom: 84px !important; width: auto !important; } }

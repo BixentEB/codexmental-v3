@@ -267,7 +267,6 @@
     q = norm(q.trim()); if (!q) return null;
     var res = [];
     DB.sections.forEach(function (s) {
-      if (s.id === 'blog') return;   // le Journal reprend les articles du Codex
       (order[s.id] || []).forEach(function (id) {
         var a = DB.articles[id], head = norm(a.title + ' ' + (a.desc || '') + ' ' + (a.tags || []).join(' '));
         var t = head.indexOf(q) >= 0, b = !t && searchText && norm(searchText[id]).indexOf(q) >= 0;
@@ -362,7 +361,7 @@
     if (a.type === 'pending') { rdMain.innerHTML = '<article class="pane">' + title.replace(/<p class="a-lead">.*?<\/p>/, '') + '<div class="msgbox">' + esc(a.desc || '') + '</div></article>'; updateProg(); return; }
     if (a.type === 'contact') {
       rdMain.innerHTML = '<article class="pane contact"><div class="ufo-sky" aria-hidden="true"></div><p class="kicker">Codex Mental · Correspondance</p>' +
-        '<h1 class="a-title contact-h">' + UFO_ICON + '<span>' + esc(a.title) + '</span></h1>' + (a.desc ? '<p class="a-lead">' + esc(a.desc) + '</p>' : '') + contactForm(a) + '</article>';
+        '<h1 class="a-title contact-h">' + UFO_ICON + '<span>' + esc(a.title) + '</span></h1>' + (a.desc ? '<p class="a-lead">' + esc(a.desc) + '</p>' : '') + contactForm(a) + '<p class="legal-link"><a href="#codex/legal">Mentions légales et vie privée</a></p></article>';
       bindContact(a); updateProg();
       if (Codex.ufo) Codex.ufo.mount(rdMain.querySelector('.pane.contact'));
       return;

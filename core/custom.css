@@ -1,0 +1,23 @@
+/* Carte de personnalisation commune (reprend celle de « Ciel profond ») */
+.cx-lab { position: fixed; right: 20px; bottom: 20px; z-index: 10030; display: flex; align-items: center; gap: 14px; min-width: 0; max-width: calc(100vw - 32px); padding: 12px 12px 12px 16px;
+  color: var(--fg); font-family: var(--font-body); text-align: left; cursor: pointer;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 12px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: border-color .25s, opacity .35s; }
+.cx-lab:hover, .cx-lab:focus-visible { border-color: color-mix(in srgb, var(--accent) 65%, transparent); }
+.cx-lab .cx-t { display: block; margin-bottom: 3px; font-family: var(--font-mono); font-size: .68rem; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: var(--hud); }
+.cx-lab .cx-s { display: block; font-size: .72rem; color: var(--muted); }
+.cx-ic { flex: none; width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; opacity: .85; }
+.cx-gear { flex: none; width: 36px; height: 36px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; }
+.cx-gear svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; transition: transform .6s; }
+.cx-lab[aria-expanded="true"] .cx-gear svg { transform: rotate(90deg); }
+html.reading .cx-lab, html.reading .cx-pop { opacity: 0; visibility: hidden; pointer-events: none; }
+.cx-pop { position: fixed; right: 20px; bottom: 96px; z-index: 10029; width: min(330px, calc(100vw - 32px)); display: flex; flex-direction: column; gap: 14px; padding: 16px 18px; color: var(--fg); font-family: var(--font-body); font-size: .84rem;
+  background: var(--panel-solid, var(--panel)); border: 1px solid var(--line); border-radius: 14px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 18px 50px rgba(0, 0, 0, .55); }
+.cx-pop[hidden] { display: none; }
+.cx-pop .cx-l { display: block; margin-bottom: 8px; font-family: var(--font-mono); font-size: .64rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+.cx-pop input[type="range"] { width: 100%; accent-color: var(--accent); }
+.cx-pop .cx-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.cx-pop input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent); }
+.cx-pop .cx-sw { display: flex; flex-wrap: wrap; gap: 6px; }
+.cx-pop .cx-sw button { font: inherit; font-size: .75rem; color: var(--muted); background: none; border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+.cx-pop .cx-sw button[aria-checked="true"] { color: var(--fg); border-color: color-mix(in srgb, var(--accent) 60%, transparent); background: color-mix(in srgb, var(--accent) 14%, transparent); }
+@media (max-width: 700px) { .cx-lab { right: 10px; bottom: 10px; left: 10px; max-width: none; } .cx-pop { right: 10px; bottom: 84px; } }

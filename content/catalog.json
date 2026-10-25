@@ -24,9 +24,12 @@
       },
       {
        "article": "codex/merci"
+      },
+      {
+       "article": "codex/legal"
       }
      ],
-     "desc": "Présentation, Nexus, Odyssée, Grimoire et Reliques."
+     "desc": "Présentation, Nexus, Odyssée, Grimoire, Reliques et mentions légales."
     },
     {
      "label": "Intelligence artificielle",
@@ -222,85 +225,6 @@
       "Un témoignage personnel n'a pas vocation à définir ce que les autres vivent ; il propose un point de vue, ouvert au dialogue et à la nuance."
      ],
      "desc": "Que découvre-t-on lorsqu'on observe ses propres pensées sans chercher immédiatement à les juger ?"
-    }
-   ]
-  },
-  {
-   "id": "blog",
-   "label": "Journal",
-   "nav": false,
-   "kicker": "Articles et réflexions",
-   "intro": "Les mêmes articles que le Codex, classés par date de publication.",
-   "tree": [
-    {
-     "label": "2025",
-     "children": [
-      {
-       "article": "journal/hp/cameleon"
-      },
-      {
-       "article": "journal/ai/correct"
-      },
-      {
-       "article": "journal/philo/identite"
-      },
-      {
-       "article": "journal/ai/democratisation"
-      },
-      {
-       "article": "journal/ai/decalage"
-      },
-      {
-       "article": "journal/introspection/seulsilence"
-      },
-      {
-       "article": "journal/ai/limites"
-      },
-      {
-       "article": "journal/ai/simulsens"
-      }
-     ]
-    },
-    {
-     "label": "Sans date",
-     "children": [
-      {
-       "article": "journal/ai/local"
-      },
-      {
-       "article": "journal/ai/aivie"
-      },
-      {
-       "article": "journal/ai/miroirintro"
-      },
-      {
-       "article": "journal/ai/miroir0"
-      },
-      {
-       "article": "journal/ai/miroir1"
-      },
-      {
-       "article": "journal/aiautor/intro"
-      },
-      {
-       "article": "journal/aiautor/manifeste"
-      },
-      {
-       "article": "journal/aiautor/complexa"
-      },
-      {
-       "article": "journal/psy/article2"
-      },
-      {
-       "article": "journal/philo/intangible"
-      },
-      {
-       "article": "journal/altstates/revelucide"
-      },
-      {
-       "article": "journal/symbol/tarot/13"
-      }
-     ]
     }
    ]
   },
@@ -807,215 +731,6 @@
    ],
    "type": "article"
   },
-  "journal/hp/cameleon": {
-   "title": "Le Caméléon",
-   "src": "content/codex/hp/cameleon.html",
-   "base": "blog/articles/hp",
-   "words": 5009,
-   "date": "2025-09-16",
-   "tags": [
-    "Psychologie",
-    "HautPotentiel"
-   ],
-   "type": "article"
-  },
-  "journal/ai/correct": {
-   "title": "De la correction à la perfection",
-   "src": "content/codex/ai/correct.html",
-   "base": "blog/articles/ai",
-   "words": 390,
-   "date": "2025-09-14",
-   "tags": [
-    "IntelligenceArtificielle"
-   ],
-   "type": "article"
-  },
-  "journal/philo/identite": {
-   "title": "Qui suis-je ?",
-   "src": "content/codex/philo/identite.html",
-   "base": "blog/articles/philo",
-   "words": 479,
-   "date": "2025-08-22",
-   "tags": [
-    "Philosophie"
-   ],
-   "type": "article"
-  },
-  "journal/ai/democratisation": {
-   "title": "Démocratisation & Développement",
-   "src": "content/codex/ai/democratisation.html",
-   "base": "blog/articles/ai",
-   "words": 1057,
-   "date": "2025-08-09",
-   "tags": [
-    "IntelligenceArtificielle"
-   ],
-   "type": "article"
-  },
-  "journal/ai/decalage": {
-   "title": "Accès & Décalage",
-   "src": "content/codex/ai/decalage.html",
-   "base": "blog/articles/ai",
-   "words": 515,
-   "date": "2025-08-09",
-   "tags": [
-    "IntelligenceArtificielle"
-   ],
-   "type": "article"
-  },
-  "journal/introspection/seulsilence": {
-   "title": "Penser seul, douter en silence",
-   "src": "content/codex/introspection/seulsilence.html",
-   "base": "blog/articles/introspection",
-   "words": 779,
-   "date": "2025-08-09",
-   "tags": [
-    "Introspection"
-   ],
-   "type": "article"
-  },
-  "journal/ai/limites": {
-   "title": "L'IA et ses limites",
-   "src": "content/codex/ai/limites.html",
-   "base": "blog/articles/ai",
-   "words": 606,
-   "date": "2025-08-04",
-   "tags": [
-    "IntelligenceArtificielle"
-   ],
-   "type": "article"
-  },
-  "journal/ai/simulsens": {
-   "title": "Simuler, ressentir, dire",
-   "src": "content/codex/ai/simulsens.html",
-   "base": "blog/articles/ai",
-   "words": 727,
-   "date": "2025-08-04",
-   "tags": [
-    "IntelligenceArtificielle"
-   ],
-   "type": "article"
-  },
-  "journal/ai/local": {
-   "title": "Installer une IA en local ?",
-   "src": "content/codex/ai/local.html",
-   "base": "blog/articles/ai",
-   "words": 363,
-   "tags": [
-    "IntelligenceArtificielle"
-   ],
-   "type": "article"
-  },
-  "journal/ai/aivie": {
-   "title": "La place de l'IA dans ma vie",
-   "src": "content/codex/ai/aivie.html",
-   "base": "blog/articles/ai",
-   "words": 71,
-   "tags": [
-    "IntelligenceArtificielle"
-   ],
-   "type": "article"
-  },
-  "journal/ai/miroirintro": {
-   "title": "Miroir de l'humanité",
-   "src": "content/codex/ai/miroirintro.html",
-   "base": "blog/articles/ai",
-   "words": 271,
-   "tags": [
-    "IntelligenceArtificielle"
-   ],
-   "type": "article"
-  },
-  "journal/ai/miroir0": {
-   "title": "0. Genèse",
-   "src": "content/codex/ai/miroir0.html",
-   "base": "blog/articles/ai",
-   "words": 114,
-   "tags": [
-    "IntelligenceArtificielle"
-   ],
-   "type": "article"
-  },
-  "journal/ai/miroir1": {
-   "title": "1. Révélation",
-   "src": "content/codex/ai/miroir1.html",
-   "base": "blog/articles/ai",
-   "words": 1015,
-   "tags": [
-    "IntelligenceArtificielle"
-   ],
-   "type": "article"
-  },
-  "journal/aiautor/intro": {
-   "title": "Introduction",
-   "src": "content/codex/aiautor/intro.html",
-   "base": "blog/articles/aiautor",
-   "words": 352,
-   "tags": [
-    "IntelligenceArtificielle",
-    "Écriture"
-   ],
-   "type": "article"
-  },
-  "journal/aiautor/manifeste": {
-   "title": "Manifeste du Code Partagé",
-   "src": "content/codex/aiautor/manifeste.html",
-   "base": "blog/articles/aiautor",
-   "words": 583,
-   "tags": [
-    "IntelligenceArtificielle",
-    "Écriture"
-   ],
-   "type": "article"
-  },
-  "journal/aiautor/complexa": {
-   "title": "Complexité apprivoisée",
-   "src": "content/codex/aiautor/complexa.html",
-   "base": "blog/articles/aiautor",
-   "words": 573,
-   "tags": [
-    "IntelligenceArtificielle",
-    "Écriture"
-   ],
-   "type": "article"
-  },
-  "journal/psy/article2": {
-   "title": "Surfonctionner sans s’effondrer",
-   "src": "content/codex/psy/article2.html",
-   "base": "blog/articles/psy",
-   "words": 5,
-   "status": "draft",
-   "type": "article"
-  },
-  "journal/philo/intangible": {
-   "title": "Conscience et Réalité : Intangibilité",
-   "src": "content/codex/philo/intangible.html",
-   "base": "blog/articles/philo",
-   "words": 862,
-   "tags": [
-    "Philosophie"
-   ],
-   "type": "article"
-  },
-  "journal/altstates/revelucide": {
-   "title": "Rêves lucides",
-   "src": "content/codex/altstates/revelucide.html",
-   "base": "blog/articles/altstates",
-   "words": 70,
-   "status": "draft",
-   "type": "article"
-  },
-  "journal/symbol/tarot/13": {
-   "title": "XIII. MORT",
-   "src": "content/codex/symbol/tarot/13.html",
-   "base": "blog/articles/symbol/tarot",
-   "words": 759,
-   "tags": [
-    "Symbolisme",
-    "Tarot"
-   ],
-   "type": "article"
-  },
   "atelier/intro": {
    "title": "Définition",
    "src": "content/atelier/atelier/intro.html",
@@ -1392,6 +1107,13 @@
    "title": "Spiritualité",
    "type": "pending",
    "desc": "Cette rubrique accueillera ses premiers articles prochainement."
+  },
+  "codex/legal": {
+   "title": "Mentions légales",
+   "src": "content/codex/codex/legal.html",
+   "base": "",
+   "words": 380,
+   "type": "page"
   }
  }
 }

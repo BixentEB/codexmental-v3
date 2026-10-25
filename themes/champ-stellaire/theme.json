@@ -9,9 +9,10 @@
     "display": "system-ui, -apple-system, 'Segoe UI', sans-serif",
     "body": "system-ui, -apple-system, 'Segoe UI', sans-serif"
   },
+  "customize": {"title": "Laboratoire stellaire", "sub": "Dérive, éclat et parallaxe"},
   "reader": { "layout": "wide" },
   "markup": "scene.html",
   "css": ["scene.css"],
-  "scripts": ["https://cdn.jsdelivr.net/npm/three@0.148.0/build/three.min.js"],
+  "scripts": ["vendor/three-r148/three.min.js"],
   "scene": "scene.js"
 }

@@ -1,22 +1,17 @@
 # État de la v3
 
 ## Fait
-- Interface commune (barre, bouton de thème, lecteur) alimentée par `content/catalog.json`.
-- Quatre thèmes branchés : Ciel profond, Héliosphère, Galactique, Champ stellaire.
-- Contenus importés de v2 sans modification de texte : Codex (5 pages + 20 articles), Atelier (9), Lab (1), Portrait (7 sections, 40 pages), Contact (formulaire).
-- Le Journal (`blog`) reprend les articles du Codex classés par année ; il n'est pas dans la barre (comme en v2) mais s'ouvre depuis la planète « Blog » d'Héliosphère.
-
-## À vérifier à l'œil (non testé dans l'environnement de développement)
-- Rendu 3D d'Héliosphère et de Galactique et de Champ stellaire (bibliothèque three.js chargée depuis un CDN : indisponible là où le code a été écrit). Le code des scènes est repris de v2 ; seuls le lecteur et la navigation ont été remplacés.
-- Vols de caméra jusqu'à la rubrique, puis ouverture automatique du lecteur.
+- Interface commune (barre, bouton de thème, lecteur, bouton de personnalisation) alimentée par `content/catalog.json`.
+- Quatre thèmes : Ciel profond (défaut), Héliosphère, Galactique, Champ stellaire. Le thème choisi est mémorisé sur l'appareil du visiteur.
+- Le site est autonome : three.js (`vendor/`), polices (`fonts/`) et images d'articles (`img/articles/`) sont hébergés ici ; plus aucune dépendance à la v1 ni à la v2 (hors images Wikimedia Commons et vidéos YouTube intégrées dans certains articles).
+- Contenus : Codex (blog), Atelier, Laboratoire (vitrine : `content/lab/projects.json`), Portrait, Contact, Mentions légales (`codex/legal`).
+- Le Journal a été supprimé (il doublait le Codex).
 
 ## Pas encore migré
-- **Observatoire (DashB)** : application interactive à part entière (modules, textures ~23 Mo) ; la rubrique affiche pour l'instant une page d'attente.
-- **Lab** : une seule fiche (`lab/index.html` de v2).
-- Pages complètes de v2 hors catalogue (`arc/`, `mentions/`, `blog/modele.html`, `blog/blog.json`).
+- **Observatoire** : à construire comme application autonome (voir la discussion) ; la rubrique affiche une page d'attente.
+- Pages complètes de v2 hors catalogue (`arc/`, `mentions/`, `blog/modele.html`) : non reprises, volontairement.
 - Brouillons : `psy/article2` et `altstates/revelucide` sont listés avec la mention « brouillon » (à décider : publier, masquer).
-- Articles de test v2 (`ai/articletest1`, etc.) non importés.
 
-## Décisions à confirmer
-- Thème par défaut : Ciel profond (`themes/themes.json › default`).
-- Journal : vue chronologique du Codex (ou rubrique éditoriale distincte ?).
+## Décisions à prendre
+- Identité de l'éditeur et licence de réutilisation à préciser dans « Mentions légales ».
+- Avenir du thème Champ stellaire (voir la proposition).

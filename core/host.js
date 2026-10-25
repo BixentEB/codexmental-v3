@@ -90,6 +90,7 @@
       for (var i = 0; i < (T.scripts || []).length; i++) { try { await addScript(T.scripts[i]); } catch (e) { console.warn(e.message); } }
       if (T.scene) await addScript(base + T.scene);
       Codex.sceneOk = !!(window.CodexScene && window.CodexScene.ok !== false);
+      if (Codex.customize) Codex.customize.mount(T);
       if (!Codex.sceneOk) message("La scène n'a pas pu démarrer (WebGL indisponible ?). La lecture des articles reste disponible.");
     } catch (err) {
       console.error(err);

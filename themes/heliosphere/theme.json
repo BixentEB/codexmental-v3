@@ -7,22 +7,22 @@
   },
   "fonts": {
     "display": "'Syne', 'Trebuchet MS', system-ui, sans-serif",
-    "body": "'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif",
-    "href": "https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap"
+    "body": "'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif"
   },
+  "customize": {"title": "Observatoire solaire", "sub": "Vitesse, orbites et qualité", "legacy": "#solar-observatory-settings"},
   "reader": { "layout": "wide" },
   "markup": "scene.html",
   "css": ["scene.css"],
   "scripts": [
-    "https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js",
-    "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js",
-    "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js",
-    "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js",
-    "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js",
-    "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js",
-    "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js",
-    "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/MaskPass.js",
-    "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"
+    "vendor/three-r128/three.min.js",
+    "vendor/three-r128/examples/js/controls/OrbitControls.js",
+    "vendor/three-r128/examples/js/shaders/CopyShader.js",
+    "vendor/three-r128/examples/js/shaders/LuminosityHighPassShader.js",
+    "vendor/three-r128/examples/js/postprocessing/EffectComposer.js",
+    "vendor/three-r128/examples/js/postprocessing/RenderPass.js",
+    "vendor/three-r128/examples/js/postprocessing/ShaderPass.js",
+    "vendor/three-r128/examples/js/postprocessing/MaskPass.js",
+    "vendor/three-r128/examples/js/postprocessing/UnrealBloomPass.js"
   ],
   "scene": "scene.js"
 }

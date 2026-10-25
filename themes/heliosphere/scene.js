@@ -427,13 +427,12 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
     return;
   }
 
-  var CODEX_LINKS = {codex:'../../codex.html',blog:'../../blog/blog.html',atelier:'../../atelier/atelier.html',lab:'../../lab/index.html',dashb:'../../dashb/index.html',profil:'../../profil/index.html'};
+  var CODEX_LINKS = {codex:'../../codex.html',atelier:'../../atelier/atelier.html',lab:'../../lab/index.html',dashb:'../../dashb/index.html',profil:'../../profil/index.html'};
   var SECTIONS = {
     home:    { name: 'Accueil', sub: '', rgb: '255,178,62', text: "Chaque planète est une section du site. Glissez pour tourner, zoomez, puis cliquez une planète pour voler jusqu'à elle." },
-    codex:   { name: 'Codex', sub: '', rgb: '190,205,255', text: "La base de connaissances : notes, concepts et fiches reliés entre eux. Un monde argenté, creusé de cratères." },
-    blog:    { name: 'Blog', sub: '', rgb: '178,100,255', text: "Articles et réflexions, publiés au fil du temps. Une géante glacée violette." },
-    atelier: { name: 'Atelier', sub: '', rgb: '255,150,50', text: "Projets en cours, expériences et prototypes en construction. Un monde rouille, avec deux petites lunes." },
-    lab:     { name: 'Laboratoire', sub: 'Applications', rgb: '60,230,140', text: "Applications et outils à essayer. Une géante verte sous un voile de gaz." },
+    codex:   { name: 'Codex', sub: '', rgb: '190,205,255', text: "Le blog : articles et réflexions sur l’IA, la psychologie, la philosophie et l’esprit. Un monde argenté, creusé de cratères." },
+    atelier: { name: 'Atelier', sub: '', rgb: '255,150,50', text: "Le lieu où je range mes idées farfelues : la cryodynamique, Polaris et autres explorations. Un monde rouille, avec deux petites lunes." },
+    lab:     { name: 'Laboratoire', sub: 'Applications', rgb: '60,230,140', text: "La vitrine de mes créations qui se matérialisent : outils, personnalisations CSS et applications. Une géante verte sous un voile de gaz." },
     dashb:   { name: 'Observatoire', sub: 'Tableau de bord', rgb: '60,160,255', text: "Un espace d’exploration astronomique : cartes célestes, observations, visualisations et hypothèses personnelles accompagnées de croquis." },
     profil:  { name: 'Portrait', sub: 'Découverte', rgb: '205,218,255', text: "Un espace pour découvrir mon parcours, mes inspirations, mes valeurs et les différentes facettes de CODEX Mental." }
   };
@@ -447,12 +446,11 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
   SECTIONS.eris = { info: 1, name: 'Éris', sub: 'Planète naine', rgb: '225,230,240', text: "Planète naine du disque diffus, de la taille de Pluton mais un peu plus massive. Sa découverte, en 2005, a relancé le débat qui a conduit à redéfinir le mot « planète »." };
   SECTIONS.planet9 = { info: 1, name: 'Planète 9', sub: 'Hypothétique', rgb: '150,165,255', text: "Hypothèse : l’orbite inhabituelle de certains objets lointains pourrait trahir une planète de 5 à 10 masses terrestres, à plusieurs centaines d’unités astronomiques. Elle n’a jamais été observée et son existence est débattue : sa place ici est symbolique." };
   var SOLAR_SUBTITLES = {
-    codex:'La bibliothèque des connaissances',
-    blog:'Le journal des réflexions',
+    codex:'Le blog : articles et réflexions',
     atelier:'L’espace des idées et des créations',
-    lab:'Le laboratoire des créations numériques',
-    dashb:'L’observatoire des explorations',
-    profil:'À la découverte de mon univers'
+    lab:'La vitrine des créations',
+    dashb:'La tête dans les étoiles',
+    profil:'À la découverte de l’auteur'
   };
 
   /* ---------- Définitions des mondes (rayons exagérés pour rester lisibles) ---------- */
@@ -829,7 +827,7 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
   function makeLabel(P) {
     var s = SECTIONS[P.id];
     var d = document.createElement('div');
-    d._k = (s.info ? ' info' : '');
+    d._k = (s.info ? ' pl-info' : '');
     d.className = 'pl right' + d._k;
     d.innerHTML = '<button class="hit" type="button" aria-label="' + s.name + (s.sub ? ' : ' + s.sub : '') + '"></button>' +
       '<span class="lbl"><b>' + s.name + '</b>' + (s.sub ? '<i>' + s.sub + '</i>' : '') + '</span>';
@@ -940,7 +938,7 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
   });
 
   /* ---------- Lecteur : délégué à l'interface commune (Codex.reader) ---------- */
-  var readerRoutes = { codex: 1, blog: 1, atelier: 1, lab: 1, dashb: 1, profil: 1 };
+  var readerRoutes = { codex: 1, atelier: 1, lab: 1, dashb: 1, profil: 1 };
   var readerPending = null, readerOpen = false;
   function closeCodexReader() {
     readerPending = null;

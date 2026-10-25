@@ -167,3 +167,12 @@ html[data-theme="galactique"], html[data-theme="galactique"] body {width:100%;he
 html[data-theme="galactique"] #scene .hero { top: calc(var(--topbar-h) + 18px); }
 #scene .wrap { display: contents; }
 html[data-theme="galactique"] #scene .stage { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; }
+
+/* Bouton de personnalisation commun (core/custom.js) : le panneau n'apparaît qu'ouvert, au-dessus de la carte */
+#scene #panel.closed { display: none !important; }
+#scene #panel > header { display: none !important; }
+#scene #panel:not(.closed) { left: auto !important; right: 20px !important; bottom: 96px !important; width: min(340px, calc(100vw - 32px)) !important; }
+#scene #panel:not(.closed) .body { margin-top: 0; display: flex !important; }
+@media (max-width: 700px) { #scene #panel:not(.closed) { right: 10px !important; left: 10px !important; width: auto !important; bottom: 84px !important; } }
+#scene .caption { bottom: 96px !important; right: 20px !important; }
+@media (max-width: 700px) { #scene .caption { display: none !important; } }

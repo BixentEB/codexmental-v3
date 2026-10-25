@@ -8,8 +8,7 @@
   "fonts": {
     "display": "'Michroma', 'Eurostile', 'Arial', sans-serif",
     "body": "'Sora', system-ui, -apple-system, 'Segoe UI', sans-serif",
-    "mono": "'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace",
-    "href": "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Michroma&family=Sora:wght@300;400;500;600&display=swap"
+    "mono": "'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace"
   },
   "reader": { "layout": "side" },
   "markup": "scene.html",

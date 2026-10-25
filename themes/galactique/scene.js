@@ -220,12 +220,12 @@ window.__G = { PT_VERT: PT_VERT, STAR_FRAG: STAR_FRAG, NEB_FRAG: NEB_FRAG, DUST_
 
   var SECTIONS = {
     home:    { name: 'Accueil', sub: '', rgb: '185,164,255', text: '' },
-    codex:   { name: 'Codex', sub: '', rgb: '255,214,150', text: "La base de connaissances : notes, concepts et fiches reliés entre eux. Une étoile jaune au cœur d'un bras proche du centre." },
+    codex:   { name: 'Codex', sub: '', rgb: '255,214,150', text: "Le blog : articles et réflexions sur l’IA, la psychologie, la philosophie et l’esprit. Une étoile jaune au cœur d'un bras proche du centre." },
     blog:    { name: 'Système violet', sub: 'Exploration libre', rgb: '201,160,255', text: "Un système stellaire à explorer librement. Admirez son étoile violette et ses planètes, sans ouvrir de rubrique du site." },
     rubis:   { name: 'Système rubis', sub: 'Exploration libre', rgb: '255,91,105', text: "Un système rouge à explorer librement : une géante aux anneaux cuivrés, une planète bleue accompagnée de sa lune et un monde rocheux pourpre. Aucune rubrique associée." },
-    atelier: { name: 'Atelier', sub: '', rgb: '255,157,77', text: "Projets en cours, expériences et prototypes en construction. Une étoile orange, plus loin dans la spirale." },
-    lab:     { name: 'Lab', sub: 'Applications', rgb: '90,240,168', text: "Applications et outils à essayer. Une étoile verte en bordure du disque." },
-    dashb:   { name: 'DashB', sub: 'Tableau de bord', rgb: '92,180,255', text: "Le tableau de bord : indicateurs et suivi en direct. Une étoile bleue sur un bras jeune." },
+    atelier: { name: 'Atelier', sub: '', rgb: '255,157,77', text: "Le lieu où je range mes idées farfelues : la cryodynamique, Polaris et autres explorations. Une étoile orange, plus loin dans la spirale." },
+    lab:     { name: 'Laboratoire', sub: 'Créations', rgb: '90,240,168', text: "La vitrine de mes créations qui se matérialisent : outils, personnalisations CSS et applications. Une étoile verte en bordure du disque." },
+    dashb:   { name: 'Observatoire', sub: 'Cartes et données', rgb: '92,180,255', text: "Un espace d’exploration astronomique : cartes célestes, observations et données réelles. Une étoile bleue sur un bras jeune." },
     profil:  { name: 'Portrait', sub: "L'auteur", rgb: '230,236,255', text: "Parcours, passions, influences et fragments de pensée. Une exploration de l'esprit derrière CODEX MENTAL." }
   };
   /* Systèmes stellaires : r = rayon normalisé, k = bras */
