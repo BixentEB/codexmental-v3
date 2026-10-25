@@ -1,0 +1,18 @@
+{
+  "label": "Voisinage stellaire",
+  "palette": {
+    "bg": "#02040b", "fg": "#e8f0fb", "fgSoft": "#cdd9ec", "muted": "#8fa0bd", "hud": "#cfe3fb",
+    "accent": "#8fd0ff", "accent2": "#ffc27a", "line": "rgba(150, 190, 235, 0.22)",
+    "panel": "rgba(6, 12, 26, 0.9)", "panelSolid": "rgba(4, 9, 20, 0.98)", "panelDeep": "rgba(2, 5, 13, 0.45)"
+  },
+  "fonts": {
+    "display": "'Syne', 'Trebuchet MS', system-ui, sans-serif",
+    "body": "'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif"
+  },
+  "customize": { "title": "Cartographie stellaire", "sub": "Rotation, repères et noms" },
+  "reader": { "layout": "side" },
+  "markup": "scene.html",
+  "css": ["scene.css"],
+  "scripts": ["vendor/three-r148/three.min.js"],
+  "scene": "scene.js"
+}
