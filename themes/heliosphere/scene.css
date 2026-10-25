@@ -254,7 +254,6 @@ html[data-theme="heliosphere"] body.solar-selected #solar-return-sun:not([hidden
 html[data-theme="heliosphere"] body.solar-selected #solar-return-sun:not([hidden]) {left:18px!important;bottom:185px!important}
 }
 #scene .stage .bar {display:none!important}
-#scene .cm-signature.cm-monogram {width:34px!important;height:34px!important;min-width:0!important;min-height:0!important;right:15px!important;bottom:12px!important;padding:0!important;background-color:#d5ad63!important;opacity:.48!important;mask:none center/contain no-repeat;-webkit-mask:url('../../assets/images/codex-monogramme.png') center/contain no-repeat;border:0!important;box-shadow:none!important;font-size:0!important;pointer-events:none!important}
 html[data-theme="heliosphere"] {--codex-glass:rgba(9,14,29,.69);--codex-edge:rgba(199,211,255,.24);--codex-ink:#f1f3ff;--codex-accent:#d6ae68}
 #scene #solar-return-sun {left:auto!important;right:clamp(18px,3vw,52px)!important;bottom:clamp(70px,10vh,105px)!important;opacity:.68;font-size:11px;padding:7px 12px;background:rgba(9,15,29,.45)}
 #scene #solar-return-sun:hover, #scene #solar-return-sun:focus-visible {opacity:1}
