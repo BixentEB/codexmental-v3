@@ -39,7 +39,8 @@
     if (info.soft) t = Math.max(t, 3);
     if (/mali-4|mali-t[1-6]|adreno \(?[23]\d\d|powervr sgx|intel.*(hd graphics [2-4]\d{3}\b|gma)/i.test(info.gpu)) t = Math.max(t, 2);
     if (info.cores <= 2 || (info.mem && info.mem <= 1) || info.saveData) t = Math.max(t, 2);
-    if (info.mobile || info.cores <= 4 && info.mem && info.mem <= 4) t = Math.max(t, 1);
+    if (info.mobile) t = Math.max(t, 2);   // téléphone : mode économe d'emblée (le suivi de fluidité peut le dégrader, jamais l'inverse)
+    if (info.cores <= 4 && info.mem && info.mem <= 4) t = Math.max(t, 1);
     return ORDER[t];
   }
 
@@ -63,7 +64,7 @@
     /* choix de l'utilisateur : retenu, puis on recharge pour repartir proprement */
     setPref: function (p) { set(PREF, p === 'auto' ? null : p); set(KEY, null); location.reload(); }
   };
-  window.CodexPx = function (max) { return Math.max(.4, Math.min(window.devicePixelRatio || 1, max || 2) * P.scale); };
+  window.CodexPx = function (max) { if (info.mobile) max = Math.min(max || 2, 1.5); return Math.max(.4, Math.min(window.devicePixelRatio || 1, max || 2) * P.scale); };
 
   /* ---------- 2. ordonnanceur commun + surveillance de la fluidité ---------- */
   var queue = [], pending = false, lastRun = 0, ema = 0, slow = 0, born = performance.now(), notified = false;
@@ -87,10 +88,14 @@
     pending = false;
     if (tier === 'off') { queue.length = 0; return; }
     var cfg = TIERS[tier];
+    // lecteur plein écran sur petit écran : la scène est cachée, on ne la fait avancer qu'au ralenti
+    var hid = document.documentElement.classList.contains('reading') && window.innerWidth < 900;
+    if (hid) { if (lastRun && t - lastRun < 500) { pending = true; requestAnimationFrame(tick); return; } lastRun = t; var qh = queue; queue = []; for (var j = 0; j < qh.length; j++) { try { qh[j](t); } catch (e) { console.error(e); } } if (queue.length && !pending) { pending = true; requestAnimationFrame(tick); } return; }
     if (lastRun && t - lastRun < cfg.gap - 2) { pending = true; requestAnimationFrame(tick); return; }   // cadence plafonnée
     var iv = lastRun ? t - lastRun : 0; lastRun = t;
     var q = queue; queue = []; for (var i = 0; i < q.length; i++) { try { q[i](t); } catch (e) { console.error(e); } }
     // surveillance : ni les 1,5 premières secondes, ni les pauses d'onglet
+    if (iv >= 400 && t - born > 1500 && !document.hidden && lastRun) { slow += 1500; if (slow > (tier === 'low' ? 4500 : 2600)) degrade('image > ' + Math.round(iv) + ' ms'); }   // images très lentes : on n'attend pas
     if (iv > 0 && iv < 400 && t - born > 1500 && !document.hidden) {
       ema = ema ? ema + (iv - ema) * .12 : iv;
       var limit = Math.max(cfg.gap * 1.7, 36);

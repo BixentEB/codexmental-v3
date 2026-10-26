@@ -38,3 +38,6 @@ Vue depuis la terre ferme : un seul shader WebGL (ciel jour/crépuscule/nuit sel
 ## Idées mises de côté
 - **Multilingue** : regrouper les textes d'interface dans `i18n/<langue>.json`, un dossier de contenus par langue (`content/<langue>/…`, catalogue et recherche par langue), sélecteur de langue ; traduction préparée par Claude, relue par l'auteur. À faire après Labo/Observatoire.
 - **Ciel d'ailleurs** : rendu fixe, relief/forêt/eau plus réalistes, réactivation via `themes/themes.json` après validation.
+
+### Mobile (ajout)
+Téléphone détecté → niveau « économe » d'emblée ; définition plafonnée à 1,5× ; lecteur ouvert sur écran < 900 px → la scène ne tourne plus qu'au ralenti (2 i/s) ; images > 400 ms comptées comme lentes (dégradation plus rapide).
