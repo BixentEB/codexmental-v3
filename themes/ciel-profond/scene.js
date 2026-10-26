@@ -737,3 +737,25 @@ window.CodexScene = { ok: true };
 })();
 })();
 
+/* petite lune : dessinée une fois ; de temps en temps (ou au survol), elle laisse deviner autre chose */
+(function () {
+  var box = document.getElementById('cp-moon'), cv = document.getElementById('cp-moon-cv'); if (!box || !cv) return;
+  var g = cv.getContext('2d'), S = cv.width, R = S / 2 - 3, cx = S / 2, cy = S / 2;
+  function rnd(a) { var x = Math.sin(a * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+  g.clearRect(0, 0, S, S); g.save(); g.beginPath(); g.arc(cx, cy, R, 0, 7); g.clip();
+  var b = g.createRadialGradient(cx - R * .25, cy - R * .25, R * .1, cx, cy, R); b.addColorStop(0, '#e9e6df'); b.addColorStop(1, '#a9a69f'); g.fillStyle = b; g.fillRect(0, 0, S, S);
+  // mers sombres
+  [[-.28, -.2, .34, .26, .35], [.18, -.3, .22, .2, .28], [-.05, .22, .3, .22, .3], [.32, .12, .14, .14, .25], [-.4, .15, .16, .12, .22]].forEach(function (m) {
+    g.save(); g.filter = 'blur(' + Math.round(R * .06) + 'px)'; g.fillStyle = 'rgba(70,72,82,' + m[4] + ')'; g.beginPath(); g.ellipse(cx + m[0] * R, cy + m[1] * R, m[2] * R, m[3] * R, rnd(m[0] * 9) * 3, 0, 7); g.fill(); g.restore(); });
+  // cratères
+  for (var i = 0; i < 46; i++) { var a = rnd(i) * 6.283, d = Math.sqrt(rnd(i + 70)) * R * .93, x = cx + Math.cos(a) * d, y = cy + Math.sin(a) * d, r = (.012 + rnd(i + 140) * rnd(i + 141) * .07) * R * 2;
+    var cg = g.createRadialGradient(x - r * .25, y - r * .25, r * .1, x, y, r); cg.addColorStop(0, 'rgba(60,60,66,.35)'); cg.addColorStop(.8, 'rgba(60,60,66,.12)'); cg.addColorStop(1, 'rgba(255,255,255,.22)'); g.fillStyle = cg; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); }
+  // phase : lumière venant de la gauche, un peu gibbeuse
+  var ph = g.createLinearGradient(cx - R * .2, 0, cx + R * .9, 0); ph.addColorStop(0, 'rgba(6,8,18,0)'); ph.addColorStop(.5, 'rgba(6,8,18,.5)'); ph.addColorStop(1, 'rgba(6,8,18,.95)'); g.fillStyle = ph; g.fillRect(0, 0, S, S);
+  var lb = g.createRadialGradient(cx, cy, R * .55, cx, cy, R); lb.addColorStop(0, 'rgba(0,0,0,0)'); lb.addColorStop(1, 'rgba(0,0,0,.35)'); g.fillStyle = lb; g.fillRect(0, 0, S, S);
+  g.restore();
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches, busy = false;
+  function tell() { if (busy || document.hidden || document.documentElement.classList.contains('reading')) return; busy = true; box.classList.add('tell'); setTimeout(function () { box.classList.remove('tell'); busy = false; }, 2200); }
+  box.addEventListener('pointerenter', tell);
+  if (!reduce) (function loop() { setTimeout(function () { tell(); loop(); }, 150000 + Math.random() * 180000); })();
+})();

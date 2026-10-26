@@ -129,7 +129,7 @@
        "desc": "Pourquoi pensons-nous, ressentons-nous et réagissons-nous différemment ?"
       },
       {
-       "label": "Haut potentiel",
+       "label": "Multipotentiel",
        "emoji": "🧬",
        "children": [
         {
@@ -137,11 +137,11 @@
         }
        ],
        "intro": [
-        "Que recouvre réellement le haut potentiel, au-delà des étiquettes et des idées reçues ?",
-        "Cette sous-catégorie explore les représentations du haut potentiel, les différences de parcours, les manières de penser et les stratégies d'adaptation. Les témoignages et observations personnelles y trouvent leur place sans être érigés en règles universelles.",
+        "Que recouvre réellement le multipotentiel, au-delà des étiquettes et des idées reçues ?",
+        "Cette sous-catégorie explore les représentations du multipotentiel, les différences de parcours, les manières de penser et les stratégies d'adaptation. Les témoignages et observations personnelles y trouvent leur place sans être érigés en règles universelles.",
         "Les notions psychologiques sont abordées avec prudence : un vécu singulier ne constitue ni un diagnostic ni une preuve générale."
        ],
-       "desc": "Que recouvre réellement le haut potentiel, au-delà des étiquettes et des idées reçues ?"
+       "desc": "Que recouvre réellement le multipotentiel, au-delà des étiquettes et des idées reçues ?"
       }
      ],
      "desc": "Pourquoi pensons-nous, ressentons-nous et réagissons-nous différemment ?",
@@ -234,7 +234,14 @@
     {
      "label": "Projets en cours",
      "emoji": "📖",
-     "children": []
+     "children": [
+      {
+       "article": "atelier/projets/nox"
+      },
+      {
+       "article": "atelier/apps/heures"
+      }
+     ]
     },
     {
      "label": "Exploration futuriste",
@@ -263,15 +270,6 @@
       },
       {
        "article": "atelier/projets/ia1"
-      }
-     ]
-    },
-    {
-     "label": "Applications",
-     "emoji": "📲",
-     "children": [
-      {
-       "article": "atelier/apps/heures"
       }
      ]
     }
@@ -1110,6 +1108,13 @@
    "src": "content/codex/codex/legal.html",
    "base": "",
    "words": 380,
+   "type": "page"
+  },
+  "atelier/projets/nox": {
+   "title": "NOX Electron Lab",
+   "src": "content/atelier/atelier/projets/nox.html",
+   "base": "atelier/projets",
+   "words": 211,
    "type": "page"
   }
  }

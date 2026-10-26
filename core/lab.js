@@ -76,10 +76,15 @@
         detail.append(head(p), left, side);
       } else {
         var b = el('div', 'lab-soft');
+        if (p.tagline) b.append(el('p', 'lab-tagline', p.tagline));
         b.append(el('p', 'lab-summary', p.concept));
         var g = el('div', 'lab-cols'), a = el('div'), c = el('div');
-        a.append(el('h3', '', 'Objectif'), el('p', 'lab-desc', p.goal)); var ul2 = el('ul'); (p.ideas || []).forEach(function (t) { ul2.append(el('li', '', t)); }); c.append(el('h3', '', 'Pistes envisagées'), ul2);
-        g.append(a, c); b.append(g, el('p', 'lab-hint', 'En réflexion : rien n’est disponible ni annoncé.'));
+        function list(h, arr) { var u = el('ul'); (arr || []).forEach(function (t) { u.append(el('li', '', t)); }); return [el('h3', '', h), u]; }
+        if (p.features) a.append.apply(a, list('Fonctionnalités envisagées', p.features)); else a.append(el('h3', '', 'Objectif'), el('p', 'lab-desc', p.goal));
+        if (p.dev) c.append.apply(c, list('Développement envisagé', p.dev)); else if (p.ideas) c.append.apply(c, list('Pistes envisagées', p.ideas));
+        if (p.shot) { var fg = el('figure', 'lab-shot'), im = document.createElement('img'); im.src = p.shot; im.alt = p.shotAlt || ''; im.loading = 'lazy'; fg.append(im); if (p.shotAlt) fg.append(el('figcaption', '', p.shotAlt)); c.append(fg); }
+        g.append(a); if (c.childNodes.length) g.append(c); b.append(g);
+        b.append(el('p', 'lab-hint', p.state ? 'État : ' + p.state + '. Rien n’est disponible ni annoncé.' : 'En réflexion : rien n’est disponible ni annoncé.'));
         detail.append(head(p), b);
       }
     }

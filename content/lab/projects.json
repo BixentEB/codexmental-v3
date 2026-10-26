@@ -253,19 +253,49 @@
    "tab": "reflexion"
   },
   {
-   "id": "widgets-android",
-   "name": "Widgets Android",
+   "id": "noxlayer",
+   "name": "NoxLayer (nom provisoire)",
+   "mark": "{ }",
+   "accent": "#a6d9f5",
+   "platform": "Navigateur Web",
+   "tagline": "Personnaliser le Web à sa manière",
+   "concept": "Un gestionnaire de styles CSS et de scripts JavaScript pour modifier l'apparence et certains comportements des sites web, sans toucher à leur code d'origine.",
+   "features": [
+    "Styles CSS personnalisés par site",
+    "Scripts JavaScript indépendants",
+    "Activation et désactivation rapides",
+    "Bibliothèque de profils et de thèmes",
+    "Importation, exportation et sauvegarde"
+   ],
+   "state": "Concept en réflexion · nom provisoire",
+   "shot": "img/lab/css-exemple.webp",
+   "shotAlt": "Exemple de personnalisation : une interface d'IA habillée par des styles CSS (fond étoilé, couleurs, barre de saisie).",
+   "tags": [
+    "Web",
+    "CSS",
+    "JavaScript",
+    "Concept"
+   ],
+   "tab": "reflexion"
+  },
+  {
+   "id": "widgets",
+   "name": "Widgets Windows & Android",
    "mark": "▣",
    "accent": "#f0a9d0",
-   "platform": "Android",
-   "concept": "Un widget d'écran d'accueil qui fait tourner une sélection de photographies.",
-   "goal": "Afficher une grande collection de photos, avec un réglage simple de l'intervalle et du nom du widget.",
-   "ideas": [
-    "Cadres aux formes dessinées par l'utilisateur",
-    "Contours lissés",
-    "Version Lite gratuite et Premium envisagées"
+   "platform": "Windows · Android",
+   "tagline": "Personnalisation et liberté d'affichage",
+   "concept": "Un projet de widgets personnalisables pour Windows et Android, permettant d'organiser ses informations, ses photos et ses outils quotidiens dans une interface adaptée à ses envies.",
+   "features": [
+    "Photos et albums en rotation automatique",
+    "Cadres personnalisés et formes libres",
+    "Widgets d'informations et raccourcis",
+    "Gestion des thèmes, tailles et transparences",
+    "Bibliothèque de widgets extensible"
    ],
+   "state": "Concept en réflexion",
    "tags": [
+    "Windows",
     "Android",
     "Widget",
     "Photo",
@@ -275,76 +305,31 @@
   },
   {
    "id": "mini-rpg",
-   "name": "Mini-RPG",
+   "name": "Mini-RPG (nom à définir)",
    "mark": "⚔",
    "accent": "#ff9fa8",
-   "platform": "À définir",
-   "concept": "Un petit jeu de rôle numérique.",
-   "goal": "Concevoir les mécaniques et l'univers.",
-   "ideas": [
-    "Tout reste à définir"
+   "platform": "Windows · Android · Web",
+   "tagline": "Un univers de fantasy en pixel art, entre exploration, stratégie et collection.",
+   "concept": "Projet de jeu de rôle 2D inspiré des RPG classiques : constituer une équipe de héros aux compétences complémentaires pour explorer des donjons, affronter des créatures et découvrir progressivement un univers original.",
+   "features": [
+    "Combats stratégiques au tour par tour",
+    "Héros à collectionner et à faire évoluer",
+    "Classes, compétences et équipements",
+    "Faiblesses élémentaires et synergies d'équipe",
+    "Donjons, boss et événements évolutifs",
+    "Quêtes et scénario à embranchements",
+    "Progression et sauvegarde hors ligne"
    ],
+   "dev": [
+    "Moteur : Godot 4 / GDScript",
+    "Graphismes : pixel art 2D, sprites animés",
+    "Ressources : OpenGameArt, itch.io, Kenney",
+    "Plateformes : Windows, Android et Web"
+   ],
+   "state": "Concept en réflexion",
    "tags": [
     "Jeu",
     "Création",
-    "Concept"
-   ],
-   "tab": "reflexion"
-  },
-  {
-   "id": "nox-electron-lab",
-   "name": "NOX Electron Lab",
-   "mark": "⚛",
-   "accent": "#9fe3e8",
-   "platform": "Non définie",
-   "concept": "Expériences physiques miniaturisées, simulation et observation de phénomènes liés aux particules.",
-   "goal": "Explorer l'idée sur le plan théorique.",
-   "ideas": [
-    "Simulation numérique éventuelle"
-   ],
-   "tags": [
-    "Science",
-    "Physique",
-    "Recherche",
-    "Concept"
-   ],
-   "tab": "reflexion"
-  },
-  {
-   "id": "widgets-windows",
-   "name": "Widgets Windows",
-   "mark": "▤",
-   "accent": "#8cc7ff",
-   "platform": "Windows",
-   "concept": "Des widgets pour le bureau Windows.",
-   "goal": "À préciser.",
-   "ideas": [
-    "Pistes à préciser"
-   ],
-   "tags": [
-    "Windows",
-    "Widget",
-    "Concept"
-   ],
-   "tab": "reflexion"
-  },
-  {
-   "id": "gestionnaire-css-js",
-   "name": "Gestionnaire CSS/JS (nom provisoire)",
-   "mark": "{ }",
-   "accent": "#a6d9f5",
-   "platform": "Navigateur Web",
-   "concept": "Un gestionnaire de personnalisations pour sites Web, dans l'esprit de Stylus, mais intégrant aussi le JavaScript.",
-   "goal": "Activer ou désactiver chaque personnalisation indépendamment, site par site.",
-   "ideas": [
-    "Profils CSS et JS",
-    "Extension de navigateur",
-    "Point de départ : le CSS ChatGPT personnalisé"
-   ],
-   "tags": [
-    "Web",
-    "CSS",
-    "JavaScript",
     "Concept"
    ],
    "tab": "reflexion"
