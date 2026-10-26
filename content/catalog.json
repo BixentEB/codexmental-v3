@@ -58,6 +58,9 @@
          "article": "ai/aivie"
         },
         {
+         "article": "ai/comparaison"
+        },
+        {
          "label": "Miroir de l'humanité",
          "series": true,
          "children": [
@@ -1115,6 +1118,17 @@
    "base": "atelier/projets",
    "words": 211,
    "type": "page"
+  },
+  "ai/comparaison": {
+   "title": "Comparaison",
+   "src": "content/codex/ai/comparaison.html",
+   "base": "blog/articles/ai",
+   "words": 408,
+   "date": "2026-10-27",
+   "tags": [
+    "IntelligenceArtificielle"
+   ],
+   "type": "article"
   }
  }
 }
