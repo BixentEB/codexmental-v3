@@ -53,7 +53,7 @@
       "category": "Astronomie"
     },
     {
-      "id": "vie-etoile",
+      "id": "vie-etoile", "heavy": true,
       "label": "Vie d'une étoile",
       "description": "De la nébuleuse à la naine blanche (ou à la supernova) : chaque rubrique est un stade de la vie d'une étoile.",
       "swatch": [
@@ -63,7 +63,7 @@
       "category": "Astronomie"
     },
     {
-      "id": "ciel-ailleurs",
+      "id": "ciel-ailleurs", "heavy": true,
       "label": "Ciel d'ailleurs",
       "description": "Sur la terre ferme d'un monde inconnu : un ciel qui suit l'heure, des aurores, une lune et une planète à anneaux.",
       "swatch": [

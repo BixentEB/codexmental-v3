@@ -71,17 +71,28 @@
       .map(function (t) { return Object.assign({}, t, { preview: t.enabled === false }); });
     // garde-fou : si la visite précédente ne s'est pas terminée proprement (plantage du navigateur), on revient au thème par défaut
     var crashed = null;
-    try { var cf = JSON.parse(localStorage.getItem('codex.boot') || 'null'); if (cf && cf.id && Date.now() - cf.t < 6e5) crashed = cf.id; localStorage.removeItem('codex.boot'); } catch (e) {}
+    try { var cf = JSON.parse(localStorage.getItem('codex.boot') || 'null'); if (cf && cf.id) crashed = cf.id; localStorage.removeItem('codex.boot'); } catch (e) {}
     var want = params.get('theme') || stored() || registry.default;
-    if (crashed && !params.get('theme') && want === crashed && want !== registry.default) { want = registry.default; Codex.recovered = crashed; }
-    if (params.get('theme')) crashed = null;
+    // démarrage sécurisé : ?scene=off coupe les scènes (le lecteur reste), ?scene=on les rétablit
+    var sp = params.get('scene');
+    try { if (sp === 'off') localStorage.setItem('codex.scene', 'off'); else if (sp === 'on') { localStorage.removeItem('codex.scene'); localStorage.removeItem('codex.crash'); } } catch (e) {}
+    var sceneOff = sp === 'off' || (sp !== 'on' && (function () { try { return localStorage.getItem('codex.scene') === 'off'; } catch (e) { return false; } })());
+    if (crashed && sp !== 'on' && !params.get('theme')) {
+      if (crashed !== registry.default) { want = registry.default; Codex.recovered = crashed; }
+      else { sceneOff = true; try { localStorage.setItem('codex.scene', 'off'); } catch (e) {} Codex.recovered = crashed; }
+    }
+    // thème gourmand (heavy) : il ne démarre tout seul depuis la mémoire du navigateur qu'après avoir déjà tenu 8 s sur cet appareil ; demandé explicitement (menu, ?theme=), il démarre toujours
+    var okList = []; try { okList = JSON.parse(localStorage.getItem('codex.ok') || '[]'); } catch (e) {}
+    var wantT = Codex.themes.filter(function (t) { return t.id === want; })[0];
+    if (wantT && wantT.heavy && !params.get('theme') && okList.indexOf(want) < 0 && want !== registry.default) { Codex.deferred = wantT.label; want = registry.default; }
     var entry = Codex.themes.filter(function (t) { return t.id === want; })[0] ||
                 Codex.themes.filter(function (t) { return t.id === registry.default; })[0] || Codex.themes[0];
     var T = Codex.theme = Object.assign({ id: entry.id, label: entry.label }, await json('themes/' + entry.id + '/theme.json'));
     store(T.id);
-    try { localStorage.setItem('codex.boot', JSON.stringify({ id: T.id, t: Date.now() })); } catch (e) {}
+    if (!sceneOff) try { localStorage.setItem('codex.boot', JSON.stringify({ id: T.id, t: Date.now() })); } catch (e) {}
     var okBoot = function () { try { localStorage.removeItem('codex.boot'); } catch (e) {} };
-    window.addEventListener('pagehide', okBoot); setTimeout(okBoot, 8000);
+    var okStable = function () { okBoot(); if (sceneOff || document.hidden) return; try { var l = JSON.parse(localStorage.getItem('codex.ok') || '[]'); if (l.indexOf(T.id) < 0) { l.push(T.id); localStorage.setItem('codex.ok', JSON.stringify(l)); } } catch (e) {} };
+    window.addEventListener('pagehide', okBoot); setTimeout(okStable, 8000);
     applyTheme(T);
     var base = 'themes/' + T.id + '/';
     // polices du thème
@@ -91,7 +102,9 @@
     Codex.ui.buildShell && Codex.ui.buildShell();
     // scène
     var host = document.getElementById('scene');
-    try {
+    if (sceneOff) {
+      Codex.sceneOk = false; Codex.safe = true;
+    } else try {
       if (T.markup) host.insertAdjacentHTML('beforeend', await (await fetch(base + T.markup)).text());
       await Promise.all((T.css || []).map(function (c) { return addCss(base + c); }));
       // une bibliothèque injoignable n'est pas fatale : la scène décide si elle peut démarrer ou se replier
@@ -107,7 +120,9 @@
       if (ld) { ld.textContent = "La scène n'a pas pu se charger."; ld.classList.remove('done'); }
     }
     document.documentElement.classList.add('ready');
-    if (Codex.recovered) message("Le thème « " + Codex.recovered + " » a fait planter la visite précédente : retour au thème par défaut. Vous pouvez le réessayer depuis le menu des thèmes.");
+    if (Codex.safe) message("Mode sans scène : les animations sont coupées, la lecture fonctionne normalement." + (Codex.recovered ? ' (Le navigateur avait planté sur « ' + Codex.recovered + ' ».)' : '') + ' Pour les rétablir, ajoutez ?scene=on à l’adresse.');
+    else if (Codex.deferred) { message('Le thème « ' + Codex.deferred + ' » est gourmand : il ne démarre que lorsque vous le choisissez dans le menu des thèmes.'); setTimeout(function () { message(''); }, 9000); }
+    else if (Codex.recovered) message("Le thème « " + Codex.recovered + " » a fait planter la visite précédente : retour au thème par défaut. Vous pouvez le réessayer depuis le menu des thèmes.");
     if (Codex.recovered) setTimeout(function () { message(''); }, 14000);
     Codex.emit('ready', T);
     restore();

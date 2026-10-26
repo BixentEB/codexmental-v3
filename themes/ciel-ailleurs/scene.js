@@ -7,6 +7,7 @@
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   var W = 0, H = 0, dpr = 1;
+  var lost = false; cv.addEventListener('webglcontextlost', function (e) { e.preventDefault(); lost = true; });
 
   /* ---------- réglages mémorisés ---------- */
   var KEY = 'codex.ailleurs', cfg = { mode: 'live', hour: 22, aur: 1 };
@@ -342,19 +343,21 @@ void main(){
   pv = 1. - day * .86;
   float shore = -.012 + .006 * fbm3(vec2(cos(az), sin(az)) * 12. + 2.);
   vec3 col;
-  if (el > shore) {
-    col = land(skyFull(d, 0.), az, el);
-  } else {
-    // --- lac : le ciel entier s'y reflète (astres, aurores, collines), brouillé par les rides
+  // un seul appel au ciel et au paysage (le compilateur du pilote graphique duplique chaque appel : deux appels = shader énorme)
+  bool lake = el <= shore;
+  vec3 sd = d; float saz = az, sel = el, lq = 0., depth = 0., wvx = 0.;
+  if (lake) {
     vec2 pz = vec2(cos(az), sin(az));
     vec2 wv = vec2(fbm3(pz * 60. + vec2(0., el * 300. + uT * .2)), fbm3(pz * 50. + vec2(4., el * 260. - uT * .15))) - .5;
-    float depth = clamp(-d.y * 12., 0., 1.);
-    vec3 rd = normalize(vec3(d.x + wv.x * (.012 + .02 * depth), -d.y * .8 + .004 + abs(wv.y) * .03 * (.3 + depth), d.z + wv.y * (.012 + .02 * depth)));
-    float raz = atan(rd.x, rd.z), rel = asin(clamp(rd.y, -1., 1.));
-    vec3 rf = land(skyFull(rd, 1.), raz, rel);
+    depth = clamp(-d.y * 12., 0., 1.); wvx = wv.x;
+    sd = normalize(vec3(d.x + wv.x * (.012 + .02 * depth), -d.y * .8 + .004 + abs(wv.y) * .03 * (.3 + depth), d.z + wv.y * (.012 + .02 * depth)));
+    saz = atan(sd.x, sd.z); sel = asin(clamp(sd.y, -1., 1.)); lq = 1.;
+  }
+  col = land(skyFull(sd, lq), saz, sel);
+  if (lake) {
     float F = .36 + .55 * pow(1. - depth, 2.);
     vec3 deep = mix(vec3(.003, .008, .014), vec3(.03, .08, .1), day);
-    col = mix(deep, rf, F) * (.85 + .3 * wv.x);
+    col = mix(deep, col, F) * (.85 + .3 * wvx);
   }
   col = 1. - exp(-col * 1.25); col = pow(col, vec3(.92));
   float vg = 1. - .32 * dot(uv, uv); col *= vg;
@@ -362,13 +365,23 @@ void main(){
   gl_FragColor = vec4(col, 1.);
 }
 `;
-  function sh(type, src) { var o = gl.createShader(type); gl.shaderSource(o, src); gl.compileShader(o); if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) { if (window.console) console.warn(gl.getShaderInfoLog(o)); return null; } return o; }
-  var vs = sh(gl.VERTEX_SHADER, 'attribute vec2 p; void main(){ gl_Position = vec4(p, 0., 1.); }'), fs = sh(gl.FRAGMENT_SHADER, FRAG), prog = null, U = {};
-  if (vs && fs) { prog = gl.createProgram(); gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog); if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) prog = null; }
-  if (!prog) { window.CodexScene = { ok: false }; return; }
-  gl.useProgram(prog); var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
-  var loc = gl.getAttribLocation(prog, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-  ['uRes', 'uT', 'uYaw', 'uPitch', 'uZoom', 'uShift', 'uAur', 'uAurAz', 'uSun', 'uRnd'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
+  function sh(type, src) { var o = gl.createShader(type); gl.shaderSource(o, src); gl.compileShader(o); return o; }
+  // compilation sans bloquer la page : on attend que le pilote ait fini (extension KHR_parallel_shader_compile) avant d'interroger le programme
+  var vs = sh(gl.VERTEX_SHADER, 'attribute vec2 p; void main(){ gl_Position = vec4(p, 0., 1.); }'), fs = sh(gl.FRAGMENT_SHADER, FRAG), prog = gl.createProgram(), U = {};
+  var pext = gl.getExtension('KHR_parallel_shader_compile'), linked = false, failed = false, tCompile = performance.now();
+  gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog);
+  function checkReady() {
+    if (pext && !gl.getProgramParameter(prog, pext.COMPLETION_STATUS_KHR)) return false;
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+      failed = true; if (window.console) console.warn(gl.getShaderInfoLog(fs));
+      cv.style.display = 'none'; var st = document.getElementById('scene-status'); if (st) { st.hidden = false; st.textContent = "La scène n'a pas pu démarrer sur cet appareil. La lecture des articles reste disponible."; }
+      return true;
+    }
+    gl.useProgram(prog); var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    var loc = gl.getAttribLocation(prog, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    ['uRes', 'uT', 'uYaw', 'uPitch', 'uZoom', 'uShift', 'uAur', 'uAurAz', 'uSun', 'uRnd'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
+    linked = true; window.__caCompileMs = Math.round(performance.now() - tCompile); return true;
+  }
 
   /* ---------- vue ---------- */
   var view = { yaw: 0, pitch: .3, zoom: 1, tz: 1, ty: 0, tp: .3 }, shift = 0, clock = 0, simHour = 22, drift = 0;
@@ -435,7 +448,8 @@ void main(){
   var lastDraw = 0, drawNow = true, last = performance.now(), paused = document.hidden, clockEl = document.getElementById('ca-clock'), clockT = 0;
   document.addEventListener('visibilitychange', function () { paused = document.hidden; last = performance.now(); if (!paused) requestAnimationFrame(frame); });
   function frame(now) {
-    if (paused) return;
+    if (paused || lost) return;
+    if (!linked) { if (!failed) { checkReady(); last = now; requestAnimationFrame(frame); } return; }
     var raw = now - last, dt = Math.min(.05, raw / 1000); last = now; clock += dt;
     var reading = document.documentElement.classList.contains('reading');
     shift += ((reading ? .26 : 0) - shift) * Math.min(1, dt * 4);
