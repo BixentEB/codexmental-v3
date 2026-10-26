@@ -75,6 +75,8 @@ var CONS=[
  {n:'La Lyre',w:1,m:[0,1,2,3,4],s:[[0,0,3.8,'Véga'],[1.5,1.2,2.2],[3.4,1.9,2.2],[4.6,6.1,2.4],[2.6,5.4,2.4],[1.5,-.9,1.5]],e:[[0,1],[1,2],[2,3],[3,4],[4,1],[0,5]]},
  {n:'La Grande Ourse',w:1,m:[0,1,2,4,6],s:[[0,0,3,'Dubhé'],[-.3,5.4,2.4,'Mérak'],[7,8,2.4],[10,4.8,2],[15.5,5.8,2.6,'Alioth'],[19.6,6.9,2.4,'Mizar'],[23,12.5,2.6,'Alkaïd']],e:[[0,1],[1,2],[2,3],[3,0],[3,4],[4,5],[5,6]]}
 ];
+var ZOOM={v:1}; try{var zz=parseFloat(localStorage.getItem('codex.constzoom')); if(zz>=.4&&zz<=1.2) ZOOM.v=zz}catch(e){}
+if(C.customize&&C.customize.pop){try{var zp=C.customize.pop(),zd=document.createElement('div'); zd.innerHTML='<label class="cx-l" for="cs-zoom">Taille de la constellation</label><input id="cs-zoom" type="range" min=".4" max="1.2" step=".05" value="'+ZOOM.v+'">'; zd.querySelector('input').addEventListener('input',function(e){ZOOM.v=parseFloat(e.target.value); try{localStorage.setItem('codex.constzoom',String(ZOOM.v))}catch(_){} place()}); zp.appendChild(zd)}catch(e){}}
 var LS='codex.const', cur=null, built=[], lastIdx=-1;
 try{lastIdx=parseInt(localStorage.getItem(LS),10)}catch(e){}
 function pick(){var pool=[],i;for(i=0;i<CONS.length;i++){if(i===lastIdx)continue;for(var k=0;k<CONS[i].w;k++)pool.push(i)}return pool[Math.floor(Math.random()*pool.length)]}
@@ -95,9 +97,9 @@ function build(i){
   place();
 }
 function place(){ if(!cur) return;
-  var W=innerWidth,H=innerHeight,mob=W<800, rx=mob?.06*W:Math.max(.44*W,560), ry=mob?.46*H:.2*H, rw=mob?.88*W:W-rx-.07*W, rh=mob?.4*H:.62*H;
+  var W=innerWidth,H=innerHeight,mob=W<800, rx=mob?.06*W:Math.max(.44*W,560), ry=mob?.46*H:.2*H, rw=mob?.88*W-96:W-rx-.07*W, rh=mob?.4*H:.62*H;
   var x0=1e9,x1=-1e9,y0=1e9,y1=-1e9; cur.s.forEach(function(t){x0=Math.min(x0,t[0]);x1=Math.max(x1,t[0]);y0=Math.min(y0,t[1]);y1=Math.max(y1,t[1])});
-  var k=Math.min(rw/(x1-x0||1),rh/(y1-y0||1),(mob?300:620)/Math.max(x1-x0,y1-y0,1)), ox=rx+(rw-(x1-x0)*k)/2, oy=ry+(rh-(y1-y0)*k)/2;
+  var k=Math.min(rw/(x1-x0||1),rh/(y1-y0||1),(mob?300:620)/Math.max(x1-x0,y1-y0,1))*ZOOM.v, ox=rx+(rw-(x1-x0)*k)/2, oy=ry+(rh-(y1-y0)*k)/2;
   cur.s.forEach(function(st,j){st._x=ox+(st[0]-x0)*k; st._y=oy+(st[1]-y0)*k; built[j].style.transform='translate('+st._x+'px,'+st._y+'px)'});
   var ls=svg.querySelectorAll('line'); cur.e.forEach(function(e,i){var a=cur.s[e[0]],b=cur.s[e[1]]; ls[i].setAttribute('x1',a._x);ls[i].setAttribute('y1',a._y);ls[i].setAttribute('x2',b._x);ls[i].setAttribute('y2',b._y)});
   built.t.style.transform='translate('+ox+'px,'+(oy-46)+'px)';
