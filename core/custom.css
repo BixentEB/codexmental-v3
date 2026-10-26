@@ -26,3 +26,20 @@ html.reading .cx-lab, html.reading .cx-pop { opacity: 0; visibility: hidden; poi
 .cx-pop select, #scene select { color-scheme: dark; background-color: var(--panel-solid, #0b1020) !important; color: var(--fg, #e8f0fb) !important; border: 1px solid var(--line) !important; border-radius: 8px; }
 .cx-pop select option, #scene select option { background-color: #0d1220; color: #e8f0fb; }
 .cx-pop select:focus-visible, #scene select:focus-visible { outline: 1.5px solid var(--accent); outline-offset: 1px; }
+
+/* Téléphone : l'accueil se limite au titre et à la ligne en gras ; les réglages du thème se réduisent à l'engrenage */
+@media (max-width: 700px) {
+  .cx-lab { left: auto; right: 10px; bottom: 10px; width: 52px; height: 52px; padding: 0; gap: 0; justify-content: center; border-radius: 50%; }
+  .cx-lab > :not(.cx-gear) { display: none; }
+  .cx-lab .cx-gear { border: 0; width: 36px; height: 36px; }
+  .cx-pop { bottom: 70px; }
+  html[data-theme="vie-etoile"] #scene .ve-time, #scene .ve-time { right: 70px; }
+  html[data-theme="vie-etoile"] #scene .ve-card { bottom: 92px; }
+  /* Champ stellaire : texte réduit, haut de l'écran seulement, pour ne plus chevaucher les étoiles-rubriques */
+  #scene main.hero { align-items: start; padding-top: calc(var(--topbar-h) + 22px); }
+  #scene .hero p, #scene .hero .cta, #scene .hero-note { display: none; }
+  #scene .hero h1 { margin: 12px 0; }
+  /* Héliosphère : la ligne en gras sous la barre */
+  html[data-theme="heliosphere"] #scene .cx-who { display: block; position: fixed; z-index: 6; top: calc(var(--topbar-h) + 10px); left: 16px; right: 70px; margin: 0; }
+  html[data-theme="heliosphere"] #scene .cx-who p, html[data-theme="heliosphere"] #scene .cx-who .sig { display: none; }
+}
