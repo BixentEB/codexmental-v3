@@ -236,21 +236,31 @@
    "name": "Heures Sacrées",
    "mark": "◔",
    "accent": "#d8b4a0",
-   "platform": "Python de bureau (version conservée à confirmer)",
-   "concept": "Une application autour des heures symboliques, de leurs interprétations et de leur suivi personnel.",
+   "platform": "Python de bureau (ancien prototype à reprendre)",
+   "concept": "Une application pour observer et consigner ses synchronicités : heures miroirs, séquences répétitives, dates et mots qui reviennent. Elle sert l'observation consciente des motifs, des intuitions et de l'ordre caché dans le chaos du quotidien.",
    "goal": "Reprendre l'ancien prototype et vérifier ce qui mérite d'être conservé.",
-   "ideas": [
-    "Onglets Journal, Lexique et Grilles",
-    "Thème jour / nuit",
-    "Fichiers JSON locaux"
-   ],
    "tags": [
     "Python",
     "Symbolisme",
     "Journal",
     "Prototype"
    ],
-   "tab": "reflexion"
+   "tab": "reflexion",
+   "tagline": "Et si les chiffres que tu vois n'étaient pas le fruit du hasard ?",
+   "features": [
+    "Enregistrement des heures miroirs et des séquences numériques",
+    "Classement par catégories : heure, répétition, date, mot-clé",
+    "Notes personnelles pour chaque occurrence",
+    "Affichage des significations ésotériques (11:11, 222…)",
+    "Lexique intégré : ses propres interprétations, recherche d'occurrences similaires, liens entre événements, ressentis et symboles",
+    "Génération de grilles de jeu à partir des données (Euromillions, Loto)"
+   ],
+   "dev": [
+    "Reprendre l'ancien prototype et vérifier ce qui mérite d'être conservé",
+    "Onglets Journal, Lexique et Grilles",
+    "Thème jour / nuit",
+    "Fichiers JSON locaux"
+   ]
   },
   {
    "id": "noxlayer",

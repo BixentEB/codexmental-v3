@@ -66,6 +66,7 @@
       var ref = document.querySelector(T.who.after || T.who.append); if (!ref || document.querySelector('.cx-who')) return;
       var d = document.createElement('div'); d.className = 'cx-who';
       var s = document.createElement('strong'); s.textContent = w.lead; var p = document.createElement('p'); p.textContent = w.text; d.append(s, p);
+      if (w.sign) { var g = document.createElement('em'); g.className = 'sig'; g.textContent = w.sign; d.append(g); }
       if (T.who.after) ref.insertAdjacentElement('afterend', d); else ref.appendChild(d);
     }).catch(function () {});
   }

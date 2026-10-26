@@ -237,9 +237,6 @@
      "children": [
       {
        "article": "atelier/projets/nox"
-      },
-      {
-       "article": "atelier/apps/heures"
       }
      ]
     },
@@ -708,7 +705,16 @@
    "title": "Rêves lucides",
    "src": "content/codex/altstates/revelucide.html",
    "base": "blog/articles/altstates",
-   "words": 70,
+   "words": 941,
+   "date": "2026-10-26",
+   "tags": [
+    "Conscience",
+    "RêvesLucides",
+    "Onirisme",
+    "Introspection",
+    "Neurosciences"
+   ],
+   "desc": "Que se passe-t-il lorsque la conscience semble rester présente au sein même de la construction du rêve ?",
    "type": "article"
   },
   "symbol/tarot/13": {
@@ -781,13 +787,6 @@
    "src": "content/atelier/atelier/projets/ia1.html",
    "base": "atelier/projets",
    "words": 255,
-   "type": "page"
-  },
-  "atelier/apps/heures": {
-   "title": "Heures Sacrées",
-   "src": "content/atelier/atelier/apps/heures.html",
-   "base": "atelier/apps",
-   "words": 144,
    "type": "page"
   },
   "lab/index": {

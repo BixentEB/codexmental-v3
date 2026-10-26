@@ -82,10 +82,18 @@
       }).catch(function () { fig.remove(); });
     });
   }
+  /* typographie française : espace insécable avant : ; ! ? et à l'intérieur des guillemets « » → jamais de ponctuation seule en début de ligne */
+  function typo(root) {
+    if (!root || !root.ownerDocument) return;
+    var w = root.ownerDocument.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), n, list = [];
+    while ((n = w.nextNode())) { if (n.nodeValue && /[ \u00a0][:;!?»]|«[ \u00a0]/.test(n.nodeValue) && !n.parentNode.closest('code,pre,script,style,textarea')) list.push(n); }
+    list.forEach(function (t) { t.nodeValue = t.nodeValue.replace(/[ \u00a0]+([:»])/g, '\u00a0$1').replace(/[ \u00a0]+([;!?])/g, '\u202f$1').replace(/«[ \u00a0]+/g, '«\u00a0'); });
+  }
+  Codex.typo = typo;
   function enhance(root) {
     root = root || main;
     var prose = root.querySelector('.prose'); if (!prose) return;
-    restructureRefs(prose); moveGalleries(prose); resolveWiki(prose);
+    typo(root); restructureRefs(prose); moveGalleries(prose); resolveWiki(prose);
     var n = 0;
     prose.querySelectorAll('img').forEach(function (img) {
       if (img.closest('.codex-nexus-person') || img.classList.contains('astra-avatar') || img.dataset.thumb === 'no') return;

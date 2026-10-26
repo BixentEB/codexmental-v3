@@ -92,7 +92,7 @@
   }
   function mount(scope) {
     var host = scope && scope.querySelector('.lab-mount'); if (!host) return;
-    load(host.getAttribute('data-src')).then(function (d) { if (host.isConnected) build(host, d); },
+    load(host.getAttribute('data-src')).then(function (d) { if (host.isConnected) { build(host, d); if (window.Codex && Codex.typo) Codex.typo(host); } },
       function () { host.textContent = 'Le Laboratoire n’a pas pu être chargé. Réessayez dans un instant.'; });
   }
   window.Codex.lab = { mount: mount };
