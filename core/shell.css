@@ -103,3 +103,14 @@ html.noscene #scene { background: radial-gradient(120% 90% at 50% 0%, color-mix(
 html.reading .cx-who { opacity: 0; visibility: hidden; }
 @media (max-width: 760px) { .cx-who p, .cx-who .sig { display: none; } }
 @media (max-height: 640px) { .cx-who p, .cx-who .sig { display: none; } }
+
+/* très petits écrans : la barre ne doit jamais déborder (le bouton Contact restait coupé) */
+@media (max-width: 480px) {
+  .topbar { gap: 2px 4px; padding-left: max(10px, env(safe-area-inset-left, 0px)); padding-right: max(10px, env(safe-area-inset-right, 0px)); }
+  .topbar .brand { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: clip; font-size: min(10px, 2.7vw); letter-spacing: .04em; }
+  .topbar .nav { flex: 0 0 auto; gap: 0; }
+  .nav-item, .nav-contact { padding: 8px 6px; }
+  .nav-item svg, .nav-contact svg { width: 18px; height: 18px; }
+  .theme-btn { padding: 6px; flex: none; }
+}
+@media (max-width: 360px) { .topbar .brand { font-size: 9px; } .nav-item, .nav-contact { padding: 8px 4px; } }
