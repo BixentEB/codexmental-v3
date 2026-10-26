@@ -69,11 +69,19 @@
     var preview = params.has('preview');
     Codex.themes = registry.themes.filter(function (t) { return t.enabled !== false || preview; })
       .map(function (t) { return Object.assign({}, t, { preview: t.enabled === false }); });
+    // garde-fou : si la visite précédente ne s'est pas terminée proprement (plantage du navigateur), on revient au thème par défaut
+    var crashed = null;
+    try { var cf = JSON.parse(localStorage.getItem('codex.boot') || 'null'); if (cf && cf.id && Date.now() - cf.t < 6e5) crashed = cf.id; localStorage.removeItem('codex.boot'); } catch (e) {}
     var want = params.get('theme') || stored() || registry.default;
+    if (crashed && !params.get('theme') && want === crashed && want !== registry.default) { want = registry.default; Codex.recovered = crashed; }
+    if (params.get('theme')) crashed = null;
     var entry = Codex.themes.filter(function (t) { return t.id === want; })[0] ||
                 Codex.themes.filter(function (t) { return t.id === registry.default; })[0] || Codex.themes[0];
     var T = Codex.theme = Object.assign({ id: entry.id, label: entry.label }, await json('themes/' + entry.id + '/theme.json'));
     store(T.id);
+    try { localStorage.setItem('codex.boot', JSON.stringify({ id: T.id, t: Date.now() })); } catch (e) {}
+    var okBoot = function () { try { localStorage.removeItem('codex.boot'); } catch (e) {} };
+    window.addEventListener('pagehide', okBoot); setTimeout(okBoot, 8000);
     applyTheme(T);
     var base = 'themes/' + T.id + '/';
     // polices du thème
@@ -99,6 +107,8 @@
       if (ld) { ld.textContent = "La scène n'a pas pu se charger."; ld.classList.remove('done'); }
     }
     document.documentElement.classList.add('ready');
+    if (Codex.recovered) message("Le thème « " + Codex.recovered + " » a fait planter la visite précédente : retour au thème par défaut. Vous pouvez le réessayer depuis le menu des thèmes.");
+    if (Codex.recovered) setTimeout(function () { message(''); }, 14000);
     Codex.emit('ready', T);
     restore();
   }

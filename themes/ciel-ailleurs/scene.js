@@ -126,7 +126,7 @@ vec3 aurora(vec3 d){
   return ac * .62;
 }
 
-vec3 skyFull(vec3 d){
+vec3 skyFull(vec3 d, float lq){
   vec3 col;
   // --- ciel
   col = skyBase(d, day, twiS, twi);
@@ -142,9 +142,9 @@ vec3 skyFull(vec3 d){
     // Voie lactée : bande inclinée, noyau, poussières
     vec3 nb = normalize(vec3(.35, .75, .45)); float bd = dot(d, nb); float band = exp(-bd * bd * 11.);
     vec3 gc = normalize(vec3(-.55, .1, .82) - nb * dot(vec3(-.55, .1, .82), nb)); float core = exp(-pow(acos(clamp(dot(d, gc), -1., 1.)), 2.) * 1.6);
-    float mn = fbmS(d * 6.), lane = smoothstep(.46, .72, fbmS(d * 11. + 7.));
+    float mn = 0., lane = 0.; if (band > .02) { mn = fbmS(d * 6.); lane = lq > .5 ? 0. : smoothstep(.46, .72, fbmS(d * 11. + 7.)); }
     vec3 milky = mix(vec3(.45, .52, .8), vec3(1., .78, .55), core) * band * (.18 + .9 * mn + 1.1 * core) * (1. - .75 * lane * band);
-    float dust = (1. - smoothstep(.45, .8, vn3(d * 90.))) * band * .12;
+    float dust = band > .05 && lq < .5 ? (1. - smoothstep(.45, .8, vn3(d * 90.))) * band * .12 : 0.;
     col += (tn * (st * 1.7 + st2) + milky * .3 + vec3(.5, .6, .9) * dust * .2) * nf;
     // airglow vert très faible près de l'horizon
     col += vec3(.015, .05, .03) * exp(-dO.y * 9.) * night * .6;
@@ -201,7 +201,7 @@ vec3 skyFull(vec3 d){
       col += vec3(1., .6, .35) * exp(-max(r - 1., 0.) * 11.) * .12 * pv * step(1., r) * lit; } }
   { // grande planète à anneaux
     float fc; vec2 q = tang(d, P_GIANT, fc); float R = R_GIANT; float tl = -.38 + (uRnd.y - .5) * .4; vec2 qr = rot(q, tl);
-    if (fc > 0.) {
+    if (fc > 0. && length(q) < R * 2.6) {
       float rr = length(vec2(qr.x, qr.y / .27)) / R; float ringA = smoothstep(1.3, 1.36, rr) * smoothstep(2.38, 2.28, rr);
       float fine = .5 + .5 * sin(rr * 120. + 6. * fbm3(vec2(rr * 8., 1.)));
       float dens = (.5 + .5 * sin(rr * 36. + 3. * fbm3(vec2(rr * 6., 1.)))) * (.35 + .65 * fbm3(vec2(rr * 30., 4.))) * (.7 + .3 * fine);
@@ -288,13 +288,13 @@ vec3 skyFull(vec3 d){
   // --- nuages : cumulus et cirrus, liseré lumineux
   {
     vec2 cp2 = d.xz / (max(d.y, 0.) + .22) * .9 + vec2(uT * .006, 0.);
-    float c = fbm(cp2); float dens = smoothstep(.5, .8, c) * smoothstep(.0, .09, d.y);
+    float c = fbm3(cp2 * 1.15) * 1.06; float dens = smoothstep(.5, .8, c) * smoothstep(.0, .09, d.y);
     float cirr = fbm3(vec2(cp2.x * .6 + 3., cp2.y * 2.4 + uT * .004)); float ci = smoothstep(.55, .85, cirr) * smoothstep(.02, .3, d.y) * .35;
-    vec2 Ld = normalize(uSun.xz + vec2(.001)) * .05; float sh = clamp((c - fbm(cp2 + Ld)) * 7. + .5, 0., 1.);
+    vec2 Ld = normalize(uSun.xz + vec2(.001)) * .05; float sh = clamp((c - fbm3((cp2 + Ld) * 1.15) * 1.06) * 7. + .5, 0., 1.);
     vec3 lightC = mix(vec3(.025, .035, .07), vec3(.95, .97, 1.), day); lightC = mix(lightC, vec3(1., .55, .4), twi * .8);
     vec3 cc = mix(lightC * .3, lightC, sh) * (1. - .35 * dens);
     cc += lightC * pow(max(dot(d, uSun), 0.), 14.) * (1. - dens) * .4 * step(0., sE + .1);
-    cc += vec3(.04, .05, .09) * night * (.5 + .5 * fbm(cp2 * 2.));
+    cc += vec3(.04, .05, .09) * night * (.5 + .5 * fbm3(cp2 * 2.));
     col = mix(col, cc, dens * .85);
     col = mix(col, lightC * .9 + vec3(.02), ci);
   }
@@ -302,6 +302,7 @@ vec3 skyFull(vec3 d){
 }
 
 vec3 land(vec3 col, float az, float el){
+  if (el > .12) return col;
   vec2 pz = vec2(cos(az), sin(az));
   float shore = -.012 + .006 * fbm3(pz * 12. + 2.);
   vec3 amb = mix(vec3(.004, .007, .014), vec3(.07, .1, .08), day) + vec3(.1, .05, .04) * twi;
@@ -310,8 +311,8 @@ vec3 land(vec3 col, float az, float el){
   float sunAz = atan(uSun.x, uSun.z);
   for (int i = 0; i < 5; i++) {
     float fi = float(i), far = 1. - fi / 4.;
-    float n = fbm(pz * (1.5 + fi * .8) + vec2(fi * 7.3, fi * 3.7));
-    float rg = 1. - abs(2. * fbm3(pz * (2.4 + fi) + fi * 3.1) - 1.);
+    float n = fbm3(pz * (1.5 + fi * .8) + vec2(fi * 7.3, fi * 3.7));
+    float rg = i < 2 ? 1. - abs(2. * vn(pz * (2.4 + fi) * 2. + fi * 3.1) - 1.) : n;
     float h = .05 - fi * .0105 + (.058 - fi * .008) * (mix(n, rg * .85, far * far * .55) - .42);
     if (i == 3) { float tooth = pow(1. - abs(fract(az * 5.7296 * 6. + fbm3(pz * 9. + 1.) * 3.) - .5) * 2., 2.5); h = .014 + .02 * fbm3(pz * 5. + 8.) + tooth * .016 * smoothstep(.2, .5, fbm3(pz * 6. + 5.)); }
     if (i == 4) { float x = az * 5.7296 * 14.; float cell = floor(x); float bl = pow(1. - abs(fract(x) - .5) * 2., 1.6) * step(.45, h21(vec2(cell, 3.))) * (.4 + .6 * h21(vec2(cell, 9.)));
@@ -342,7 +343,7 @@ void main(){
   float shore = -.012 + .006 * fbm3(vec2(cos(az), sin(az)) * 12. + 2.);
   vec3 col;
   if (el > shore) {
-    col = land(skyFull(d), az, el);
+    col = land(skyFull(d, 0.), az, el);
   } else {
     // --- lac : le ciel entier s'y reflète (astres, aurores, collines), brouillé par les rides
     vec2 pz = vec2(cos(az), sin(az));
@@ -350,7 +351,7 @@ void main(){
     float depth = clamp(-d.y * 12., 0., 1.);
     vec3 rd = normalize(vec3(d.x + wv.x * (.012 + .02 * depth), -d.y * .8 + .004 + abs(wv.y) * .03 * (.3 + depth), d.z + wv.y * (.012 + .02 * depth)));
     float raz = atan(rd.x, rd.z), rel = asin(clamp(rd.y, -1., 1.));
-    vec3 rf = land(skyFull(rd), raz, rel);
+    vec3 rf = land(skyFull(rd, 1.), raz, rel);
     float F = .36 + .55 * pow(1. - depth, 2.);
     vec3 deep = mix(vec3(.003, .008, .014), vec3(.03, .08, .1), day);
     col = mix(deep, rf, F) * (.85 + .3 * wv.x);
@@ -428,23 +429,34 @@ void main(){
   cv.addEventListener('dblclick', function () { view.ty = 0; view.tp = .3; view.tz = 1; });
 
   /* ---------- boucle ---------- */
-  function resize() { W = window.innerWidth; H = window.innerHeight; dpr = Math.min(window.devicePixelRatio || 1, W < 900 ? .9 : 1.15); cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); cv.style.width = W + 'px'; cv.style.height = H + 'px'; }
+  var qq = /[?&]q=([\d.]+)/.exec(location.search), qual = qq ? +qq[1] : (window.innerWidth < 900 ? .5 : .7), qualMax = qq ? qual : 1, ema = 33, slow = 0, fast = 0;
+  function resize() { W = window.innerWidth; H = window.innerHeight; dpr = qual; cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); cv.style.width = W + 'px'; cv.style.height = H + 'px'; }
   window.addEventListener('resize', resize); resize();
-  var last = performance.now(), paused = document.hidden, clockEl = document.getElementById('ca-clock'), clockT = 0;
+  var lastDraw = 0, drawNow = true, last = performance.now(), paused = document.hidden, clockEl = document.getElementById('ca-clock'), clockT = 0;
   document.addEventListener('visibilitychange', function () { paused = document.hidden; last = performance.now(); if (!paused) requestAnimationFrame(frame); });
   function frame(now) {
     if (paused) return;
-    var dt = Math.min(.05, (now - last) / 1000); last = now; clock += dt;
+    var raw = now - last, dt = Math.min(.05, raw / 1000); last = now; clock += dt;
     var reading = document.documentElement.classList.contains('reading');
     shift += ((reading ? .26 : 0) - shift) * Math.min(1, dt * 4);
     view.yaw += (view.ty - view.yaw) * Math.min(1, dt * 8); view.pitch += (view.tp - view.pitch) * Math.min(1, dt * 8); view.zoom += (view.tz - view.zoom) * Math.min(1, dt * 6);
     if (cfg.mode === 'cycle') simHour += dt * (24 / 150); else simHour = hourOf();
     var hr = hourOf(), sun = sunVec(hr); drift = clock * .0006;
     var w = gl;
+    var gap = reading ? 90 : 33;   // ciel lent : 30 images/s au plus, 11 pendant la lecture
+    if (!lastDraw || now - lastDraw >= gap - 2) {
+      // résolution adaptative : si les images arrivent trop lentement, on baisse la définition ; si l'objectif est tenu, on la remonte
+      var iv = now - lastDraw; lastDraw = now; drawNow = true;
+      if (!reading && iv < 400) { ema += (iv - ema) * .1; if (ema > 46) { slow += iv; fast = 0; } else if (ema < 37) { fast += iv; slow = 0; } else { slow = fast = 0; }
+        if (slow > 1500 && qual > .35) { qual = Math.max(.35, qual * .8); slow = 0; resize(); }
+        else if (fast > 3000 && qual < qualMax) { qual = Math.min(qualMax, qual * 1.1); fast = 0; resize(); } }
+    } else drawNow = false;
+    if (drawNow) {
     w.viewport(0, 0, cv.width, cv.height);
     w.uniform2f(U.uRes, cv.width, cv.height); w.uniform1f(U.uT, clock); w.uniform1f(U.uYaw, view.yaw); w.uniform1f(U.uPitch, view.pitch); w.uniform1f(U.uZoom, view.zoom * base()); w.uniform1f(U.uShift, shift); w.uniform1f(U.uAur, cfg.aur);
     w.uniform3f(U.uSun, sun[0], sun[1], sun[2]); w.uniform1f(U.uAurAz, AUR_OFF); w.uniform4f(U.uRnd, RND[0], RND[1], RND[2], RND[3]);
     w.drawArrays(w.TRIANGLE_STRIP, 0, 4);
+    }
     placeMarks();
     clockT += dt; if (clockT > .5 && clockEl) { clockT = 0; clockEl.textContent = (cfg.mode === 'live' ? 'Heure locale ' : cfg.mode === 'cycle' ? 'Journée accélérée ' : 'Heure choisie ') + hlabel(hr) + ' · ' + phase(sun[1]); }
     requestAnimationFrame(frame);
