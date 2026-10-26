@@ -34,3 +34,7 @@ Vue depuis la terre ferme : un seul shader WebGL (ciel jour/crépuscule/nuit sel
 - Démarrage en douceur : définition réduite pendant 2,5 s. Thèmes `heavy` : jamais lancés automatiquement tant qu'ils n'ont pas tenu 8 s sur l'appareil.
 - Garde-fou de plantage (`codex.boot`), mode sans scène (`?scene=off` / `?scene=on`), réglage manuel dans le menu des thèmes (« Qualité des animations »), `?perf=high|medium|low|off|auto`.
 - Ciel d'ailleurs : `enabled:false` dans themes.json (accessible avec `?preview`) le temps d'isoler le plantage de la carte graphique.
+
+## Idées mises de côté
+- **Multilingue** : regrouper les textes d'interface dans `i18n/<langue>.json`, un dossier de contenus par langue (`content/<langue>/…`, catalogue et recherche par langue), sélecteur de langue ; traduction préparée par Claude, relue par l'auteur. À faire après Labo/Observatoire.
+- **Ciel d'ailleurs** : rendu fixe, relief/forêt/eau plus réalistes, réactivation via `themes/themes.json` après validation.
