@@ -443,13 +443,13 @@ void main(){
 
   /* ---------- boucle ---------- */
   var qq = /[?&]q=([\d.]+)/.exec(location.search), qual = qq ? +qq[1] : (window.innerWidth < 900 ? .5 : .7), qualMax = qq ? qual : 1, ema = 33, slow = 0, fast = 0;
-  function resize() { W = window.innerWidth; H = window.innerHeight; dpr = qual; cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); cv.style.width = W + 'px'; cv.style.height = H + 'px'; }
-  window.addEventListener('resize', resize); resize();
+  function resize() { W = window.innerWidth; H = window.innerHeight; dpr = qual * (window.Codex && Codex.perf ? Codex.perf.scale : 1); cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); cv.style.width = W + 'px'; cv.style.height = H + 'px'; }
+  window.addEventListener('resize', resize); Codex.on('perf', resize); resize();
   var lastDraw = 0, drawNow = true, last = performance.now(), paused = document.hidden, clockEl = document.getElementById('ca-clock'), clockT = 0;
-  document.addEventListener('visibilitychange', function () { paused = document.hidden; last = performance.now(); if (!paused) requestAnimationFrame(frame); });
+  document.addEventListener('visibilitychange', function () { paused = document.hidden; last = performance.now(); if (!paused) (window.CodexRaf||requestAnimationFrame)(frame); });
   function frame(now) {
     if (paused || lost) return;
-    if (!linked) { if (!failed) { checkReady(); last = now; requestAnimationFrame(frame); } return; }
+    if (!linked) { if (!failed) { checkReady(); last = now; (window.CodexRaf||requestAnimationFrame)(frame); } return; }
     var raw = now - last, dt = Math.min(.05, raw / 1000); last = now; clock += dt;
     var reading = document.documentElement.classList.contains('reading');
     shift += ((reading ? .26 : 0) - shift) * Math.min(1, dt * 4);
@@ -473,8 +473,8 @@ void main(){
     }
     placeMarks();
     clockT += dt; if (clockT > .5 && clockEl) { clockT = 0; clockEl.textContent = (cfg.mode === 'live' ? 'Heure locale ' : cfg.mode === 'cycle' ? 'Journée accélérée ' : 'Heure choisie ') + hlabel(hr) + ' · ' + phase(sun[1]); }
-    requestAnimationFrame(frame);
+    (window.CodexRaf||requestAnimationFrame)(frame);
   }
   window.CodexScene = { ok: true };
-  requestAnimationFrame(frame);
+  (window.CodexRaf||requestAnimationFrame)(frame);
 })();

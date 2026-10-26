@@ -95,7 +95,7 @@ window.CodexScene = { ok: true };
   }
   function sizeCanvases() {
     W = window.innerWidth; H = window.innerHeight;
-    DPR = Math.min(window.devicePixelRatio || 1, 1.5);
+    DPR = CodexPx(1.5);
     [bgEl, fxEl, gridEl].forEach(function (c) { c.width = Math.round(W * DPR); c.height = Math.round(H * DPR); });
   }
 
@@ -626,7 +626,7 @@ window.CodexScene = { ok: true };
       for (var i = 0; i < shooters.length; i++) shooters[i].age += dt;
       drawFx();
     }
-    requestAnimationFrame(frame);
+    (window.CodexRaf||requestAnimationFrame)(frame);
   }
 
   /* ---------- Construction complète ---------- */
@@ -646,6 +646,7 @@ window.CodexScene = { ok: true };
   }
   function scheduleBake(delay) { clearTimeout(bakeTimer); bakeTimer = setTimeout(bakeAll, delay); }
   window.addEventListener('resize', function () { scheduleBake(220); });
+  Codex.on('perf', function () { scheduleBake(80); });
 
   /* ---------- Laboratoire de la galaxie ---------- */
   var pop = $('pop'), lab = $('lab');
@@ -713,7 +714,7 @@ window.CodexScene = { ok: true };
   /* ---------- Démarrage ---------- */
   sizeCanvases(); layout();
   setTimeout(bakeAll, 30);
-  requestAnimationFrame(frame);
+  (window.CodexRaf||requestAnimationFrame)(frame);
 /* Carte « région du ciel » : chaque clic rapproche le fond d'une région dense, puis revient au ciel complet */
 (function () {
   var card = document.getElementById('nebula'), bg = document.getElementById('bg'); if (!card || !bg) return;

@@ -27,3 +27,10 @@
 
 ## Thème « Ciel d'ailleurs » (octobre 2026)
 Vue depuis la terre ferme : un seul shader WebGL (ciel jour/crépuscule/nuit selon l'heure réelle, étoiles et Voie lactée, aurores, planète à anneaux, lune, planète bleue, nuages, crêtes). Réglages : heure réelle / journée accélérée / heure choisie, intensité des aurores. `?hour=` force l'heure (tests). Menus : planète à anneaux = Codex, lune = Atelier, planète bleue = Laboratoire, étoile = Observatoire, aurore = Portrait. Mémorisation : `codex.ailleurs`.
+
+## Performance adaptative (core/perf.js)
+- À l'arrivée : estimation (cœurs, mémoire, mobile, carte graphique, rendu logiciel) → niveau haute / moyenne / économe / sans animation.
+- Pendant la visite : un ordonnanceur commun (`CodexRaf`) plafonne la cadence et surveille la fluidité ; si l'appareil peine, la définition baisse (`CodexPx`, événement `perf`), puis la scène s'arrête. Le niveau appris est retenu une semaine (`codex.perf`).
+- Démarrage en douceur : définition réduite pendant 2,5 s. Thèmes `heavy` : jamais lancés automatiquement tant qu'ils n'ont pas tenu 8 s sur l'appareil.
+- Garde-fou de plantage (`codex.boot`), mode sans scène (`?scene=off` / `?scene=on`), réglage manuel dans le menu des thèmes (« Qualité des animations »), `?perf=high|medium|low|off|auto`.
+- Ciel d'ailleurs : `enabled:false` dans themes.json (accessible avec `?preview`) le temps d'isoler le plantage de la carte graphique.

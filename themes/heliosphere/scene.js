@@ -1077,7 +1077,7 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
     var r = stage.getBoundingClientRect();
     W = Math.max(280, Math.round(r.width)); H = Math.max(300, Math.round(r.height));
     mobile = W < 640;
-    PR = quality === 'high' ? Math.min(window.devicePixelRatio || 1, 2) : 1;
+    PR = CodexPx(quality === 'high' ? 2 : 1);
     renderer.setPixelRatio(PR);
     renderer.setSize(W, H, false);
     if (customRT) composer.setSize(W * PR, H * PR); else { composer.setPixelRatio(PR); composer.setSize(W, H); }
@@ -1106,7 +1106,7 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
   }
 
   function frame(now) {
-    requestAnimationFrame(frame);
+    (window.CodexRaf||requestAnimationFrame)(frame);
     var dt = Math.min(.05, (now - last) / 1000); last = now;
     var sdt = paused ? 0 : dt * speed;
     simT += sdt;
@@ -1269,7 +1269,8 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
   select(null);
   flight = null; controls.enabled = true; controls.minDistance = 10;
   camera.position.copy(homeCamPos()); controls.target.copy(ZERO);
-  requestAnimationFrame(function (t) { last = t; frame(t); });
+  Codex.on('perf', function () { resize(); });
+  (window.CodexRaf||requestAnimationFrame)(function (t) { last = t; frame(t); });
 })();
 (function(){
 const toggle=document.getElementById('solar-settings-toggle');

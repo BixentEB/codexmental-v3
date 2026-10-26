@@ -292,10 +292,10 @@ void main(){
   cv.addEventListener('dblclick', function () { view.tz = 1; view.yaw = 0; view.pitch = .3; });
 
   /* ---------- boucle ---------- */
-  function resize() { W = window.innerWidth; H = window.innerHeight; dpr = Math.min(2, window.devicePixelRatio || 1); dpr = Math.min(gl ? 1.5 : 2, window.devicePixelRatio || 1); cv.width = W * dpr; cv.height = H * dpr; }
-  window.addEventListener('resize', resize); resize();
+  function resize() { W = window.innerWidth; H = window.innerHeight; dpr = Math.min(2, window.devicePixelRatio || 1); dpr = CodexPx(gl ? 1.5 : 2); cv.width = W * dpr; cv.height = H * dpr; }
+  window.addEventListener('resize', resize); Codex.on('perf', resize); resize();
   var since = 0, last = performance.now(), paused = document.hidden;
-  document.addEventListener('visibilitychange', function () { paused = document.hidden; last = performance.now(); if (!paused) requestAnimationFrame(frame); });
+  document.addEventListener('visibilitychange', function () { paused = document.hidden; last = performance.now(); if (!paused) (window.CodexRaf||requestAnimationFrame)(frame); });
   function frame(now) {
     if (paused) return;
     var dt = Math.min(.05, (now - last) / 1000); last = now; clock += dt;
@@ -305,9 +305,9 @@ void main(){
     stepAnim(dt); since += dt; if (to.flash) cur.flash = to.flash * Math.max(.07, 1 - since / 4.5);
     if (userHold > 0) userHold -= dt;
     else if (cfg.auto && !reading && !reduce) { timer += dt * cfg.speed; if (timer > 9) { goStage((stage + 1) % 6); } }
-    draw(); requestAnimationFrame(frame);
+    draw(); (window.CodexRaf||requestAnimationFrame)(frame);
   }
   buildTime(); goStage(0); setTarget(PATHS[cfg.path].stages[0].p, true);
   window.CodexScene = { ok: true };
-  requestAnimationFrame(frame);
+  (window.CodexRaf||requestAnimationFrame)(frame);
 })();

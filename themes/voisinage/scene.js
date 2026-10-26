@@ -10,7 +10,7 @@ window.CodexScene = { ok: false };
   if (!T || !cv) return;
   var renderer;
   try { renderer = new T.WebGLRenderer({ canvas: cv, antialias: true, powerPreference: 'high-performance' }); } catch (e) { return; }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.7));
+  renderer.setPixelRatio(CodexPx(1.7));
   var DPR = renderer.getPixelRatio();
   var scene = new T.Scene(), camera = new T.PerspectiveCamera(55, 1, .1, 3000);
   var DEG = Math.PI / 180;
@@ -241,9 +241,9 @@ window.CodexScene = { ok: false };
 
   /* ---------- boucle ---------- */
   function resize() { W = window.innerWidth; H = window.innerHeight; renderer.setSize(W, H, false); camera.aspect = W / H; camera.updateProjectionMatrix(); }
-  window.addEventListener('resize', resize); resize();
+  window.addEventListener('resize', resize); Codex.on('perf', function () { renderer.setPixelRatio(CodexPx(1.7)); resize(); }); resize();
   var v3 = new T.Vector3(), last = performance.now(), paused = document.hidden, clock = 0;
-  document.addEventListener('visibilitychange', function () { paused = document.hidden; last = performance.now(); if (!paused) requestAnimationFrame(frame); });
+  document.addEventListener('visibilitychange', function () { paused = document.hidden; last = performance.now(); if (!paused) (window.CodexRaf||requestAnimationFrame)(frame); });
   function project(p, out) { v3.copy(p).project(camera); out.x = (v3.x * .5 + .5) * W; out.y = (-v3.y * .5 + .5) * H; out.z = v3.z; return out; }
   var o = { x: 0, y: 0, z: 0 };
   function frame(now) {
@@ -271,8 +271,8 @@ window.CodexScene = { ok: false };
       });
     })();
     ringLabels.forEach(function (l) { project(l.p, o); var vis = o.z < 1 && cfg.rings; l.el.style.visibility = vis ? '' : 'hidden'; if (vis) l.el.style.transform = 'translate3d(' + o.x.toFixed(1) + 'px,' + o.y.toFixed(1) + 'px,0)'; });
-    requestAnimationFrame(frame);
+    (window.CodexRaf||requestAnimationFrame)(frame);
   }
   window.CodexScene = { ok: true };
-  requestAnimationFrame(frame);
+  (window.CodexRaf||requestAnimationFrame)(frame);
 })();

@@ -613,7 +613,7 @@ window.__G = { PT_VERT: PT_VERT, STAR_FRAG: STAR_FRAG, NEB_FRAG: NEB_FRAG, DUST_
     var r = stage.getBoundingClientRect();
     W = Math.max(280, Math.round(r.width)); H = Math.max(300, Math.round(r.height));
     mobile = W < 640;
-    PR = state.quality === 'std' ? 1 : Math.min(window.devicePixelRatio || 1, 2);
+    PR = CodexPx(state.quality === 'std' ? 1 : 2);
     renderer.setPixelRatio(PR); renderer.setSize(W, H, false);
     if (customRT) composer.setSize(W * PR, H * PR); else { composer.setPixelRatio(PR); composer.setSize(W, H); }
     finalUniforms.uRes.value.set(W * PR, H * PR);
@@ -629,7 +629,7 @@ window.__G = { PT_VERT: PT_VERT, STAR_FRAG: STAR_FRAG, NEB_FRAG: NEB_FRAG, DUST_
   /* ---------- Boucle ---------- */
   var v3 = new T.Vector3(), camSpace = new T.Vector3(), firstFrame = true;
   function frame(now) {
-    requestAnimationFrame(frame);
+    (window.CodexRaf||requestAnimationFrame)(frame);
     var dt = Math.min(.05, (now - last) / 1000); last = now;
     var sdt = paused ? 0 : dt * state.speed;
     simT += sdt;
@@ -688,5 +688,6 @@ window.__G = { PT_VERT: PT_VERT, STAR_FRAG: STAR_FRAG, NEB_FRAG: NEB_FRAG, DUST_
   /* ouverture : on arrive de loin */
   camera.position.copy(homeCamPos()).multiplyScalar(2.3); controls.target.copy(ZERO);
   startFlight(null, 3.6, camera.position.clone());
-  requestAnimationFrame(function (t) { last = t; frame(t); });
+  Codex.on('perf', function () { resize(); });
+  (window.CodexRaf||requestAnimationFrame)(function (t) { last = t; frame(t); });
 })();

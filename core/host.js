@@ -81,10 +81,13 @@
       if (crashed !== registry.default) { want = registry.default; Codex.recovered = crashed; }
       else { sceneOff = true; try { localStorage.setItem('codex.scene', 'off'); } catch (e) {} Codex.recovered = crashed; }
     }
+    // performance adaptative (core/perf.js) : appareil jugé trop juste = pas de scène ; niveau économe = pas de thème gourmand au démarrage automatique
+    var PF = Codex.perf;
+    if (PF && PF.off && sp !== 'on') { sceneOff = true; Codex.perfOff = true; }
     // thème gourmand (heavy) : il ne démarre tout seul depuis la mémoire du navigateur qu'après avoir déjà tenu 8 s sur cet appareil ; demandé explicitement (menu, ?theme=), il démarre toujours
     var okList = []; try { okList = JSON.parse(localStorage.getItem('codex.ok') || '[]'); } catch (e) {}
     var wantT = Codex.themes.filter(function (t) { return t.id === want; })[0];
-    if (wantT && wantT.heavy && !params.get('theme') && okList.indexOf(want) < 0 && want !== registry.default) { Codex.deferred = wantT.label; want = registry.default; }
+    if (wantT && wantT.heavy && !params.get('theme') && (okList.indexOf(want) < 0 || (PF && PF.tier === 'low')) && want !== registry.default) { Codex.deferred = wantT.label; want = registry.default; }
     var entry = Codex.themes.filter(function (t) { return t.id === want; })[0] ||
                 Codex.themes.filter(function (t) { return t.id === registry.default; })[0] || Codex.themes[0];
     var T = Codex.theme = Object.assign({ id: entry.id, label: entry.label }, await json('themes/' + entry.id + '/theme.json'));
@@ -120,7 +123,8 @@
       if (ld) { ld.textContent = "La scène n'a pas pu se charger."; ld.classList.remove('done'); }
     }
     document.documentElement.classList.add('ready');
-    if (Codex.safe) message("Mode sans scène : les animations sont coupées, la lecture fonctionne normalement." + (Codex.recovered ? ' (Le navigateur avait planté sur « ' + Codex.recovered + ' ».)' : '') + ' Pour les rétablir, ajoutez ?scene=on à l’adresse.');
+    if (Codex.perfOff && !Codex.recovered) message('Votre appareil a été jugé trop juste pour les animations : elles sont suspendues, la lecture fonctionne normalement. Vous pouvez les essayer depuis le menu des thèmes, rubrique « Qualité des animations ».');
+    else if (Codex.safe) message("Mode sans scène : les animations sont coupées, la lecture fonctionne normalement." + (Codex.recovered ? ' (Le navigateur avait planté sur « ' + Codex.recovered + ' ».)' : '') + ' Pour les rétablir, ajoutez ?scene=on à l’adresse.');
     else if (Codex.deferred) { message('Le thème « ' + Codex.deferred + ' » est gourmand : il ne démarre que lorsque vous le choisissez dans le menu des thèmes.'); setTimeout(function () { message(''); }, 9000); }
     else if (Codex.recovered) message("Le thème « " + Codex.recovered + " » a fait planter la visite précédente : retour au thème par défaut. Vous pouvez le réessayer depuis le menu des thèmes.");
     if (Codex.recovered) setTimeout(function () { message(''); }, 14000);
