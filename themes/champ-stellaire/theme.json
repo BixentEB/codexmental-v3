@@ -10,6 +10,7 @@
     "body": "system-ui, -apple-system, 'Segoe UI', sans-serif"
   },
   "customize": {"title": "Laboratoire stellaire", "sub": "Dérive, éclat et parallaxe"},
+  "who": {"append": ".hero-inner"},
   "reader": { "layout": "wide" },
   "markup": "scene.html",
   "css": ["scene.css"],

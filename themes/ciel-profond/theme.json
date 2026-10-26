@@ -10,6 +10,7 @@
     "body": "'Sora', system-ui, -apple-system, 'Segoe UI', sans-serif",
     "mono": "'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace"
   },
+  "who": {"append": ".hero-inner"},
   "reader": { "layout": "side" },
   "markup": "scene.html",
   "css": ["scene.css"],

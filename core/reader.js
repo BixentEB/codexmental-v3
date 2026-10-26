@@ -132,7 +132,8 @@
     var box = document.createElement('div'); box.innerHTML = html;
     var toc = [], used = {};
     box.querySelectorAll('h2').forEach(function (h) {
-      var t = h.textContent.trim(); if (t.length < 3) return;
+      if (h.closest('summary')) return;   // les titres des notes repliables n'entrent pas au sommaire
+      var t = h.textContent.trim().replace(/\s*[›»]\s*$/, ''); if (t.length < 3) return;
       var id = 'h-' + (slug(t) || 'x'); while (used[id]) id += '-b'; used[id] = 1; h.id = id; toc.push({ id: id, t: t });
     });
     return { html: box.innerHTML, toc: toc };

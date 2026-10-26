@@ -10,6 +10,7 @@
     "body": "'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif"
   },
   "customize": {"title": "Observatoire solaire", "sub": "Vitesse, orbites et qualité", "legacy": "#solar-observatory-settings"},
+  "who": {"after": ".hl-lead"},
   "reader": { "layout": "wide" },
   "markup": "scene.html",
   "css": ["scene.css"],

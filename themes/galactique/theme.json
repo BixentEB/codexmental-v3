@@ -10,6 +10,7 @@
     "body": "'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif"
   },
   "customize": {"title": "Laboratoire de la galaxie", "sub": "Réglages et personnalisation", "legacy": "#panelToggle"},
+  "who": {"append": ".hero"},
   "reader": { "layout": "wide" },
   "markup": "scene.html",
   "css": ["scene.css"],

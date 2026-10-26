@@ -59,6 +59,17 @@
     document.title = 'Codex Mental · ' + T.label;
   }
 
+  /* petite présentation sous le titre du thème (texte unique : content/who.json ; emplacement : « who » dans theme.json) */
+  function addWho(T) {
+    if (!T.who) return;
+    json('content/who.json').then(function (w) {
+      var ref = document.querySelector(T.who.after || T.who.append); if (!ref || document.querySelector('.cx-who')) return;
+      var d = document.createElement('div'); d.className = 'cx-who';
+      var s = document.createElement('strong'); s.textContent = w.lead; var p = document.createElement('p'); p.textContent = w.text; d.append(s, p);
+      if (T.who.after) ref.insertAdjacentElement('afterend', d); else ref.appendChild(d);
+    }).catch(function () {});
+  }
+
   function message(txt) {
     var el = document.getElementById('scene-status'); if (!el) return;
     el.textContent = txt; el.hidden = !txt;
@@ -114,6 +125,7 @@
       for (var i = 0; i < (T.scripts || []).length; i++) { try { await addScript(T.scripts[i]); } catch (e) { console.warn(e.message); } }
       if (T.scene) await addScript(base + T.scene);
       Codex.sceneOk = !!(window.CodexScene && window.CodexScene.ok !== false);
+      addWho(T);
       if (Codex.customize) Codex.customize.mount(T);
       if (!Codex.sceneOk) message("La scène n'a pas pu démarrer (WebGL indisponible ?). La lecture des articles reste disponible.");
     } catch (err) {

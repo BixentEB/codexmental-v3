@@ -10,6 +10,7 @@
     "body": "'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif"
   },
   "customize": { "title": "Cartographie stellaire", "sub": "Rotation, repères et noms" },
+  "who": {"after": ".vs-lead"},
   "reader": { "layout": "side" },
   "markup": "scene.html",
   "css": ["scene.css"],

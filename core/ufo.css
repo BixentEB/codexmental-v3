@@ -39,3 +39,15 @@
 @media (min-width: 900px) { .pane.contact .cform { padding: 18px 22px; } .pane.contact .cform textarea { min-height: 96px; } }
 @media (max-height: 840px) { .pane.contact .a-lead { font-size: 1rem; margin-bottom: 4px; } .pane.contact .cform { gap: 8px; padding: 14px 20px; } .pane.contact .cform textarea { min-height: 66px; } .pane.contact .legal-link { margin-top: 18px; } }
 .pane.contact .cform p { margin: 0; } .pane.contact .cform .st { min-height: 1.1em; }
+
+/* la petite Lune de la page Contact */
+.pane.contact .cm { position: absolute; z-index: 1; top: clamp(18px, 3vw, 34px); right: clamp(16px, 4vw, 64px); width: clamp(40px, 4.4vw, 60px); aspect-ratio: 1; pointer-events: none; will-change: transform; filter: drop-shadow(0 0 12px rgba(215, 225, 255, .2)); }
+.cm-body { position: absolute; inset: 0; border-radius: 50%; overflow: hidden; transform-origin: 50% 50%; }
+.cm-body canvas { width: 100%; height: 100%; display: block; }
+.cm-metal { position: absolute; inset: 0; opacity: 0; background: linear-gradient(180deg, rgba(255, 255, 255, .55) 0, rgba(190, 205, 230, .35) 38%, rgba(40, 52, 80, .55) 70%, rgba(20, 28, 50, .65) 100%); mix-blend-mode: overlay; }
+.cm-dome { position: absolute; left: 33%; width: 34%; top: 20%; height: 24%; opacity: 0; border-radius: 50% 50% 8% 8% / 100% 100% 8% 8%; background: radial-gradient(90% 100% at 40% 30%, rgba(210, 245, 255, .95), color-mix(in srgb, var(--accent) 45%, #7fb8d8) 55%, rgba(30, 60, 90, .8)); box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 50%, transparent); transform-origin: 50% 100%; }
+.cm-lts { position: absolute; inset: 0; opacity: 0; }
+.cm-lts i { position: absolute; width: 3px; height: 3px; margin: -1.5px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 5px 1px color-mix(in srgb, var(--accent) 80%, white); top: 53%; }
+.cm-lts i:nth-child(1) { left: 22%; top: 51%; } .cm-lts i:nth-child(2) { left: 36%; top: 58%; } .cm-lts i:nth-child(3) { left: 50%; top: 61%; } .cm-lts i:nth-child(4) { left: 64%; top: 58%; } .cm-lts i:nth-child(5) { left: 78%; top: 51%; }
+.cm.lit .cm-lts i { animation: ufoBlink .6s steps(2, jump-none) infinite; } .cm.lit .cm-lts i:nth-child(2n) { animation-delay: .2s; } .cm.lit .cm-lts i:nth-child(3n) { animation-delay: .4s; }
+@media (max-width: 700px) { .pane.contact .cm { width: 38px; top: 14px; right: 14px; } }

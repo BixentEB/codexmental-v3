@@ -10,6 +10,7 @@
     "body": "'Sora', system-ui, -apple-system, 'Segoe UI', sans-serif"
   },
   "customize": { "title": "Ciel d'ailleurs", "sub": "Heure, aurores et vue" },
+  "who": {"after": ".ca-sub"},
   "reader": { "layout": "side" },
   "markup": "scene.html",
   "css": ["scene.css"],

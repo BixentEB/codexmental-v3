@@ -347,3 +347,5 @@ body.nm-objects.nm-objn #scene .pl.pl-menu .lbl em.objn { display: block; }
   #scene .wrap>h1 { top: 84px !important; bottom: auto !important; }
   #scene .hl-lead { top: 196px; bottom: auto; }
 }
+#scene .cx-who { position: fixed; z-index: 7; left: clamp(18px, 4vw, 68px); top: 300px; width: min(31rem, 40vw); margin: 0; }
+@media (max-width: 900px), (max-height: 700px) { #scene .cx-who { display: none; } }

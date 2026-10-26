@@ -165,16 +165,3 @@ html[data-theme="ciel-profond"] body { font-size: 15px; -webkit-font-smoothing: 
 }
 @media (max-width: 760px) { .hero { top: 14%; } }
 
-/* petite lune, en haut à droite */
-.cp-moon { position: fixed; z-index: 2; right: clamp(24px, 4.2vw, 84px); top: clamp(104px, 15vh, 170px); width: clamp(40px, 3.4vw, 64px); aspect-ratio: 1; pointer-events: auto; transition: opacity .6s .15s, visibility 0s; filter: drop-shadow(0 0 14px rgba(215, 225, 255, .22)); }
-.cp-moon canvas { width: 100%; height: 100%; display: block; border-radius: 50%; }
-.cp-moon .cp-lt { position: absolute; width: 3px; height: 3px; margin: -1.5px; border-radius: 50%; background: #ffe9a8; box-shadow: 0 0 5px 1px rgba(255, 226, 150, .9); opacity: 0; }
-.cp-moon .cp-lt.a { left: 20%; top: 50%; } .cp-moon .cp-lt.b { left: 35%; top: 62%; } .cp-moon .cp-lt.c { left: 50%; top: 67%; } .cp-moon .cp-lt.d { left: 65%; top: 62%; } .cp-moon .cp-lt.e { left: 80%; top: 50%; }
-.cp-moon.tell .cp-lt { animation: cp-blink 1.9s ease-in-out both; }
-.cp-moon.tell .cp-lt.b { animation-delay: .12s; } .cp-moon.tell .cp-lt.c { animation-delay: .24s; } .cp-moon.tell .cp-lt.d { animation-delay: .36s; } .cp-moon.tell .cp-lt.e { animation-delay: .48s; }
-.cp-moon.tell canvas { animation: cp-wob 1.9s ease-in-out both; }
-@keyframes cp-blink { 0%, 100% { opacity: 0; } 30%, 70% { opacity: 1; } }
-@keyframes cp-wob { 0%, 100% { transform: translate(0, 0); } 25% { transform: translate(1.5px, -1px); } 60% { transform: translate(-1px, .5px); } }
-.reading .cp-moon { opacity: 0 !important; visibility: hidden; pointer-events: none; }
-@media (max-width: 760px) { .cp-moon { display: none; } }
-@media (prefers-reduced-motion: reduce) { .cp-moon.tell canvas { animation: none; } }

@@ -24,3 +24,6 @@ html.reading #scene .ve-time { left: 10px; transform: none; max-width: calc(44vw
 #scene .ve-hint { position: fixed; z-index: 3; left: clamp(18px, 4vw, 64px); bottom: 96px; margin: 0; font-size: .7rem; letter-spacing: .06em; color: var(--muted); pointer-events: none; transition: opacity .4s; }
 html.reading #scene .ve-hint { opacity: 0; }
 @media (max-width: 900px) { #scene .ve-hint { display: none; } }
+#scene .ve-hero .cx-who { margin-top: 14px; }
+@media (min-height: 800px) and (min-width: 900px) { #scene .ve-card { top: calc(var(--topbar-h) + 385px); } }
+@media (max-height: 799px), (max-width: 899px) { #scene .cx-who { display: none; } }

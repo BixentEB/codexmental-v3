@@ -10,6 +10,7 @@
     "body": "'Sora', system-ui, -apple-system, 'Segoe UI', sans-serif"
   },
   "customize": { "title": "Destin de l'étoile", "sub": "Parcours, rythme et lecture auto" },
+  "who": {"after": ".ve-lead"},
   "reader": { "layout": "side" },
   "markup": "scene.html",
   "css": ["scene.css"],

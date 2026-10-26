@@ -23,7 +23,7 @@
     '</g></svg>';
 
   function mount(pane) {
-    stop();
+    stop(); moonMount(pane);
     var sky = pane && pane.querySelector('.ufo-sky'), icon = pane && pane.querySelector('.contact-ufo');
     if (!sky || !icon || reduce) return;
     sky.innerHTML = '<div class="ground"></div><div class="ufo">' + SAUCER + '<div class="beam"></div></div><div class="cow">' + COW + '</div>';
@@ -168,6 +168,63 @@
     schedule();
     cur = { stop: function () { dead = true; clearTimeout(timer); reset(); }, play: function (n) { return seq[n] && seq[n](); } };
   }
-  function stop() { if (cur) { cur.stop(); cur = null; } }
-  window.Codex.ufo = { mount: mount, stop: stop, play: function (n) { return cur ? cur.play(n) : null; } };
+
+  /* ---------- la petite Lune : de temps en temps, elle laisse voir ce qu'elle est vraiment ---------- */
+  var moonCur = null;
+  function drawMoon(cv) {
+    var g = cv.getContext('2d'), S = cv.width, R = S / 2 - 2, cx = S / 2, cy = S / 2;
+    function rnd(a) { var x = Math.sin(a * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+    g.clearRect(0, 0, S, S); g.save(); g.beginPath(); g.arc(cx, cy, R, 0, 7); g.clip();
+    var b = g.createRadialGradient(cx - R * .25, cy - R * .25, R * .1, cx, cy, R); b.addColorStop(0, '#ece9e2'); b.addColorStop(1, '#aaa7a0'); g.fillStyle = b; g.fillRect(0, 0, S, S);
+    [[-.28, -.2, .34, .26, .35], [.18, -.3, .22, .2, .28], [-.05, .22, .3, .22, .3], [.32, .12, .14, .14, .25], [-.4, .15, .16, .12, .22]].forEach(function (m) {
+      g.save(); g.filter = 'blur(' + Math.round(R * .07) + 'px)'; g.fillStyle = 'rgba(70,72,82,' + m[4] + ')'; g.beginPath(); g.ellipse(cx + m[0] * R, cy + m[1] * R, m[2] * R, m[3] * R, rnd(m[0] * 9) * 3, 0, 7); g.fill(); g.restore(); });
+    for (var i = 0; i < 46; i++) { var a = rnd(i) * 6.283, d = Math.sqrt(rnd(i + 70)) * R * .93, x = cx + Math.cos(a) * d, y = cy + Math.sin(a) * d, r = (.012 + rnd(i + 140) * rnd(i + 141) * .07) * R * 2;
+      var cg = g.createRadialGradient(x - r * .25, y - r * .25, r * .1, x, y, r); cg.addColorStop(0, 'rgba(60,60,66,.35)'); cg.addColorStop(.8, 'rgba(60,60,66,.12)'); cg.addColorStop(1, 'rgba(255,255,255,.22)'); g.fillStyle = cg; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); }
+    var ph = g.createLinearGradient(cx - R * .2, 0, cx + R * .9, 0); ph.addColorStop(0, 'rgba(6,8,18,0)'); ph.addColorStop(.5, 'rgba(6,8,18,.45)'); ph.addColorStop(1, 'rgba(6,8,18,.9)'); g.fillStyle = ph; g.fillRect(0, 0, S, S);
+    var lb = g.createRadialGradient(cx, cy, R * .55, cx, cy, R); lb.addColorStop(0, 'rgba(0,0,0,0)'); lb.addColorStop(1, 'rgba(0,0,0,.32)'); g.fillStyle = lb; g.fillRect(0, 0, S, S);
+    g.restore();
+  }
+  function moonMount(pane) {
+    moonStop(); if (!pane) return;
+    var m = document.createElement('div'); m.className = 'cm'; m.setAttribute('aria-hidden', 'true');
+    m.innerHTML = '<div class="cm-dome"></div><div class="cm-body"><canvas width="160" height="160"></canvas><i class="cm-metal"></i></div><div class="cm-lts"><i></i><i></i><i></i><i></i><i></i></div>';
+    pane.appendChild(m); drawMoon(m.querySelector('canvas'));
+    if (reduce) { moonCur = { stop: function () { m.remove(); } }; return; }
+    var body = m.querySelector('.cm-body'), dome = m.querySelector('.cm-dome'), lts = m.querySelector('.cm-lts'), metal = m.querySelector('.cm-metal');
+    var timer = null, dead = false, busy = false, anims = [];
+    function go(el, frames, opt) { var a = el.animate(frames, Object.assign({ fill: 'forwards', easing: 'ease-in-out' }, opt)); anims.push(a); return a.finished.catch(function () {}); }
+    function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+    function clear() { anims.forEach(function (a) { try { a.cancel(); } catch (e) {} }); anims = []; m.classList.remove('lit'); }
+    var FLAT = 'scale(1.5, .34)';
+    function reveal() {
+      if (busy || dead || document.hidden || !m.isConnected) return Promise.resolve();
+      busy = true;
+      return Promise.resolve()
+        // 1. la sphère s'aplatit en disque ; le métal affleure, le dôme monte, les hublots s'allument
+        .then(function () { return Promise.all([
+          go(body, [{ transform: 'scale(1,1)' }, { transform: 'scale(1.12,.9)', offset: .25 }, { transform: FLAT }], { duration: 1500 }),
+          go(metal, [{ opacity: 0 }, { opacity: .85 }], { duration: 1500, delay: 250 }),
+          go(dome, [{ opacity: 0, transform: 'translateY(6px) scale(.2)' }, { opacity: 1, transform: 'translateY(0) scale(1)' }], { duration: 800, delay: 900 }),
+          go(lts, [{ opacity: 0 }, { opacity: 1 }], { duration: 600, delay: 1300 })]); })
+        .then(function () { m.classList.add('lit'); return wait(450); })
+        // 2. quelques mouvements furtifs
+        .then(function () { return go(m, [{ transform: 'translate(0,0) rotate(0)' }, { transform: 'translate(-46px,6px) rotate(-7deg)', offset: .3 }, { transform: 'translate(-46px,6px) rotate(-7deg)', offset: .5 }, { transform: 'translate(22px,-5px) rotate(6deg)', offset: .78 }, { transform: 'translate(-6px,2px) rotate(-2deg)' }], { duration: 2300, easing: 'cubic-bezier(.6,0,.3,1)' }); })
+        .then(function () { return go(m, [{ transform: 'translate(-6px,2px) rotate(-2deg)' }, { transform: 'translate(-6px,-5px) rotate(2deg)' }, { transform: 'translate(0,0) rotate(0)' }], { duration: 900 }); })
+        .then(function () { return wait(500); })
+        // 3. et comme si de rien n'était : redevenue Lune
+        .then(function () { m.classList.remove('lit'); return Promise.all([
+          go(lts, [{ opacity: 1 }, { opacity: 0 }], { duration: 300 }),
+          go(dome, [{ opacity: 1, transform: 'translateY(0) scale(1)' }, { opacity: 0, transform: 'translateY(6px) scale(.2)' }], { duration: 500 }),
+          go(metal, [{ opacity: .85 }, { opacity: 0 }], { duration: 1200 }),
+          go(body, [{ transform: FLAT }, { transform: 'scale(1,1)' }], { duration: 1500, delay: 200 })]); })
+        .catch(function (e) { if (window.console) console.warn('Lune :', e && e.message || e); })
+        .then(function () { clear(); busy = false; });
+    }
+    function schedule(first) { clearTimeout(timer); timer = setTimeout(function () { if (dead) return; reveal().then(function () { schedule(); }); }, first ? 14000 + Math.random() * 16000 : 60000 + Math.random() * 90000); }
+    schedule(true);
+    moonCur = { stop: function () { dead = true; clearTimeout(timer); clear(); m.remove(); }, play: reveal };
+  }
+  function moonStop() { if (moonCur) { moonCur.stop(); moonCur = null; } }
+  function stop() { moonStop(); if (cur) { cur.stop(); cur = null; } }
+  window.Codex.ufo = { mount: mount, stop: stop, play: function (n) { return n === 'lune' ? (moonCur && moonCur.play ? moonCur.play() : null) : (cur ? cur.play(n) : null); } };
 })();
