@@ -38,6 +38,14 @@
     neb:    { az: -2.55, el: .46, r: .16 },
     comet:  { az: 2.55, el: .30, r: .05 }
   };
+  /* chaque visite tire un ciel un peu différent : positions, teintes, phase de la lune, aurores */
+  var qs = /[?&]seed=(\d+)/.exec(location.search), seed = qs ? +qs[1] : Math.floor(Math.random() * 4294967296);
+  function rnd() { seed = (seed + 0x6D2B79F5) | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }
+  function jit(b, da, de) { b.az += (rnd() - .5) * 2 * da; b.el = clamp(b.el + (rnd() - .5) * 2 * de, .14, .8); }
+  jit(BODY.giant, .10, .04); jit(BODY.moon, .12, .05); jit(BODY.blue, .12, .04); jit(BODY.star, .15, .06);
+  var AUR_OFF = (rnd() - .5) * .5; BODY.aurora.az += AUR_OFF;
+  jit(BODY.mars, .35, .06); jit(BODY.galaxy, .45, .08); jit(BODY.neb, .4, .06); jit(BODY.comet, .6, .08);
+  var RND = [rnd(), rnd(), rnd(), rnd()];
   var MENU = [
     ['codex', 'Codex', '#f0d9a8', 'giant', 'Articles et réflexions'],
     ['atelier', 'Atelier', '#e8ecf5', 'moon', 'Créations, théories, hypothèses'],
@@ -47,12 +55,12 @@
   ];
   function dirOf(b) { var c = Math.cos(b.el); return [Math.sin(b.az) * c, Math.sin(b.el), Math.cos(b.az) * c]; }
   function glslVec(n, b) { var d = dirOf(b); return 'const vec3 ' + n + ' = vec3(' + d.map(function (x) { return x.toFixed(5); }).join(',') + ');\n'; }
-  var CONSTS = glslVec('P_GIANT', BODY.giant) + glslVec('P_MOON', BODY.moon) + glslVec('P_BLUE', BODY.blue) + glslVec('P_STAR', BODY.star) + glslVec('P_MARS', BODY.mars) + glslVec('P_GMOON', BODY.gmoon) + glslVec('P_GAL', BODY.galaxy) + glslVec('P_NEB', BODY.neb) + glslVec('P_COMET', BODY.comet) +
+  var CONSTS = glslVec('P_GIANT', BODY.giant) + glslVec('P_MOON', BODY.moon) + glslVec('P_BLUE', BODY.blue) + glslVec('P_STAR', BODY.star) + glslVec('P_MARS', BODY.mars) + glslVec('P_GAL', BODY.galaxy) + glslVec('P_NEB', BODY.neb) + glslVec('P_COMET', BODY.comet) +
     'const float R_GIANT = ' + BODY.giant.r + '; const float R_MOON = ' + BODY.moon.r + '; const float R_BLUE = ' + BODY.blue.r + '; const float R_MARS = ' + BODY.mars.r + '; const float R_GMOON = ' + BODY.gmoon.r + ';\n';
 
   var FRAG = `
 precision highp float;
-uniform vec2 uRes; uniform float uT, uYaw, uPitch, uZoom, uShift, uAur; uniform vec3 uSun;
+uniform vec2 uRes; uniform float uT, uYaw, uPitch, uZoom, uShift, uAur, uAurAz; uniform vec3 uSun; uniform vec4 uRnd;
 ` + CONSTS + `
 float h21(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
 float h31(vec3 p){ p = fract(p * vec3(.1031, .1030, .0973)); p += dot(p, p.yzx + 33.33); return fract((p.x + p.y) * p.z); }
@@ -83,6 +91,8 @@ float craters(vec2 p){
 }
 
 float sE;   // élévation du soleil
+float day, twiS, night, twi, aurK, pv;
+vec3 drift(vec3 v){ float a = uT * .0003 + uRnd.z * 6.; vec3 k = normalize(vec3(.1, .75, .65)); return v * cos(a) + cross(k, v) * sin(a) + k * dot(k, v) * (1. - cos(a)); }
 vec3 skyBase(vec3 d, float day, float twiS, float twi){
   vec3 zen = mix(mix(vec3(.003, .006, .02), vec3(.07, .1, .27), twiS), vec3(.13, .33, .74), day);
   vec3 hor = mix(mix(vec3(.01, .018, .04), vec3(.55, .3, .32), twiS), vec3(.64, .79, .95), day);
@@ -98,7 +108,7 @@ vec3 skyBase(vec3 d, float day, float twiS, float twi){
 }
 vec3 aurora(vec3 d){
   float az = atan(d.x, d.z), el = asin(clamp(d.y, -1., 1.)); vec3 ac = vec3(0.);
-  float a0 = az + .14;
+  float a0 = az + .14 - uAurAz;
   float env0 = smoothstep(1.2, .15, abs(a0));
   if (abs(a0) > 1.75) return ac;
   for (int k = 0; k < 2; k++) {
@@ -116,32 +126,19 @@ vec3 aurora(vec3 d){
   return ac * .62;
 }
 
-void main(){
-  vec2 uv = (gl_FragCoord.xy - .5 * uRes) / uRes.y; uv.x += uShift;
-  vec3 v = normalize(vec3(uv, 1.15 * uZoom));
-  float cp = cos(uPitch), sp = sin(uPitch); v = vec3(v.x, v.y * cp + v.z * sp, -v.y * sp + v.z * cp);
-  float cy = cos(uYaw), sy = sin(uYaw); vec3 d = vec3(v.x * cy + v.z * sy, v.y, -v.x * sy + v.z * cy);
-  float az = atan(d.x, d.z), el = asin(clamp(d.y, -1., 1.));
-  sE = uSun.y;
-  float day = smoothstep(-.06, .22, sE), twiS = smoothstep(-.3, -.02, sE), night = 1. - smoothstep(-.22, -.03, sE);
-  float twi = twiS * (1. - smoothstep(0., .24, sE));
-  float aurK = uAur * smoothstep(.02, -.2, sE);
-  float pv = 1. - day * .86;
-  float shore = -.012 + .006 * fbm3(vec2(az * 12., 2.));
+vec3 skyFull(vec3 d){
   vec3 col;
-
-  if (el > shore - .02) {
   // --- ciel
   col = skyBase(d, day, twiS, twi);
   // --- étoiles, Voie lactée, objets du ciel profond
   float nf = night * smoothstep(-.01, .12, d.y);
   if (nf > .01) {
-    vec3 tn;
+    vec3 tn; vec3 dO = d; d = drift(dO); float twk = exp(-max(dO.y, 0.) * 8.);
     vec3 sc = d * 64.; vec3 si = floor(sc); vec3 rc = h33(si); float st = 0.;
-    if (rc.x > .93) { float r = length(fract(sc) - (.25 + .5 * rc.yzx).xyz * vec3(1.) ) ; r = length(fract(sc) - (.2 + .6 * rc.yzx)); st = pow((rc.x - .93) / .07, 2.2) * smoothstep(.2, .0, r) * (.75 + .25 * sin(uT * (1. + rc.y * 5.) + rc.z * 60.)); }
+    if (rc.x > .93) { float r = length(fract(sc) - (.25 + .5 * rc.yzx).xyz * vec3(1.) ) ; r = length(fract(sc) - (.2 + .6 * rc.yzx)); st = pow((rc.x - .93) / .07, 2.2) * smoothstep(.2, .0, r) * max(.75 + (.25 + .6 * twk) * sin(uT * (1. + rc.y * 5.) + rc.z * 60.), 0.); }
     vec3 sc2 = d * 170.; vec3 si2 = floor(sc2); vec3 rc2 = h33(si2 + 9.); float st2 = 0.;
     if (rc2.x > .9) st2 = smoothstep(.3, .0, length(fract(sc2) - (.2 + .6 * rc2.yzx))) * (.25 + .5 * rc2.z);
-    tn = mix(vec3(.65, .78, 1.), vec3(1., .82, .62), rc.z);
+    tn = mix(vec3(.65, .78, 1.), vec3(1., .82, .62), rc.z); tn += twk * .4 * vec3(sin(uT * 7. + rc.z * 40.), sin(uT * 8.3 + rc.y * 30.), 0.);
     // Voie lactée : bande inclinée, noyau, poussières
     vec3 nb = normalize(vec3(.35, .75, .45)); float bd = dot(d, nb); float band = exp(-bd * bd * 11.);
     vec3 gc = normalize(vec3(-.55, .1, .82) - nb * dot(vec3(-.55, .1, .82), nb)); float core = exp(-pow(acos(clamp(dot(d, gc), -1., 1.)), 2.) * 1.6);
@@ -150,7 +147,7 @@ void main(){
     float dust = (1. - smoothstep(.45, .8, vn3(d * 90.))) * band * .12;
     col += (tn * (st * 1.7 + st2) + milky * .3 + vec3(.5, .6, .9) * dust * .2) * nf;
     // airglow vert très faible près de l'horizon
-    col += vec3(.015, .05, .03) * exp(-d.y * 9.) * night * .6;
+    col += vec3(.015, .05, .03) * exp(-dO.y * 9.) * night * .6;
     // galaxie lointaine : spirale inclinée (bulbe, bras, voile de poussière, étoiles d'avant-plan)
     { float fc; vec2 q = tang(d, P_GAL, fc) / .095; q = rot(q, .62);
       float rho = length(q);
@@ -170,7 +167,7 @@ void main(){
     // nébuleuse en émission
     { float fc; vec2 q = tang(d, P_NEB, fc) / .16; float r = length(q);
       if (fc > 0. && r < 2.2) { float n1 = fbm(q * 2.4 + 3.), n2 = fbm(q * 5. - n1 * 2. + 8.); float m = smoothstep(.28, .8, n1) * smoothstep(2.2, .5, r);
-        vec3 nc = mix(vec3(.9, .2, .45), vec3(.15, .6, .75), smoothstep(.35, .75, n2)); nc = mix(nc, vec3(1., .75, .85), smoothstep(.7, .95, n2) * .6);
+        vec3 nc = mix(mix(vec3(.9, .2, .45), vec3(.95, .5, .2), step(.55, uRnd.w) * (.5 + .5 * uRnd.w)), mix(vec3(.15, .6, .75), vec3(.3, .35, .95), step(.55, uRnd.w)), smoothstep(.35, .75, n2)); nc = mix(nc, vec3(1., .75, .85), smoothstep(.7, .95, n2) * .6);
         col += nc * m * (.25 + .75 * n2) * .5 * nf; col *= 1. - .5 * smoothstep(.55, .75, fbm(q * 6. + 20.)) * m * .6; } }
     // comète : noyau, coma, queue ionique (droite, bleutée) et queue de poussière (courbe, dorée)
     { float fc; vec2 q = tang(d, P_COMET, fc) / .05;
@@ -191,22 +188,19 @@ void main(){
       float L = .1; float k = clamp(-u / L, 0., 1.);
       float wd = .0007 + .0009 * (1. - k);   // fine, un peu plus large près de la tête
       float tl = exp(-w * w / (wd * wd)) * pow(1. - k, 1.6) * step(u, .0008) * step(-L, u) * step(.9, pz);
-      col += vec3(.85, .93, 1.) * tl * smoothstep(0., .12, f) * smoothstep(1., .7, f) * on * .9 * step(.02, d.y); }
+      col += vec3(.85, .93, 1.) * tl * smoothstep(0., .12, f) * smoothstep(1., .7, f) * on * .9 * step(.02, dO.y); }
+    d = dO;
   }
   // --- astres proches
   { // petite planète orange, en croissant
-    float fc; vec2 q = tang(d, P_MARS, fc); float R = R_MARS; float r = length(q) / R;
+    float fc; vec2 q = tang(drift(d), P_MARS, fc); float R = R_MARS; float r = length(q) / R;
     if (fc > 0. && r < 1.2) { vec3 n = vec3(q / R, sqrt(max(1. - r * r, 0.)));
       float t1 = fbm(n.xy * 4. + 1.); vec3 mc = mix(vec3(.55, .25, .14), vec3(.82, .5, .3), t1); mc *= .85 + .3 * craters(n.xy * .8 + .3);
       vec3 L = normalize(vec3(.8, .1, .5)); float lit = smoothstep(-.05, .3, dot(n, L));
       col = mix(col, mc * (.02 + 1.1 * lit), smoothstep(1., .94, r) * pv);
       col += vec3(1., .6, .35) * exp(-max(r - 1., 0.) * 11.) * .12 * pv * step(1., r) * lit; } }
-  { // petite lune de la grande planète
-    float fc; vec2 q = tang(d, P_GMOON, fc); float r = length(q) / R_GMOON;
-    if (fc > 0. && r < 1.2) { vec3 n = vec3(q / R_GMOON, sqrt(max(1. - r * r, 0.))); float lit = smoothstep(-.1, .4, dot(n, normalize(vec3(-.6, .3, .7))));
-      col = mix(col, vec3(.7, .66, .6) * (.04 + 1.1 * lit), smoothstep(1., .9, r) * pv); } }
   { // grande planète à anneaux
-    float fc; vec2 q = tang(d, P_GIANT, fc); float R = R_GIANT; float tl = -.38; vec2 qr = rot(q, tl);
+    float fc; vec2 q = tang(d, P_GIANT, fc); float R = R_GIANT; float tl = -.38 + (uRnd.y - .5) * .4; vec2 qr = rot(q, tl);
     if (fc > 0.) {
       float rr = length(vec2(qr.x, qr.y / .27)) / R; float ringA = smoothstep(1.3, 1.36, rr) * smoothstep(2.38, 2.28, rr);
       float fine = .5 + .5 * sin(rr * 120. + 6. * fbm3(vec2(rr * 8., 1.)));
@@ -216,6 +210,10 @@ void main(){
       float r = length(q) / R; bool back = qr.y > 0.;
       vec3 L = normalize(vec3(-.62, .28, .74));
       float ringLit = .12 + .88 * smoothstep(-.2, .4, -qr.x / R * L.x * -1. + L.z * .5);
+      vec2 Pr = vec2(qr.x, qr.y / .27) / R; vec2 lr = rot(L.xy, tl); vec2 ld = normalize(vec2(lr.x, lr.y * 2.2 + .12));
+      float along = dot(Pr, ld); float cross2 = length(Pr - along * ld);
+      float pShadow = step(along, 0.) * smoothstep(1.04, .9, cross2) * smoothstep(0., -.25, along);   // ombre de la planète sur ses anneaux
+      ringLit *= 1. - .9 * pShadow;
       if (back) col = mix(col, ringC * ringLit * .8, ringA * dens * .8 * pv * step(1., r));
       if (r < 1.) {
         vec3 n = vec3(q / R, sqrt(1. - r * r)); vec2 pq = rot(n.xy, tl);
@@ -225,7 +223,9 @@ void main(){
         vec3 c1 = vec3(.9, .8, .62), c2 = vec3(.58, .33, .2), c3 = vec3(.54, .62, .7);
         vec3 pc = mix(mix(c1, c2, smoothstep(.25, .8, bands)), c3, smoothstep(.55, .95, b2) * .5);
         pc *= .8 + .4 * w2;
-        vec2 sp2 = pq - vec2(.32, -.28); float storm = smoothstep(.17, .03, length(sp2 * vec2(1., 1.9)));
+        float pal = uRnd.x; vec3 tn2 = pal < .4 ? vec3(1.) : (pal < .7 ? vec3(.72, .95, 1.18) : vec3(1.12, .8, .66));
+        pc = mix(pc, vec3(dot(pc, vec3(.333))) * tn2 * 1.12, step(.4, pal) * .8);
+        vec2 sp2 = pq - vec2(.32 * (uRnd.w * 2. - 1.), -.28 * (.5 + uRnd.x)); float storm = smoothstep(.17, .03, length(sp2 * vec2(1., 1.9)));
         pc = mix(pc, vec3(.78, .34, .2), storm * .75); pc += (w2 - .5) * storm * .4;
         float lam = dot(n, L); float lit = smoothstep(-.22, .5, lam);
         float shadowBand = exp(-pow((pq.y + .24 - L.y * .0) / .055, 2.)) * .5 * lit;   // ombre portée des anneaux
@@ -239,11 +239,18 @@ void main(){
       col += vec3(.4, .55, .8) * exp(-max(rl - 1., 0.) * 14.) * .14 * pv * step(1., rl) * (1. - ringA * .5);
     }
   }
+  { // petite lune de la géante, en orbite lente dans le plan des anneaux
+    float fc; vec2 q = tang(d, P_GIANT, fc); float R = R_GIANT; float tl = -.38 + (uRnd.y - .5) * .4;
+    float oa = uT * .035 + uRnd.w * 6.28; vec2 oc = rot(vec2(cos(oa) * 3.7, sin(oa) * 3.7 * .27) * R, -tl);
+    vec2 qm = q - oc; float rm = length(qm) / R_GMOON; bool inFront = sin(oa) < 0.;
+    float behind = inFront ? 1. : smoothstep(R * 1.02, R * .96, length(q));
+    if (fc > 0. && rm < 1.3) { vec3 n = vec3(qm / R_GMOON, sqrt(max(1. - rm * rm, 0.))); float lit = smoothstep(-.1, .4, dot(n, normalize(vec3(-.6, .3, .7))));
+      col = mix(col, vec3(.7, .66, .6) * (.04 + 1.1 * lit) * (.85 + .3 * fbm3(n.xy * 6.)), smoothstep(1., .9, rm) * pv * (1. - behind)); } }
   { // lune : relief éclairé, mers sombres
     float fc; vec2 q = tang(d, P_MOON, fc); float R = R_MOON; float r = length(q) / R;
     if (fc > 0. && r < 1.15) {
       vec3 n = vec3(q / R, sqrt(max(1. - r * r, 0.)));
-      vec3 L = normalize(vec3(.78, .22, .58));
+      vec3 L = normalize(vec3(mix(-.85, .85, uRnd.z), .22, .58));
       vec2 p2 = n.xy * .9; float h0 = craters(p2) + .35 * fbm(n.xy * 5.), h1 = craters(p2 + L.xy * .02) + .35 * fbm(n.xy * 5. + L.xy * .1);
       float mar = smoothstep(.46, .62, fbm(n.xy * 1.6 + 9.));
       vec3 mc = mix(vec3(.84, .82, .78), vec3(.42, .43, .47), mar * .85) * (.85 + .3 * fbm(n.xy * 14.));
@@ -257,7 +264,7 @@ void main(){
     float fc; vec2 q = tang(d, P_BLUE, fc); float R = R_BLUE; float r = length(q) / R;
     if (fc > 0. && r < 1.35) {
       vec3 n = vec3(q / R, sqrt(max(1. - r * r, 0.)));
-      float w = fbm(n.xy * 2.6 + 2. + uT * .002), land = smoothstep(.5, .56, w);
+      float w = fbm(n.xy * 2.6 + 2. + uRnd.x * 37. + uT * .002), land = smoothstep(.5, .56, w);
       vec3 oc = mix(vec3(.03, .12, .32), vec3(.06, .3, .5), fbm3(n.xy * 8.)); vec3 lc = mix(vec3(.2, .36, .16), vec3(.58, .5, .34), fbm(n.xy * 7. + 4.));
       vec3 bc = mix(oc, lc, land);
       float cl = smoothstep(.5, .78, fbm(n.xy * 4.5 + w * 2.5 + 6. + uT * .004)); bc = mix(bc, vec3(.95, .97, 1.), cl * .85);
@@ -291,26 +298,61 @@ void main(){
     col = mix(col, cc, dens * .85);
     col = mix(col, lightC * .9 + vec3(.02), ci);
   }
-  // --- collines et rivage
+  return col;
+}
+
+vec3 land(vec3 col, float az, float el){
+  vec2 pz = vec2(cos(az), sin(az));
+  float shore = -.012 + .006 * fbm3(pz * 12. + 2.);
   vec3 amb = mix(vec3(.004, .007, .014), vec3(.07, .1, .08), day) + vec3(.1, .05, .04) * twi;
   vec3 hor = mix(mix(vec3(.01, .018, .04), vec3(.55, .3, .32), twiS), vec3(.64, .79, .95), day);
-  for (int i = 0; i < 4; i++) {
-    float fi = float(i);
-    float h = .05 - fi * .012 + (.05 - fi * .006) * (fbm3(vec2(az * (1.6 + fi * .8) + fi * 7.3, fi * 3.7)) - .4);
-    if (i == 3) { float tooth = pow(1. - abs(fract(az * 34. + fbm3(vec2(az * 9., 1.)) * 3.) - .5) * 2., 2.5); h = .012 + .02 * fbm3(vec2(az * 5., 8.)) + tooth * .016 * smoothstep(.2, .5, fbm3(vec2(az * 6., 5.))); }
+  vec3 sunC = mix(vec3(1., .55, .28), vec3(1., .93, .8), smoothstep(0., .5, sE));
+  float sunAz = atan(uSun.x, uSun.z);
+  for (int i = 0; i < 5; i++) {
+    float fi = float(i), far = 1. - fi / 4.;
+    float n = fbm(pz * (1.5 + fi * .8) + vec2(fi * 7.3, fi * 3.7));
+    float rg = 1. - abs(2. * fbm3(pz * (2.4 + fi) + fi * 3.1) - 1.);
+    float h = .05 - fi * .0105 + (.058 - fi * .008) * (mix(n, rg * .85, far * far * .55) - .42);
+    if (i == 3) { float tooth = pow(1. - abs(fract(az * 5.7296 * 6. + fbm3(pz * 9. + 1.) * 3.) - .5) * 2., 2.5); h = .014 + .02 * fbm3(pz * 5. + 8.) + tooth * .016 * smoothstep(.2, .5, fbm3(pz * 6. + 5.)); }
+    if (i == 4) { float x = az * 5.7296 * 14.; float cell = floor(x); float bl = pow(1. - abs(fract(x) - .5) * 2., 1.6) * step(.45, h21(vec2(cell, 3.))) * (.4 + .6 * h21(vec2(cell, 9.)));
+      h = .003 + .004 * fbm3(pz * 7. + 4.) + bl * .011 * smoothstep(.25, .55, fbm3(pz * 4. + 12.)); }
     float m = smoothstep(.0012, -.0012, el - h) * smoothstep(shore - .002, shore + .002, el);
-    vec3 gc = mix(mix(hor, amb, .5), amb, fi / 3.); gc = mix(gc * (.4 + .35 * day), gc, 1. - fi * .2);
-    col = mix(col, gc * (1. - fi * .12), m);
+    // perspective atmosphérique : le lointain tire sur la brume de l'horizon
+    float hz = far * far * (.18 + .55 * day) + far * .08 * twiS;
+    vec3 gc = mix(amb * (1. - .2 * fi / 3.), hor, hz);
+    // liseré lumineux du côté du soleil, sur les crêtes
+    float rim = smoothstep(.012, .0, abs(el - h)) * (.5 + .5 * cos(az - sunAz)) * (.25 + .75 * twi) * step(.0, sE + .1);
+    gc += sunC * rim * .22 * (1. - fi * .12);
+    if (i < 4) gc *= .75 + .25 * smoothstep(.0, .05, el);
+    col = mix(col, gc * (1. - fi * .05), m);
   }
+  return col;
+}
+void main(){
+  vec2 uv = (gl_FragCoord.xy - .5 * uRes) / uRes.y; uv.x += uShift;
+  vec3 v = normalize(vec3(uv, 1.15 * uZoom));
+  float cp = cos(uPitch), sp = sin(uPitch); v = vec3(v.x, v.y * cp + v.z * sp, -v.y * sp + v.z * cp);
+  float cy = cos(uYaw), sy = sin(uYaw); vec3 d = vec3(v.x * cy + v.z * sy, v.y, -v.x * sy + v.z * cy);
+  float az = atan(d.x, d.z), el = asin(clamp(d.y, -1., 1.));
+  sE = uSun.y;
+  day = smoothstep(-.06, .22, sE); twiS = smoothstep(-.3, -.02, sE); night = 1. - smoothstep(-.22, -.03, sE);
+  twi = twiS * (1. - smoothstep(0., .24, sE));
+  aurK = uAur * smoothstep(.02, -.2, sE);
+  pv = 1. - day * .86;
+  float shore = -.012 + .006 * fbm3(vec2(cos(az), sin(az)) * 12. + 2.);
+  vec3 col;
+  if (el > shore) {
+    col = land(skyFull(d), az, el);
   } else {
-  // --- lac : reflet du ciel bas, ondulations
-    vec2 wv = vec2(fbm3(vec2(az * 60., el * 300. + uT * .2)), fbm3(vec2(az * 50. + 4., el * 260. - uT * .15))) - .5;
-    vec3 rd = normalize(vec3(d.x + wv.x * .02, -d.y * .55 + .004 + abs(wv.y) * .03, d.z + wv.y * .02));
-    float day2 = smoothstep(-.06, .22, sE), tw2 = smoothstep(-.3, -.02, sE), twi2 = tw2 * (1. - smoothstep(0., .24, sE));
-    vec3 rf = skyBase(rd, day2, tw2, twi2) + aurora(rd) * aurK;
-    float nf2 = (1. - smoothstep(-.22, -.03, sE)); vec3 sc = rd * 90.; vec3 rc = h33(floor(sc)); rf += vec3(.8, .9, 1.) * step(.94, rc.x) * smoothstep(.25, 0., length(fract(sc) - (.2 + .6 * rc.yzx))) * nf2 * .5;
-    float F = .25 + .6 * pow(1. - clamp(-d.y * 12., 0., 1.), 2.);
-    vec3 deep = mix(vec3(.003, .008, .014), vec3(.03, .08, .1), day2);
+    // --- lac : le ciel entier s'y reflète (astres, aurores, collines), brouillé par les rides
+    vec2 pz = vec2(cos(az), sin(az));
+    vec2 wv = vec2(fbm3(pz * 60. + vec2(0., el * 300. + uT * .2)), fbm3(pz * 50. + vec2(4., el * 260. - uT * .15))) - .5;
+    float depth = clamp(-d.y * 12., 0., 1.);
+    vec3 rd = normalize(vec3(d.x + wv.x * (.012 + .02 * depth), -d.y * .8 + .004 + abs(wv.y) * .03 * (.3 + depth), d.z + wv.y * (.012 + .02 * depth)));
+    float raz = atan(rd.x, rd.z), rel = asin(clamp(rd.y, -1., 1.));
+    vec3 rf = land(skyFull(rd), raz, rel);
+    float F = .36 + .55 * pow(1. - depth, 2.);
+    vec3 deep = mix(vec3(.003, .008, .014), vec3(.03, .08, .1), day);
     col = mix(deep, rf, F) * (.85 + .3 * wv.x);
   }
   col = 1. - exp(-col * 1.25); col = pow(col, vec3(.92));
@@ -325,7 +367,7 @@ void main(){
   if (!prog) { window.CodexScene = { ok: false }; return; }
   gl.useProgram(prog); var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
   var loc = gl.getAttribLocation(prog, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-  ['uRes', 'uT', 'uYaw', 'uPitch', 'uZoom', 'uShift', 'uAur', 'uSun'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
+  ['uRes', 'uT', 'uYaw', 'uPitch', 'uZoom', 'uShift', 'uAur', 'uAurAz', 'uSun', 'uRnd'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
 
   /* ---------- vue ---------- */
   var view = { yaw: 0, pitch: .3, zoom: 1, tz: 1, ty: 0, tp: .3 }, shift = 0, clock = 0, simHour = 22, drift = 0;
@@ -401,7 +443,7 @@ void main(){
     var w = gl;
     w.viewport(0, 0, cv.width, cv.height);
     w.uniform2f(U.uRes, cv.width, cv.height); w.uniform1f(U.uT, clock); w.uniform1f(U.uYaw, view.yaw); w.uniform1f(U.uPitch, view.pitch); w.uniform1f(U.uZoom, view.zoom * base()); w.uniform1f(U.uShift, shift); w.uniform1f(U.uAur, cfg.aur);
-    w.uniform3f(U.uSun, sun[0], sun[1], sun[2]);
+    w.uniform3f(U.uSun, sun[0], sun[1], sun[2]); w.uniform1f(U.uAurAz, AUR_OFF); w.uniform4f(U.uRnd, RND[0], RND[1], RND[2], RND[3]);
     w.drawArrays(w.TRIANGLE_STRIP, 0, 4);
     placeMarks();
     clockT += dt; if (clockT > .5 && clockEl) { clockT = 0; clockEl.textContent = (cfg.mode === 'live' ? 'Heure locale ' : cfg.mode === 'cycle' ? 'Journée accélérée ' : 'Heure choisie ') + hlabel(hr) + ' · ' + phase(sun[1]); }
