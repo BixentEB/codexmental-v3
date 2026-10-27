@@ -50,4 +50,4 @@
 .cm-lts i { position: absolute; width: 3px; height: 3px; margin: -1.5px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 5px 1px color-mix(in srgb, var(--accent) 80%, white); top: 53%; }
 .cm-lts i:nth-child(1) { left: 22%; top: 51%; } .cm-lts i:nth-child(2) { left: 36%; top: 58%; } .cm-lts i:nth-child(3) { left: 50%; top: 61%; } .cm-lts i:nth-child(4) { left: 64%; top: 58%; } .cm-lts i:nth-child(5) { left: 78%; top: 51%; }
 .cm.lit .cm-lts i { animation: ufoBlink .6s steps(2, jump-none) infinite; } .cm.lit .cm-lts i:nth-child(2n) { animation-delay: .2s; } .cm.lit .cm-lts i:nth-child(3n) { animation-delay: .4s; }
-@media (max-width: 700px) { .pane.contact .cm { width: 38px; top: 14px; right: 14px; } }
+@media (max-width: 700px) { .pane.contact .cm { width: 36px; top: -12px; right: 8px; } }
