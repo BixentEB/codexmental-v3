@@ -110,6 +110,8 @@
     var okBoot = function () { try { localStorage.removeItem('codex.boot'); } catch (e) {} };
     var okStable = function () { okBoot(); if (sceneOff || document.hidden) return; try { var l = JSON.parse(localStorage.getItem('codex.ok') || '[]'); if (l.indexOf(T.id) < 0) { l.push(T.id); localStorage.setItem('codex.ok', JSON.stringify(l)); } } catch (e) {} };
     window.addEventListener('pagehide', okBoot); setTimeout(okStable, 8000);
+    // téléphone : changer d'appli ou verrouiller l'écran ne prévient pas toujours (pas de pagehide) -> ce n'est pas un plantage
+    document.addEventListener('visibilitychange', function () { if (document.hidden) okBoot(); });
     applyTheme(T);
     var base = 'themes/' + T.id + '/';
     // polices du thème

@@ -28,7 +28,7 @@
   function perfRow() {   // qualité des animations : automatique par défaut, réglable
     var P = Codex.perf; if (!P) return '';
     var opts = [['auto', 'Auto (' + P.label() + ')'], ['high', 'Haute'], ['medium', 'Moyenne'], ['low', 'Économe'], ['still', 'Minimale'], ['off', 'Sans animation']];
-    return '<li class="perf-row" role="none"><label for="perf-sel">Qualité des animations</label><select id="perf-sel">' + opts.map(function (o) { return '<option value="' + o[0] + '"' + (o[0] === (P.pref === 'auto' || P.ORDER.indexOf(P.pref) < 0 ? 'auto' : P.pref) ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></li>';
+    return '<li class="perf-row" role="none"><label for="perf-sel">Qualité des animations</label><select id="perf-sel">' + opts.map(function (o) { return '<option value="' + o[0] + '"' + (o[0] === (P.pref === 'auto' || P.ORDER.indexOf(P.pref) < 0 ? 'auto' : P.pref) ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select><small class="perf-hint">Changer la qualité relance la scène : quelques secondes de fabrication.</small></li>';
   }
   Codex.ui.buildShell = function () {
     var bar = document.getElementById('topbar');

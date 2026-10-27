@@ -93,6 +93,8 @@ html.noscene #scene canvas { display: none; }
 html.noscene #scene { background: radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 60%), var(--bg); }
 
 .theme-menu .perf-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 6px; padding: 10px 12px 6px; border-top: 1px solid var(--line); font-size: .78rem; color: var(--muted); }
+.theme-menu .perf-row { flex-wrap: wrap; }
+.theme-menu .perf-row .perf-hint { flex-basis: 100%; font-size: .7rem; opacity: .75; line-height: 1.35; }
 .theme-menu .perf-row select { color-scheme: dark; background: var(--panel-solid); color: var(--fg); border: 1px solid var(--line); border-radius: 8px; padding: 5px 8px; font: inherit; }
 
 /* présentation personnelle sous le titre du thème */

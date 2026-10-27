@@ -18,7 +18,7 @@
     high:   { scale: 1,   gap: 1000 / 62, label: 'Haute' },
     medium: { scale: .8,  gap: 1000 / 40, label: 'Moyenne' },
     low:    { scale: .6,  gap: 1000 / 24, label: 'Économe' },
-    still:  { scale: .5,  gap: 1000,      label: 'Minimale' },   // une image par seconde : la scène reste visible, l'appareil se repose
+    still:  { scale: .5,  gap: 1000 / 10, label: 'Minimale' },   // 10 images/s : la scène reste fluide à l'œil, l'appareil se repose
     off:    { scale: .5,  gap: 1000 / 24, label: 'Sans animation' }
   };
   function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
@@ -52,12 +52,12 @@
   var detected = ORDER.indexOf(params.get('assume')) >= 0 ? params.get('assume') : detect(), pref = params.get('perf') || get(PREF) || 'auto';
   if (params.get('perf')) set(PREF, pref === 'auto' ? null : pref);
   if (params.get('scene') === 'on') set(KEY, null);
-  var learned = null; try { var lj = JSON.parse(get(KEY) || 'null'); if (lj && ORDER.indexOf(lj.tier) >= 0 && Date.now() - lj.t < (detect() === 'high' ? DAY : WEEK)) learned = lj.tier === 'off' ? FLOOR : lj.tier; } catch (e) {}   // un ancien « off » appris devient « minimale »
+  var learned = null; try { var lj = JSON.parse(get(KEY) || 'null'); if (lj && ORDER.indexOf(lj.tier) >= 0 && Date.now() - lj.t < (detect() === 'high' || info.mobile ? DAY : WEEK)) learned = lj.tier === 'off' ? FLOOR : lj.tier; } catch (e) {}   // un ancien « off » appris devient « minimale »
   function worst(a, b) { return ORDER.indexOf(a) >= ORDER.indexOf(b) ? a : b; }
   var tier = ORDER.indexOf(pref) >= 0 ? pref : (learned ? worst(detected, learned) : detected);
 
   /* ---------- l'objet partagé ---------- */
-  var ramp = performance.now() + 2500;   // démarrage en douceur : définition réduite pendant 2,5 s
+  var ramp = 0;   // plus de « démarrage en douceur » : la définition choisie à l'arrivée ne bouge plus d'elle-même (une seule fabrication)
   var P = C.perf = {
     info: info, detected: detected, pref: pref,
     get tier() { return tier; },
@@ -116,6 +116,4 @@
   document.addEventListener('visibilitychange', function () { ema = 0; slow = 0; lastRun = 0; longs = []; });
   window.addEventListener('focus', function () { ema = 0; slow = 0; lastRun = 0; longs = []; });   // retour depuis un autre onglet ou une autre fenêtre : on repart à zéro
   if (tier === 'off') document.documentElement.classList.add('noscene');
-  // fin du démarrage en douceur : une dernière notification pour que les scènes remontent leur définition
-  setTimeout(function () { if (scaleSeen !== P.scale) { scaleSeen = P.scale; C.emit('perf', { tier: tier, scale: scaleSeen }); } }, 2600);
 })();
