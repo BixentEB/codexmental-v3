@@ -12,7 +12,7 @@
 (function () {
   'use strict';
   var C = window.Codex; if (!C) return;
-  var KEY = 'codex.perf', PREF = 'codex.perfpref', WEEK = 6048e5;
+  var KEY = 'codex.perf2', PREF = 'codex.perfpref', WEEK = 6048e5, DAY = 864e5;   // perf2 : les allègements appris avec l'ancien suivi (trop nerveux) sont oubliés
   var ORDER = ['high', 'medium', 'low', 'still', 'off'], FLOOR = 'still';   // FLOOR : plancher automatique
   var TIERS = {
     high:   { scale: 1,   gap: 1000 / 62, label: 'Haute' },
@@ -24,6 +24,7 @@
   function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function set(k, v) { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} }
   var params = new URLSearchParams(location.search);
+  set('codex.perf', null);   // ancienne clé
 
   /* ---------- 1. estimation à l'arrivée ---------- */
   var info = { cores: navigator.hardwareConcurrency || 4, mem: navigator.deviceMemory || 0, mobile: false, saveData: false, webgl: false, soft: false, gpu: '' };
@@ -51,7 +52,7 @@
   var detected = ORDER.indexOf(params.get('assume')) >= 0 ? params.get('assume') : detect(), pref = params.get('perf') || get(PREF) || 'auto';
   if (params.get('perf')) set(PREF, pref === 'auto' ? null : pref);
   if (params.get('scene') === 'on') set(KEY, null);
-  var learned = null; try { var lj = JSON.parse(get(KEY) || 'null'); if (lj && ORDER.indexOf(lj.tier) >= 0 && Date.now() - lj.t < WEEK) learned = lj.tier === 'off' ? FLOOR : lj.tier; } catch (e) {}   // un ancien « off » appris devient « minimale »
+  var learned = null; try { var lj = JSON.parse(get(KEY) || 'null'); if (lj && ORDER.indexOf(lj.tier) >= 0 && Date.now() - lj.t < (detect() === 'high' ? DAY : WEEK)) learned = lj.tier === 'off' ? FLOOR : lj.tier; } catch (e) {}   // un ancien « off » appris devient « minimale »
   function worst(a, b) { return ORDER.indexOf(a) >= ORDER.indexOf(b) ? a : b; }
   var tier = ORDER.indexOf(pref) >= 0 ? pref : (learned ? worst(detected, learned) : detected);
 
@@ -73,14 +74,16 @@
   window.CodexPx = function (max) { if (info.mobile) max = Math.min(max || 2, 1.5); return Math.max(.4, Math.min(window.devicePixelRatio || 1, max || 2) * P.scale); };
 
   /* ---------- 2. ordonnanceur commun + surveillance de la fluidité ---------- */
-  var queue = [], pending = false, lastRun = 0, ema = 0, slow = 0, born = performance.now(), notified = false;
+  var queue = [], pending = false, lastRun = 0, ema = 0, slow = 0, born = performance.now(), notified = false, longs = [];
+  var WARM = 5000;   // pas de jugement pendant le chargement (polices, textures, premiers calculs)
+  function budget() { return (tier === 'low' ? 8000 : 5000) * (detected === 'high' ? 1.6 : 1); }   // lenteur soutenue tolérée avant d'alléger ; plus patient sur une machine puissante
   window.CodexRaf = function (fn) { queue.push(fn); if (!pending) { pending = true; requestAnimationFrame(tick); } return 0; };
   function degrade(why) {
     var i = ORDER.indexOf(tier); if (i >= ORDER.indexOf(FLOOR) || ORDER.indexOf(pref) >= 0) return;
-    tier = ORDER[i + 1]; ema = 0; slow = 0; ramp = 0;
+    tier = ORDER[i + 1]; ema = 0; slow = 0; ramp = 0; longs = [];
     set(KEY, JSON.stringify({ tier: tier, t: Date.now(), why: why }));
     C.emit('perf', { tier: tier, scale: P.scale, reason: why });
-    toast(tier === FLOOR ? 'Votre appareil a du mal : les animations sont mises au ralenti pour le ménager.' : 'Votre appareil semble peiner : les animations sont allégées.', false);
+    if (tier === FLOOR) toast('Votre appareil a du mal : les animations sont mises au ralenti pour le ménager.', false);   // les allègements intermédiaires se font en silence
   }
   function toast(txt, withBtn) {
     var el = document.getElementById('scene-status'); if (!el) return;
@@ -100,16 +103,18 @@
     var iv = lastRun ? t - lastRun : 0; lastRun = t;
     var q = queue; queue = []; for (var i = 0; i < q.length; i++) { try { q[i](t); } catch (e) { console.error(e); } }
     // surveillance : ni les 1,5 premières secondes, ni les pauses d'onglet
-    if (iv >= 400 && t - born > 1500 && !document.hidden && lastRun) { slow += 1500; if (slow > (tier === 'low' ? 4500 : 2600)) degrade('image > ' + Math.round(iv) + ' ms'); }   // images très lentes : on n'attend pas
-    if (iv > 0 && iv < 400 && t - born > 1500 && !document.hidden) {
+    // images très lentes : une saccade isolée (onglet, ramasse-miettes, fenêtre déplacée) ne compte pas, seule une série en compte
+    if (iv >= 400 && t - born > WARM && !document.hidden && lastRun) { longs.push(t); longs = longs.filter(function (x) { return t - x < 10000; }); if (longs.length >= 5) degrade('saccades ' + longs.length + ' en 10 s'); }
+    if (iv > 0 && iv < 400 && t - born > WARM && !document.hidden) {
       ema = ema ? ema + (iv - ema) * .12 : iv;
       var limit = Math.max(cfg.gap * 1.7, 36);
-      if (ema > limit) { slow += iv; if (slow > (tier === 'low' ? 4500 : 2600)) degrade('fps ' + Math.round(1000 / ema)); } else slow = Math.max(0, slow - iv * .5);
+      if (ema > limit) { slow += iv; if (slow > budget()) degrade('fps ' + Math.round(1000 / ema)); } else slow = Math.max(0, slow - iv);
     }
     if (P.scale !== scaleSeen) { scaleSeen = P.scale; C.emit('perf', { tier: tier, scale: scaleSeen }); }   // fin du démarrage en douceur
     if (queue.length && !pending) { pending = true; requestAnimationFrame(tick); }
   };
-  document.addEventListener('visibilitychange', function () { ema = 0; slow = 0; lastRun = 0; });
+  document.addEventListener('visibilitychange', function () { ema = 0; slow = 0; lastRun = 0; longs = []; });
+  window.addEventListener('focus', function () { ema = 0; slow = 0; lastRun = 0; longs = []; });   // retour depuis un autre onglet ou une autre fenêtre : on repart à zéro
   if (tier === 'off') document.documentElement.classList.add('noscene');
   // fin du démarrage en douceur : une dernière notification pour que les scènes remontent leur définition
   setTimeout(function () { if (scaleSeen !== P.scale) { scaleSeen = P.scale; C.emit('perf', { tier: tier, scale: scaleSeen }); } }, 2600);
