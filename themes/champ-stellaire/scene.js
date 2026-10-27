@@ -102,7 +102,10 @@ function place(){ if(!cur) return;
   var k=Math.min(rw/(x1-x0||1),rh/(y1-y0||1),(mob?300:620)/Math.max(x1-x0,y1-y0,1))*ZOOM.v, ox=rx+(rw-(x1-x0)*k)/2, oy=ry+(rh-(y1-y0)*k)/2;
   cur.s.forEach(function(st,j){st._x=ox+(st[0]-x0)*k; st._y=oy+(st[1]-y0)*k; built[j].style.transform='translate('+st._x+'px,'+st._y+'px)'});
   var ls=svg.querySelectorAll('line'); cur.e.forEach(function(e,i){var a=cur.s[e[0]],b=cur.s[e[1]]; ls[i].setAttribute('x1',a._x);ls[i].setAttribute('y1',a._y);ls[i].setAttribute('x2',b._x);ls[i].setAttribute('y2',b._y)});
-  built.t.style.transform='translate('+ox+'px,'+(oy-46)+'px)';
+  // nom de la constellation : sur mobile, en bas à gauche (au-dessus de la figure, il passait sous l'intro) ; sur grand écran, au-dessus comme avant
+  if(mob){ var lowY=-1e9; cur.s.forEach(function(st){lowY=Math.max(lowY,st._y)});
+    built.t.style.transform='translate(16px,'+Math.round(Math.min(H-26,Math.max(H-52,lowY+72)))+'px)'; }
+  else built.t.style.transform='translate('+ox+'px,'+(oy-46)+'px)';
 }
 var qc=/[?&]const=(\d)/.exec(location.search); build(qc&&CONS[+qc[1]]?+qc[1]:pick()); addEventListener('resize',place);
 function swap(){ if(document.hidden||document.documentElement.classList.contains('reading')) return; box.style.opacity='0'; setTimeout(function(){build(pick()); box.style.opacity=''},700) }
