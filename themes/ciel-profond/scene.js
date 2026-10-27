@@ -258,7 +258,7 @@ window.CodexScene = { ok: true };
   }
 
   function genGalaxy() {
-    var G = FILT[state.filter].gal, S = small ? 800 : 1600, Sd = small ? 448 : 640, i, j;
+    var G = FILT[state.filter].gal, S = small ? 800 : 1600, Sd = small ? 360 : 640, i, j;
     var dc = document.createElement('canvas'); dc.width = dc.height = Sd;
     var dctx = dc.getContext('2d'), img = dctx.createImageData(Sd, Sd), d = img.data;
     for (j = 0; j < Sd; j++) {
@@ -283,7 +283,7 @@ window.CodexScene = { ok: true };
     g.drawImage(dc, 0, 0, S, S);
     g.globalCompositeOperation = 'lighter';
 
-    var N = small ? 16000 : 62000, placed = 0, tries = 0;
+    var N = small ? 12000 : 62000, placed = 0, tries = 0;
     snSpots = [];
     while (placed < N && tries < N * 8) {
       tries++;
@@ -629,24 +629,49 @@ window.CodexScene = { ok: true };
     (window.CodexRaf||requestAnimationFrame)(frame);
   }
 
-  /* ---------- Construction complète ---------- */
-  var bakeTimer = null;
+  /* ---------- Construction complète ----------
+     La fabrication du ciel est lourde (bruit procédural pixel par pixel) : on la découpe en étapes,
+     on montre le fond dès qu'il est prêt (jamais d'écran noir le temps de fabriquer la galaxie),
+     et on ne la refait que si c'est vraiment nécessaire (largeur, filtre), pas pour la barre d'adresse
+     d'un téléphone qui apparaît/disparaît ni pour un simple changement de qualité. */
+  var bakeTimer = null, bakeRun = 0, galKey = '', bakedW = 0, bakedH = 0;
   function bakeAll() {
+    var run = ++bakeRun;
     sizeCanvases(); layout();
+    bakedW = W; bakedH = H;
     applyFilterColors();
     bakeBackground();
-    genGalaxy();
-    buildDynamic();
-    if (firstBake && !reduce) { zoom = 1.45; intro = true; lastHud = zoom; } else { zoom = zoomT; }
-    firstBake = false;
-    drawGrid(); drawThumb(); updateHud(); updateNodes();
-    ready = true;
-    document.documentElement.classList.add('ready');
-    if (reduce) drawFx();
+    document.documentElement.classList.add('ready');   // le fond apparaît tout de suite
+    setTimeout(function () {
+      if (run !== bakeRun) return;   // une reconstruction plus récente a pris le relais
+      var key = state.filter + '|' + small;
+      if (key !== galKey || !galSprite) { genGalaxy(); galKey = key; }
+      setTimeout(function () {
+        if (run !== bakeRun) return;
+        buildDynamic();
+        if (firstBake && !reduce) { zoom = 1.45; intro = true; lastHud = zoom; } else { zoom = zoomT; }
+        firstBake = false;
+        drawGrid(); drawThumb(); updateHud(); updateNodes();
+        ready = true;
+        if (reduce) drawFx();
+      }, 0);
+    }, 40);
   }
   function scheduleBake(delay) { clearTimeout(bakeTimer); bakeTimer = setTimeout(bakeAll, delay); }
-  window.addEventListener('resize', function () { scheduleBake(220); });
-  Codex.on('perf', function () { scheduleBake(80); });
+  window.addEventListener('resize', function () {
+    var w = window.innerWidth, h = window.innerHeight;
+    // téléphone : la barre d'adresse change la hauteur en défilant -> on garde le ciel tel quel
+    if (w === bakedW && Math.abs(h - bakedH) < bakedH * 0.25) return;
+    scheduleBake(220);
+  });
+  // changement de qualité : seules les couches redessinées à chaque image changent de définition ;
+  // le fond (figé) et la galaxie sont gardés, pas de reconstruction coûteuse
+  Codex.on('perf', function () {
+    var d = CodexPx(1.5); if (Math.abs(d - DPR) < 0.05) return;
+    DPR = d;
+    [fxEl, gridEl].forEach(function (c) { c.width = Math.round(W * DPR); c.height = Math.round(H * DPR); });
+    drawGrid(); if (reduce) drawFx();
+  });
 
   /* ---------- Laboratoire de la galaxie ---------- */
   var pop = $('pop'), lab = $('lab');
