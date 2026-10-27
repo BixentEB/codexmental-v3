@@ -88,27 +88,26 @@
     // démarrage sécurisé : ?scene=off coupe les scènes (le lecteur reste), ?scene=on les rétablit
     var sp = params.get('scene');
     // « manual » = coupure demandée par ?scene=off (durable) ; l'ancienne valeur « off », posée automatiquement après un faux plantage, est effacée
-    try { if (sp === 'off') localStorage.setItem('codex.scene', 'manual'); else if (sp === 'on') { localStorage.removeItem('codex.scene'); localStorage.removeItem('codex.crash'); } else if (localStorage.getItem('codex.scene') === 'off') localStorage.removeItem('codex.scene'); } catch (e) {}
+    try { if (sp === 'off') localStorage.setItem('codex.scene', 'manual'); else if (sp === 'on') { localStorage.removeItem('codex.scene'); } else if (localStorage.getItem('codex.scene') === 'off') localStorage.removeItem('codex.scene'); } catch (e) {}
     var sceneOff = sp === 'off' || (sp !== 'on' && (function () { try { return localStorage.getItem('codex.scene') === 'manual'; } catch (e) { return false; } })());
     if (crashed && sp !== 'on' && !params.get('theme')) {
       if (crashed !== registry.default) { want = registry.default; Codex.recovered = crashed; }
-      // plantage sur le thème par défaut : une seule visite sans scène, puis on retente ; deux plantages de suite seulement rendent la coupure durable
-      else { sceneOff = true; Codex.recovered = crashed; try { var nc = (+localStorage.getItem('codex.crash') || 0) + 1; localStorage.setItem('codex.crash', String(nc)); if (nc >= 2) localStorage.setItem('codex.scene', 'manual'); } catch (e) {} }
+      // plantage sur le thème par défaut : on ne coupe pas, on allège (scène quasi figée pour cette visite, niveau économe ensuite)
+      else if (Codex.perf) { Codex.perf.cap('still'); Codex.perf.remember('low'); Codex.recoveredSoft = true; }
     }
-    // performance adaptative (core/perf.js) : appareil jugé trop juste = pas de scène ; niveau économe = pas de thème gourmand au démarrage automatique
+    // performance adaptative (core/perf.js) : « off » n'existe que sur choix explicite (menu, ?perf=off) ; niveau économe = pas de thème gourmand au démarrage automatique
     var PF = Codex.perf;
     if (PF && PF.off && sp !== 'on') { sceneOff = true; Codex.perfOff = true; }
     // thème gourmand (heavy) : il ne démarre tout seul depuis la mémoire du navigateur qu'après avoir déjà tenu 8 s sur cet appareil ; demandé explicitement (menu, ?theme=), il démarre toujours
     var okList = []; try { okList = JSON.parse(localStorage.getItem('codex.ok') || '[]'); } catch (e) {}
     var wantT = Codex.themes.filter(function (t) { return t.id === want; })[0];
-    if (wantT && wantT.heavy && !params.get('theme') && (okList.indexOf(want) < 0 || (PF && PF.tier === 'low')) && want !== registry.default) { Codex.deferred = wantT.label; want = registry.default; }
+    if (wantT && wantT.heavy && !params.get('theme') && (okList.indexOf(want) < 0 || (PF && (PF.tier === 'low' || PF.tier === 'still'))) && want !== registry.default) { Codex.deferred = wantT.label; want = registry.default; }
     var entry = Codex.themes.filter(function (t) { return t.id === want; })[0] ||
                 Codex.themes.filter(function (t) { return t.id === registry.default; })[0] || Codex.themes[0];
     var T = Codex.theme = Object.assign({ id: entry.id, label: entry.label }, await json('themes/' + entry.id + '/theme.json'));
     store(T.id);
     if (!sceneOff) try { localStorage.setItem('codex.boot', JSON.stringify({ id: T.id, t: Date.now() })); } catch (e) {}
     var okBoot = function () { try { localStorage.removeItem('codex.boot'); } catch (e) {} };
-    if (!sceneOff) setTimeout(function () { try { localStorage.removeItem('codex.crash'); } catch (e) {} }, 8000);
     var okStable = function () { okBoot(); if (sceneOff || document.hidden) return; try { var l = JSON.parse(localStorage.getItem('codex.ok') || '[]'); if (l.indexOf(T.id) < 0) { l.push(T.id); localStorage.setItem('codex.ok', JSON.stringify(l)); } } catch (e) {} };
     window.addEventListener('pagehide', okBoot); setTimeout(okStable, 8000);
     applyTheme(T);
@@ -121,7 +120,7 @@
     // scène
     var host = document.getElementById('scene');
     if (sceneOff) {
-      Codex.sceneOk = false; Codex.safe = true;
+      Codex.sceneOk = false; Codex.safe = true; document.documentElement.classList.add('noscene');
     } else try {
       if (T.markup) host.insertAdjacentHTML('beforeend', await (await fetch(base + T.markup)).text());
       await Promise.all((T.css || []).map(function (c) { return addCss(base + c); }));
@@ -131,16 +130,18 @@
       Codex.sceneOk = !!(window.CodexScene && window.CodexScene.ok !== false);
       addWho(T);
       if (Codex.customize) Codex.customize.mount(T);
+      if (!Codex.sceneOk) document.documentElement.classList.add('noscene');
       if (!Codex.sceneOk) message("La scène n'a pas pu démarrer (WebGL indisponible ?). La lecture des articles reste disponible.");
     } catch (err) {
       console.error(err);
+      document.documentElement.classList.add('noscene');
       message("La scène 3D n'a pas pu se charger (connexion ou WebGL). La lecture des articles reste disponible.");
       var ld = document.getElementById('loading');
       if (ld) { ld.textContent = "La scène n'a pas pu se charger."; ld.classList.remove('done'); }
     }
     document.documentElement.classList.add('ready');
-    if (Codex.perfOff && !Codex.recovered) message('Votre appareil a été jugé trop juste pour les animations : elles sont suspendues, la lecture fonctionne normalement. Vous pouvez les essayer depuis le menu des thèmes, rubrique « Qualité des animations ».');
-    else if (Codex.safe) message("Mode sans scène : les animations sont coupées, la lecture fonctionne normalement." + (Codex.recovered ? ' (Le navigateur avait planté sur « ' + Codex.recovered + ' ».)' : '') + ' Pour les rétablir, ajoutez ?scene=on à l’adresse.');
+    if (Codex.perfOff) message('Animations désactivées (votre choix). Vous pouvez les rétablir depuis le menu des thèmes, rubrique « Qualité des animations ».');
+    else if (Codex.safe) message("Mode sans scène : les animations sont coupées, la lecture fonctionne normalement. Pour les rétablir, ajoutez ?scene=on à l’adresse.");
     else if (Codex.deferred) { message('Le thème « ' + Codex.deferred + ' » est gourmand : il ne démarre que lorsque vous le choisissez dans le menu des thèmes.'); setTimeout(function () { message(''); }, 9000); }
     else if (Codex.recovered) message("Le thème « " + Codex.recovered + " » a fait planter la visite précédente : retour au thème par défaut. Vous pouvez le réessayer depuis le menu des thèmes.");
     if (Codex.recovered) setTimeout(function () { message(''); }, 14000);
@@ -160,6 +161,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     boot().catch(function (err) {
       console.error(err);
+      document.documentElement.classList.add('noscene');
       var el = document.getElementById('scene-status');
       if (el) { el.hidden = false; el.textContent = 'Le site n\'a pas pu démarrer : ' + err.message; }
     });
