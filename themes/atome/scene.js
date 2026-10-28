@@ -284,10 +284,9 @@ window.CodexScene = { ok: true };
     if (!reduce) RAF(frame);
     var dt = last ? Math.min(.05, Math.max(0, (ms - last) / 1000)) : .016; last = ms;
     if (document.hidden) return;
-    // lecteur ouvert : la scène est derrière un panneau, on ne la redessine qu'à ~8 images/s
-    if (document.documentElement.classList.contains('reading')) { acc += dt; if (acc < .12) return; dt = acc; acc = 0; } else acc = 0;
+    // lecteur ouvert : sur grand écran l'atome reste visible à côté, il garde sa cadence normale (sur téléphone, core/perf.js le ralentit déjà quand il est caché)
     t += dt * (reduce ? 0 : Math.max(.15, CFG.speed));
-    render(Math.min(dt, .12));
+    render(dt);
   }
   var kickPending = false;
   function kick() { if (!reduce || kickPending || !W) return; kickPending = true; requestAnimationFrame(function () { kickPending = false; render(.016); }); }
