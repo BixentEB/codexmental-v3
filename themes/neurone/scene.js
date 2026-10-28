@@ -68,7 +68,7 @@ window.CodexScene = { ok: true };
   var SHAPE = spline(OUT, 6);
   // cervelet (sous le lobe occipital) et tronc cérébral (pont puis bulbe)
   var CBS = spline([[.40, .26], [.52, .19], [.68, .16], [.84, .16], [.94, .23], [.97, .33], [.91, .44], [.76, .51], [.58, .53], [.45, .48], [.38, .38]], 6);
-  var STEM = spline([[.16, .30], [.33, .32], [.37, .43], [.34, .55], [.31, .70], [.29, .82], [.21, .82], [.20, .70], [.16, .58], [.10, .48], [.11, .38]], 6);
+  var STEM = spline([[.15, .24], [.33, .26], [.37, .40], [.35, .52], [.32, .64], [.30, .76], [.28, .83], [.21, .83], [.19, .74], [.16, .62], [.12, .50], [.11, .36]], 6);
   // grands sillons : [points, largeur, intensité]
   var SULCI = [
     [[[-.45, .09], [-.30, .04], [-.10, -.02], [.10, -.08], [.26, -.15], [.33, -.26]], 6, .85],                       // latéral (Sylvius)
@@ -156,46 +156,61 @@ window.CodexScene = { ok: true };
       for (var k = 1; k < P.length - 1; k++) { var mx = (P[k][0] + P[k + 1][0]) / 2, my = (P[k][1] + P[k + 1][1]) / 2; x.quadraticCurveTo(X(P[k][0]), Y(P[k][1]), X(mx), Y(my)); }
       x.lineTo(X(P[P.length - 1][0]), Y(P[P.length - 1][1]));
     }
-    // matière d'une partie du cerveau : remplissage, teinte des lobes, lumière venue d'en haut à gauche, ombre en bas, liseré
-    function body(P, tint, base) {
-      x.save(); path(P, true); x.clip();
-      x.globalCompositeOperation = 'source-over'; x.fillStyle = 'rgba(70,95,210,' + base + ')'; x.fillRect(0, 0, w, h);
-      x.globalCompositeOperation = 'lighter';
-      if (tint) A.forEach(function (a) { var gr = x.createRadialGradient(X(a.x), Y(a.y), 0, X(a.x), Y(a.y), R0 * .62); gr.addColorStop(0, 'rgba(' + a.rgb + ',.16)'); gr.addColorStop(1, 'rgba(' + a.rgb + ',0)'); x.fillStyle = gr; x.fillRect(0, 0, w, h); });
-      var li = x.createLinearGradient(X(-.7), Y(-.8), X(.4), Y(.3)); li.addColorStop(0, 'rgba(200,215,255,.10)'); li.addColorStop(1, 'rgba(200,215,255,0)'); x.fillStyle = li; x.fillRect(0, 0, w, h);
-      path(P, true); x.lineWidth = 22 * u; x.strokeStyle = 'rgba(140,170,255,.06)'; x.stroke(); x.lineWidth = 8 * u; x.strokeStyle = 'rgba(160,190,255,.06)'; x.stroke();
-      x.globalCompositeOperation = 'destination-out';
-      var sh = x.createLinearGradient(X(-.2), Y(-.3), X(.5), Y(.6)); sh.addColorStop(0, 'rgba(0,0,0,0)'); sh.addColorStop(1, 'rgba(0,0,0,.55)'); x.fillStyle = sh; x.fillRect(0, 0, w, h);
-      x.restore();
+    // un seul volume : les trois parties (cerveau, cervelet, tronc) partagent la même matière, la même lumière et le même contour
+    function sub(P) { P.forEach(function (p, i) { if (i) x.lineTo(X(p[0]), Y(p[1])); else x.moveTo(X(p[0]), Y(p[1])); }); x.closePath(); }
+    var PARTS = [STEM, CBS, SHAPE];
+    function union() { x.beginPath(); PARTS.forEach(sub); }
+    // bord extérieur seulement : le tracé de chaque partie, privé de ce qui passe à l'intérieur des autres
+    var tmp = document.createElement('canvas'); tmp.width = net.width; tmp.height = net.height; var tx = tmp.getContext('2d');
+    function outer(width, color) {
+      PARTS.forEach(function (P, i) {
+        tx.setTransform(1, 0, 0, 1, 0, 0); tx.clearRect(0, 0, tmp.width, tmp.height); tx.setTransform(DPR, 0, 0, DPR, 0, 0);
+        tx.lineJoin = 'round'; tx.beginPath(); P.forEach(function (p, k) { if (k) tx.lineTo(X(p[0]), Y(p[1])); else tx.moveTo(X(p[0]), Y(p[1])); }); tx.closePath();
+        tx.lineWidth = width; tx.strokeStyle = color; tx.stroke();
+        tx.globalCompositeOperation = 'destination-out';
+        PARTS.forEach(function (Q, j) { if (j === i) return; tx.beginPath(); Q.forEach(function (p, k) { if (k) tx.lineTo(X(p[0]), Y(p[1])); else tx.moveTo(X(p[0]), Y(p[1])); }); tx.closePath(); tx.fillStyle = '#000'; tx.fill(); });
+        tx.globalCompositeOperation = 'source-over';
+        x.drawImage(tmp, 0, 0, w, h);
+      });
     }
+    // jonction entre deux parties : les points du contour de P qui passent à l'intérieur de Q deviennent une fente
+    function seam(P, Q) { var runs = [], cur = []; P.concat(P.slice(0, 1)).forEach(function (p) { if (inPoly(p[0], p[1], Q)) cur.push(p); else { if (cur.length > 2) runs.push(cur); cur = []; } }); if (cur.length > 2) runs.push(cur); return runs; }
     // sillon : on creuse la matière (le fond apparaît), puis un fin reflet sur la lèvre éclairée
     function groove(P, wd, al) {
       x.globalCompositeOperation = 'destination-out'; curve(P); x.lineWidth = wd * u; x.strokeStyle = 'rgba(0,0,0,' + al + ')'; x.stroke();
       x.globalCompositeOperation = 'lighter'; x.save(); x.translate(-1.1 * u, -1.1 * u); curve(P); x.lineWidth = Math.max(.6, .9 * u); x.strokeStyle = 'rgba(190,210,255,' + (al * .22) + ')'; x.stroke(); x.restore();
     }
 
-    body(STEM, false, .13);
-    groove([[.12, .50], [.24, .53], [.35, .50]], 2.4, .5);                     // limite pont / bulbe
-    body(CBS, false, .15);
-    x.save(); path(CBS, true); x.clip();                                         // lamelles du cervelet
-    for (var f = 0; f < 12; f++) { var yy = .21 + f * .028; groove([[.30, yy + .06], [.50, yy - .01], [.70, yy - .02], [.90, yy + .03], [1.0, yy + .08]], 1.6, .55); }
+    x.save(); union(); x.clip();
+    x.globalCompositeOperation = 'source-over'; x.fillStyle = 'rgba(70,95,210,.12)'; x.fillRect(0, 0, w, h);
+    x.globalCompositeOperation = 'lighter';
+    A.forEach(function (a) { var gr = x.createRadialGradient(X(a.x), Y(a.y), 0, X(a.x), Y(a.y), R0 * .62); gr.addColorStop(0, 'rgba(' + a.rgb + ',.15)'); gr.addColorStop(1, 'rgba(' + a.rgb + ',0)'); x.fillStyle = gr; x.fillRect(0, 0, w, h); });
+    var li = x.createLinearGradient(X(-.7), Y(-.8), X(.4), Y(.3)); li.addColorStop(0, 'rgba(200,215,255,.10)'); li.addColorStop(1, 'rgba(200,215,255,0)'); x.fillStyle = li; x.fillRect(0, 0, w, h);
+    outer(22 * u, 'rgba(140,170,255,.07)'); outer(8 * u, 'rgba(160,190,255,.07)');   // lueur intérieure le long du bord
+    x.globalCompositeOperation = 'destination-out';
+    var sh = x.createLinearGradient(X(-.2), Y(-.3), X(.5), Y(.9)); sh.addColorStop(0, 'rgba(0,0,0,0)'); sh.addColorStop(1, 'rgba(0,0,0,.5)'); x.fillStyle = sh; x.fillRect(0, 0, w, h);
+    // jonctions : fente transverse (cerveau / cervelet), sillon du tronc
+    seam(SHAPE, CBS).forEach(function (r) { groove(r, 5, .7); });
+    seam(SHAPE, STEM).forEach(function (r) { groove(r, 3, .45); });
+    seam(CBS, STEM).forEach(function (r) { groove(r, 3, .5); });
+    groove([[.12, .50], [.24, .53], [.35, .50]], 2.4, .45);                     // limite pont / bulbe
     x.restore();
-    body(SHAPE, true, .15);
-    x.save(); path(SHAPE, true); x.clip();
+    x.save(); x.beginPath(); sub(CBS); x.clip();                                // lamelles du cervelet (sous le cerveau)
+    for (var f = 0; f < 11; f++) { var yy = .245 + f * .027; groove([[.36, yy + .05], [.52, yy - .01], [.70, yy - .02], [.88, yy + .02], [1.0, yy + .07]], 1.5, .5); }
+    x.restore();
+    x.save(); x.beginPath(); sub(SHAPE); x.clip();
     // sillons tertiaires : courtes rides qui découpent les circonvolutions
-    for (var gi = 0; gi < 150; gi++) {
+    for (var gi = 0; gi < 110; gi++) {
       var gx = seed(5000 + gi * 3) * 2 - 1, gy = seed(5001 + gi * 3) * 1.15 - .8; if (!inPoly(gx, gy, SHAPE)) continue;
       var pts = [[gx, gy]], steps = 3 + Math.floor(seed(5002 + gi * 3) * 4), ang = seed(7000 + gi) * TAU;
       for (var st = 0; st < steps; st++) { ang += Math.sin(gi * 1.7 + st * 2.1) * .9; gx += Math.cos(ang) * .035; gy += Math.sin(ang) * .035; pts.push([gx, gy]); }
-      groove(pts, 2.6, .42);
+      groove(pts, 2.4, .34);
     }
     // grands sillons, d'après une vue latérale de l'hémisphère gauche
     SULCI.forEach(function (sc) { groove(sc[0], sc[1], sc[2]); });
     x.restore();
     x.globalCompositeOperation = 'lighter';
-    path(SHAPE, true); x.lineWidth = 1.3; x.strokeStyle = 'rgba(160,190,255,.38)'; x.stroke();
-    path(CBS, true); x.lineWidth = 1.1; x.strokeStyle = 'rgba(160,190,255,.26)'; x.stroke();
-    path(STEM, true); x.strokeStyle = 'rgba(160,190,255,.2)'; x.stroke();
+    outer(1.3, 'rgba(160,190,255,.4)');
     // synapses (légèrement courbes) et neurones
     x.lineWidth = .8;
     E.forEach(function (e, i) {
