@@ -63,6 +63,16 @@
       "category": "Astronomie"
     },
     {
+      "id": "atome",
+      "label": "Atome",
+      "description": "Un atome de bore en petit système solaire : cinq électrons lumineux, cinq rubriques.",
+      "swatch": [
+        "#6ff0ff",
+        "#ff6fb4"
+      ],
+      "category": "Sciences"
+    },
+    {
       "id": "ciel-ailleurs", "heavy": true, "enabled": false,
       "label": "Ciel d'ailleurs",
       "description": "Sur la terre ferme d'un monde inconnu : un ciel qui suit l'heure, des aurores, une lune et une planète à anneaux.",
@@ -83,6 +93,11 @@
       "id": "Astronomie",
       "label": "Astronomie",
       "description": "Systèmes, galaxies et étoiles"
+    },
+    {
+      "id": "Sciences",
+      "label": "Sciences",
+      "description": "La matière vue de (très) près"
     }
   ]
 }

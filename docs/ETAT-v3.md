@@ -20,6 +20,7 @@
 ## Univers ajoutés
 - **Voisinage stellaire** (`themes/voisinage`) : carte 3D des étoiles proches ; chaque étoile dorée est une rubrique.
 - **Vie d'une étoile** (`themes/vie-etoile`) : six stades et deux destins (Soleil / étoile massive) ; chaque rubrique est un stade.
+- **Atome** (`themes/atome`, catégorie Sciences) : un atome de bore 11 en petit système solaire (canvas 2D, sans WebGL) ; chaque électron est une rubrique, clic = saut quantique + photon. Réglages : vitesse, éclat, traînées, modèle Bohr / Mixte / Nuage quantique. S'allège via `Codex.perf.scale`, redessiné à ~8 images/s quand le lecteur est ouvert.
 
 ## Passe « références & thèmes » (octobre 2026)
 - Portrait : séparateurs entre fiches (Coups de cœur, Esprits, Mythes, Mondes, Symboles, Livres & idées) ; illustrations Wikimedia résolues à l'ouverture (`figure.wk[data-q]`, cache `codex.wk`, crédit et licence affichés ; la figure disparaît si rien n'est trouvé) ; « Gaming » devient « Jeu », numéros et icônes retirés (numéros conservés uniquement dans Synchronicités), Compétences en tableau.

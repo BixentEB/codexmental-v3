@@ -1,0 +1,42 @@
+/* Thème Atome — un atome de bore en système solaire miniature (canvas 2D, aucune dépendance). */
+html[data-theme="atome"] { --void: #06041a; }
+#scene #at-cv { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -2; display: block; background: radial-gradient(ellipse at 62% 52%, #1d1250 0%, #0c0830 40%, #05031a 85%); touch-action: pan-y; }
+#scene .hero { min-height: 100svh; display: grid; align-items: center; padding: calc(var(--topbar-h) + 52px) clamp(24px, 7vw, 125px) 65px; position: relative; z-index: 1; pointer-events: none; }
+#scene .hero-inner { max-width: 440px; pointer-events: auto; text-shadow: 0 2px 18px #05031a, 0 0 3px #05031a; }
+#scene .eyebrow { font-family: var(--font-body); font-size: 11px; letter-spacing: .25em; color: #9ff3ff; text-transform: uppercase; font-weight: 700; }
+#scene .hero h1 { font-family: var(--font-display); font-size: clamp(34px, 4.6vw, 64px); letter-spacing: .32em; font-weight: 600; line-height: 1.1; margin: 18px 0; background: linear-gradient(100deg, #8ff6ff 0%, #c9a4ff 45%, #ff7fbf 80%, #ffd27a 100%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; text-shadow: none; filter: drop-shadow(0 0 18px rgba(170, 130, 255, .45)); }
+#scene .hero p { color: #cfcaea; font-size: 16px; max-width: 410px; }
+#scene .hero p.sub { font-family: var(--font-body); text-transform: none; letter-spacing: 0; font-size: 13px; line-height: 1.55; color: #a29dc8; max-width: 380px; }
+#scene .status { position: fixed; bottom: 18px; left: 24px; color: #9a94c4; font: 11px/1 var(--font-mono, monospace); letter-spacing: .11em; pointer-events: none; }
+#scene .at-hud { position: fixed; right: 26px; top: calc(var(--topbar-h) + 18px); display: flex; align-items: baseline; gap: 10px; font: 11px/1 var(--font-mono, monospace); letter-spacing: .08em; color: #a7a1d0; pointer-events: none; }
+#scene .at-hud b { font: 600 22px/1 var(--font-display); color: #ffb4dc; text-shadow: 0 0 14px #ff6fb488; }
+#scene .at-hud i { font-style: normal; color: #8fe9f5; }
+
+/* électrons cliquables (positionnés à chaque image par scene.js) */
+#scene #at-nav { position: fixed; inset: 0; z-index: 2; pointer-events: none; transition: opacity .5s; }
+#scene .at-e { position: absolute; left: 0; top: 0; width: 0; height: 0; will-change: transform; }
+#scene .at-e button { position: absolute; left: -24px; top: -24px; width: 48px; height: 48px; border: 0; padding: 0; background: transparent; border-radius: 50%; cursor: pointer; pointer-events: auto; }
+#scene .at-e button:focus-visible { outline: 1.5px solid var(--c); outline-offset: 2px; }
+#scene .at-e .at-l { position: absolute; left: 16px; top: -7px; white-space: nowrap; font: 600 .74rem/1 var(--font-body); letter-spacing: .16em; text-transform: uppercase; color: #fff; text-shadow: 0 0 10px var(--c), 0 1px 6px #000; pointer-events: none; transition: opacity .3s; }
+#scene .at-e .at-l small { display: block; margin-top: 4px; font: .62rem/1 var(--font-mono, monospace); letter-spacing: .08em; text-transform: none; color: color-mix(in srgb, var(--c) 75%, #fff); opacity: .8; }
+#scene .at-e.behind .at-l { opacity: .45; }
+#scene .at-e .at-t { position: absolute; left: 18px; top: 18px; min-width: 180px; max-width: 240px; padding: 9px 12px; border-radius: 10px; background: rgba(10, 7, 30, .92); border: 1px solid color-mix(in srgb, var(--c) 45%, transparent); box-shadow: 0 8px 26px rgba(0, 0, 0, .5), 0 0 22px color-mix(in srgb, var(--c) 18%, transparent); opacity: 0; transform: translateY(4px); transition: opacity .2s, transform .2s; pointer-events: none; font-size: .78rem; line-height: 1.4; color: #c4bfe2; }
+#scene .at-e button:hover ~ .at-t, #scene .at-e button:focus-visible ~ .at-t { opacity: 1; transform: none; }
+#scene .at-e.hot .at-l { opacity: 1; }
+#scene .at-e.flip .at-l { left: auto; right: 16px; text-align: right; }
+#scene .at-e.flip .at-t { left: auto; right: 18px; }
+
+html.reading #scene .hero, html.reading #scene .status, html.reading #scene .at-hud, html.reading #scene #at-nav { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .35s, visibility 0s .35s; }
+#scene .hero, #scene .status, #scene .at-hud { transition: opacity .5s .1s, visibility 0s; }
+
+@media (max-width: 800px) {
+  #scene .hero { align-items: start; padding: calc(var(--topbar-h) + 22px) 22px 40px; }
+  #scene .hero-inner { max-width: none; }
+  #scene .hero h1 { font-size: 34px; margin: 10px 0; }
+  #scene .hero p { font-size: 14px; }
+  #scene .hero p.sub, #scene .hero-inner > .eyebrow:nth-of-type(2), #scene .status { display: none; }
+  #scene .at-hud { display: none; }
+  #scene .at-e .at-l { font-size: .66rem; letter-spacing: .1em; }
+  #scene .at-e .at-l small, #scene .at-e .at-t { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { #scene *, #scene *::before, #scene *::after { transition: none !important; animation: none !important; } }

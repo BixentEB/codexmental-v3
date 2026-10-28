@@ -1,0 +1,19 @@
+{
+  "label": "Atome",
+  "palette": {
+    "bg": "#06041a", "fg": "#f1eeff", "fgSoft": "#d8d3f2", "muted": "#a49fca", "hud": "#9ff3ff",
+    "accent": "#6ff0ff", "accent2": "#ff6fb4", "line": "rgba(160, 150, 230, 0.28)",
+    "panel": "rgba(14, 10, 38, 0.92)", "panelSolid": "rgba(10, 7, 30, 0.98)", "panelDeep": "rgba(5, 3, 18, 0.45)"
+  },
+  "fonts": {
+    "display": "'Sora', system-ui, -apple-system, 'Segoe UI', sans-serif",
+    "body": "'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif",
+    "mono": "'IBM Plex Mono', ui-monospace, monospace"
+  },
+  "customize": {"title": "Accélérateur", "sub": "Vitesse, éclat et modèle"},
+  "who": {"append": ".hero-inner"},
+  "reader": { "layout": "wide" },
+  "markup": "scene.html",
+  "css": ["scene.css"],
+  "scene": "scene.js"
+}
