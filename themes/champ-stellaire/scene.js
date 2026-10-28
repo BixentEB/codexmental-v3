@@ -68,12 +68,12 @@ var NS='http://www.w3.org/2000/svg';
 var MENU=[['atelier','Atelier','#ffb48a','Créations, théories, hypothèses'],['lab','Laboratoire','#bff0d0','Applications et projets en construction'],['codex','Codex','#dfe8ff','Articles et réflexions'],['dashb','Observatoire','#9ec8ff','Observations, cartes et explorations'],['profil','Portrait','#fff0c8','Parcours, passions et aspirations']];
 /* étoiles : [x, y, taille, nom] — coordonnées approximatives, y vers le bas ; m = les cinq étoiles-rubriques (Atelier, Laboratoire, Codex, Observatoire, Portrait) */
 var CONS=[
- {n:'Persée',w:3,m:[0,2,4,5,6],s:[[2.8,8.9,3.4,'Algol'],[0,0,3.2,'Mirfak'],[-3.3,2.1,2.4],[-3.7,7.3,1.8],[-5.9,9.9,2.6,'Ménkib'],[-5.9,14.1,1.8],[-5.2,18,2.4],[3.2,-3.6,2.2],[5,-6,1.8]],e:[[0,1],[1,7],[7,8],[1,2],[2,3],[3,4],[4,5],[5,6]]},
- {n:'Cassiopée',w:1,m:[0,1,2,3,4],s:[[0,4.5,2.6,'Caph'],[3.9,7.2,3,'Schedar'],[5.9,3,2.6],[9.5,6,2.4,'Ruchbah'],[13.2,1.5,2.2,'Segin']],e:[[0,1],[1,2],[2,3],[3,4]]},
- {n:'Orion',w:1,m:[0,1,3,5,6],s:[[-4.75,-8.6,3.4,'Bételgeuse'],[2.8,-7.5,2.6,'Bellatrix'],[1.05,-.9,2.4],[0,0,2.8,'Alnilam'],[-1.15,.7,2.4],[-2.9,8.5,2.4,'Saïph'],[5.4,7,3.4,'Rigel'],[.3,-11.1,1.8]],e:[[7,0],[7,1],[0,4],[1,2],[4,3],[3,2],[4,5],[2,6]]},
- {n:'Le Cygne',w:1,m:[0,1,2,3,4],s:[[-3.7,-5,3,'Deneb'],[0,0,2.8,'Sadr'],[10.6,12.3,2.6,'Albiréo'],[-4.8,6.3,2.2],[6.9,-4.9,2.2]],e:[[0,1],[1,2],[3,1],[1,4]]},
- {n:'La Lyre',w:1,m:[0,1,2,3,4],s:[[0,0,3.8,'Véga'],[1.5,1.2,2.2],[3.4,1.9,2.2],[4.6,6.1,2.4],[2.6,5.4,2.4],[1.5,-.9,1.5]],e:[[0,1],[1,2],[2,3],[3,4],[4,1],[0,5]]},
- {n:'La Grande Ourse',w:1,m:[0,1,2,4,6],s:[[0,0,3,'Dubhé'],[-.3,5.4,2.4,'Mérak'],[7,8,2.4],[10,4.8,2],[15.5,5.8,2.6,'Alioth'],[19.6,6.9,2.4,'Mizar'],[23,12.5,2.6,'Alkaïd']],e:[[0,1],[1,2],[2,3],[3,0],[3,4],[4,5],[5,6]]}
+ {n:'Persée',w:3,ab:'Per',b:['β','δ','ξ','ζ','ο'],m:[0,2,4,5,6],s:[[2.8,8.9,3.4,'Algol'],[0,0,3.2,'Mirfak'],[-3.3,2.1,2.4],[-3.7,7.3,1.8],[-5.9,9.9,2.6,'Ménkib'],[-5.9,14.1,1.8],[-5.2,18,2.4],[3.2,-3.6,2.2],[5,-6,1.8]],e:[[0,1],[1,7],[7,8],[1,2],[2,3],[3,4],[4,5],[5,6]]},
+ {n:'Cassiopée',w:1,ab:'Cas',b:['β','α','γ','δ','ε'],m:[0,1,2,3,4],s:[[0,4.5,2.6,'Caph'],[3.9,7.2,3,'Schedar'],[5.9,3,2.6],[9.5,6,2.4,'Ruchbah'],[13.2,1.5,2.2,'Segin']],e:[[0,1],[1,2],[2,3],[3,4]]},
+ {n:'Orion',w:1,ab:'Ori',b:['α','γ','ε','κ','β'],m:[0,1,3,5,6],s:[[-4.75,-8.6,3.4,'Bételgeuse'],[2.8,-7.5,2.6,'Bellatrix'],[1.05,-.9,2.4],[0,0,2.8,'Alnilam'],[-1.15,.7,2.4],[-2.9,8.5,2.4,'Saïph'],[5.4,7,3.4,'Rigel'],[.3,-11.1,1.8]],e:[[7,0],[7,1],[0,4],[1,2],[4,3],[3,2],[4,5],[2,6]]},
+ {n:'Le Cygne',w:1,ab:'Cyg',b:['α','γ','β','ε','δ'],m:[0,1,2,3,4],s:[[-3.7,-5,3,'Deneb'],[0,0,2.8,'Sadr'],[10.6,12.3,2.6,'Albiréo'],[-4.8,6.3,2.2],[6.9,-4.9,2.2]],e:[[0,1],[1,2],[3,1],[1,4]]},
+ {n:'La Lyre',w:1,ab:'Lyr',b:['α','ζ','δ','γ','β'],m:[0,1,2,3,4],s:[[0,0,3.8,'Véga'],[1.5,1.2,2.2],[3.4,1.9,2.2],[4.6,6.1,2.4],[2.6,5.4,2.4],[1.5,-.9,1.5]],e:[[0,1],[1,2],[2,3],[3,4],[4,1],[0,5]]},
+ {n:'La Grande Ourse',w:1,ab:'UMa',b:['α','β','γ','ε','η'],m:[0,1,2,4,6],s:[[0,0,3,'Dubhé'],[-.3,5.4,2.4,'Mérak'],[7,8,2.4],[10,4.8,2],[15.5,5.8,2.6,'Alioth'],[19.6,6.9,2.4,'Mizar'],[23,12.5,2.6,'Alkaïd']],e:[[0,1],[1,2],[2,3],[3,0],[3,4],[4,5],[5,6]]}
 ];
 var ZOOM={v:1}; try{var zz=parseFloat(localStorage.getItem('codex.constzoom')); if(zz>=.4&&zz<=1.2) ZOOM.v=zz}catch(e){}
 if(C.customize&&C.customize.pop){try{var zp=C.customize.pop(),zd=document.createElement('div'); zd.innerHTML='<label class="cx-l" for="cs-zoom">Taille de la constellation</label><input id="cs-zoom" type="range" min=".4" max="1.2" step=".05" value="'+ZOOM.v+'">'; zd.querySelector('input').addEventListener('input',function(e){ZOOM.v=parseFloat(e.target.value); try{localStorage.setItem('codex.constzoom',String(ZOOM.v))}catch(_){} place()}); zp.appendChild(zd)}catch(e){}}
@@ -87,7 +87,7 @@ function build(i){
   cur.s.forEach(function(st,j){
     var k=cur.m.indexOf(j), d=document.createElement('div');
     if(k>=0){var M=MENU[k]; d.className='cs-star'; d.style.setProperty('--c',M[2]); d.style.setProperty('--tw',(2.6+k*.55)+'s');
-      d.innerHTML='<button type="button" aria-label="'+M[1]+' — '+M[3]+'"></button><span class="tip"><b>'+M[1]+'</b><em>'+M[3]+'</em></span><span class="core"></span><span class="lab">'+M[1]+'</span>'+(st[3]?'<i class="real">'+st[3]+'</i>':'');
+      d.innerHTML='<button type="button" aria-label="'+M[1]+' — '+M[3]+'"></button><span class="tip"><b>'+M[1]+'</b><em>'+M[3]+'</em></span><span class="core"></span><span class="lab"><b>'+cur.b[k]+'</b><small>'+cur.ab+'</small><span class="nm">'+M[1]+'</span></span>'+(st[3]?'<i class="real">'+st[3]+'</i>':'');
       d.querySelector('button').addEventListener('click',function(){C.navigate(M[0])});
     } else {d.className='cs-dot'; d.style.setProperty('--s',st[2]+'px'); if(st[3]) d.innerHTML='<i>'+st[3]+'</i>'}
     box.appendChild(d); built.push(d);

@@ -54,6 +54,14 @@
     ['dashb', 'Observatoire', '#c9d8ff', 'star', 'Observations, cartes et explorations'],
     ['profil', 'Portrait', '#7fe6b0', 'aurora', 'Parcours, passions et aspirations']
   ];
+  // glyphes d'une écriture inconnue (inventés) : chaque repère du ciel porte le sien, le nom de la rubrique se lit au survol
+  var GLYPH = {
+    codex: 'M10 2v20M10 12m-5.5 0a5.5 5.5 0 1 0 11 0a5.5 5.5 0 1 0 -11 0',
+    atelier: 'M14 4a8 8 0 1 0 0 16a6 6 0 1 1 0-16zM16.5 6.5h.01',
+    lab: 'M10 3L3 20h14zM6 14h8M10 3v-1',
+    dashb: 'M10 2v20M4 7l12 10M16 7L4 17M8 2h4',
+    profil: 'M2 8q4-5 8 0t8 0M2 15q4-5 8 0t8 0M10 19v3'
+  };
   function dirOf(b) { var c = Math.cos(b.el); return [Math.sin(b.az) * c, Math.sin(b.el), Math.cos(b.az) * c]; }
   function glslVec(n, b) { var d = dirOf(b); return 'const vec3 ' + n + ' = vec3(' + d.map(function (x) { return x.toFixed(5); }).join(',') + ');\n'; }
   var CONSTS = glslVec('P_GIANT', BODY.giant) + glslVec('P_MOON', BODY.moon) + glslVec('P_BLUE', BODY.blue) + glslVec('P_STAR', BODY.star) + glslVec('P_MARS', BODY.mars) + glslVec('P_GAL', BODY.galaxy) + glslVec('P_NEB', BODY.neb) + glslVec('P_COMET', BODY.comet) +
@@ -396,7 +404,7 @@ void main(){
   var marks = document.getElementById('ca-marks'), mk = [];
   MENU.forEach(function (m) {
     var d = document.createElement('div'); d.className = 'ca-mk'; d.style.setProperty('--c', m[2]);
-    d.innerHTML = '<button type="button" aria-label="' + m[1] + ' — ' + m[4] + '"></button><span class="ring"></span><span class="lab">' + m[1] + '</span><span class="tip"><em>' + m[4] + '</em></span>';
+    d.innerHTML = '<button type="button" aria-label="' + m[1] + ' — ' + m[4] + '"></button><span class="ring"></span><span class="lab"><svg class="gl" viewBox="0 0 20 24" aria-hidden="true"><path d="' + GLYPH[m[0]] + '"/></svg><span class="nm">' + m[1] + '</span></span><span class="tip"><em>' + m[4] + '</em></span>';
     d.querySelector('button').addEventListener('click', function () { Codex.navigate(m[0]); });
     marks.appendChild(d); mk.push({ el: d, b: BODY[m[3]] });
   });

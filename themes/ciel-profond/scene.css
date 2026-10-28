@@ -171,3 +171,9 @@ html[data-theme="ciel-profond"] body { font-size: 15px; -webkit-font-smoothing: 
   .labcard > svg.ic, .labcard > span:nth-child(2) { display: none; }
   .labcard .gear { border: 0; }
 }
+
+/* Désignations de relevé (J0534+22…) au repos ; nom de la rubrique et coordonnées complètes au survol */
+.node .lbl .sym { display: block; font: 500 .74rem/1.1 var(--font-mono); letter-spacing: .08em; color: var(--accent); text-shadow: 0 0 10px color-mix(in srgb, var(--accent) 45%, transparent), 0 1px 6px #000; }
+.node .lbl b, .node .lbl .co { max-height: 0; max-width: 0; opacity: 0; overflow: hidden; margin-top: 0; transition: max-height .3s, max-width .35s, opacity .25s, margin .3s; }
+.node:hover .lbl b, .node:focus-visible .lbl b, .node[aria-pressed="true"] .lbl b { max-width: 260px; max-height: 20px; opacity: 1; margin-top: 4px; }
+.node:hover .lbl .co, .node:focus-visible .lbl .co, .node[aria-pressed="true"] .lbl .co { max-width: 260px; max-height: 16px; opacity: 1; margin-top: 4px; }

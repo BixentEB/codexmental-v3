@@ -18,11 +18,11 @@ window.CodexScene = { ok: false };
   /* ---------- données ---------- */
   var COL = { O: 0xa9c6ff, B: 0xb8d0ff, A: 0xdce8ff, F: 0xfff3de, G: 0xffe3a6, K: 0xffbf80, M: 0xff8f66, D: 0xeaf2ff };
   var STARS = [
-    { id: 'profil', menu: 1, name: 'Portrait', star: 'Le Soleil', ra: 0, dec: 0, d: 0, cls: 'G', m: 1.3, sub: 'Notre étoile', text: "Le point de départ de toute carte : c’est d’ici que l’on observe. Un espace pour découvrir l’auteur, ses passions et ses influences." },
-    { id: 'codex', menu: 1, name: 'Codex', star: 'Sirius', ra: 6.7525, dec: -16.716, d: 8.6, cls: 'A', m: 1.6, text: "La plus brillante des étoiles du ciel nocturne, accompagnée d’une naine blanche. Le blog : articles et réflexions." },
-    { id: 'atelier', menu: 1, name: 'Atelier', star: 'Alpha du Centaure', ra: 14.66, dec: -60.83, d: 4.37, cls: 'G', m: 1.4, text: "Le système stellaire le plus proche du Soleil. Le lieu où je range mes idées farfelues." },
-    { id: 'lab', menu: 1, name: 'Laboratoire', star: 'Véga', ra: 18.615, dec: 38.78, d: 25, cls: 'A', m: 1.5, text: "Étoile blanche très brillante, longtemps utilisée comme référence de luminosité. La vitrine de mes créations." },
-    { id: 'dashb', menu: 1, name: 'Observatoire', star: 'Arcturus', ra: 14.261, dec: 19.18, d: 36.7, cls: 'K', m: 1.5, text: "Géante orangée parmi les plus brillantes du ciel. La tête dans les étoiles : cartes et données astronomiques." },
+    { id: 'profil', menu: 1, name: 'Portrait', star: 'Le Soleil', sp: 'G2 V', far: '☉', ra: 0, dec: 0, d: 0, cls: 'G', m: 1.3, sub: 'Notre étoile', text: "Le point de départ de toute carte : c’est d’ici que l’on observe. Un espace pour découvrir l’auteur, ses passions et ses influences." },
+    { id: 'codex', menu: 1, name: 'Codex', star: 'Sirius', sp: 'A1 V', far: '8,6 al', ra: 6.7525, dec: -16.716, d: 8.6, cls: 'A', m: 1.6, text: "La plus brillante des étoiles du ciel nocturne, accompagnée d’une naine blanche. Le blog : articles et réflexions." },
+    { id: 'atelier', menu: 1, name: 'Atelier', star: 'Alpha du Centaure', sp: 'G2 V', far: '4,4 al', ra: 14.66, dec: -60.83, d: 4.37, cls: 'G', m: 1.4, text: "Le système stellaire le plus proche du Soleil. Le lieu où je range mes idées farfelues." },
+    { id: 'lab', menu: 1, name: 'Laboratoire', star: 'Véga', sp: 'A0 V', far: '25 al', ra: 18.615, dec: 38.78, d: 25, cls: 'A', m: 1.5, text: "Étoile blanche très brillante, longtemps utilisée comme référence de luminosité. La vitrine de mes créations." },
+    { id: 'dashb', menu: 1, name: 'Observatoire', star: 'Arcturus', sp: 'K1.5 III', far: '37 al', ra: 14.261, dec: 19.18, d: 36.7, cls: 'K', m: 1.5, text: "Géante orangée parmi les plus brillantes du ciel. La tête dans les étoiles : cartes et données astronomiques." },
     { id: 'proxima', name: 'Proxima du Centaure', lbl: 1, ra: 14.495, dec: -62.68, d: 4.24, cls: 'M', m: .8, text: "Naine rouge, l’étoile la plus proche du Soleil. Elle possède au moins une planète tempérée, Proxima b." },
     { id: 'barnard', name: 'Étoile de Barnard', lbl: 1, ra: 17.963, dec: 4.69, d: 5.96, cls: 'M', m: .8, text: "Naine rouge qui possède le plus grand mouvement propre connu : elle se déplace plus vite que toute autre sur le fond du ciel." },
     { id: 'wolf359', name: 'Wolf 359', ra: 10.94, dec: 7.01, d: 7.86, cls: 'M', m: .7, text: "Naine rouge très peu lumineuse, invisible à l’œil nu malgré sa proximité." },
@@ -153,7 +153,7 @@ window.CodexScene = { ok: false };
   var cardEl = document.getElementById('vs-card'), hov = null;
   named.forEach(function (s) {
     var e = document.createElement('div'); e.className = 'vs-pt' + (s.menu ? ' menu' : '');
-    e.innerHTML = '<button class="hit" type="button" aria-label="' + s.name + (s.star ? ' — ' + s.star : '') + '"></button><span class="lbl"><b>' + s.name + '</b>' + (s.star ? '<i>' + s.star + '</i>' : '') + '</span>';
+    e.innerHTML = '<button class="hit" type="button" aria-label="' + s.name + (s.star ? ' — ' + s.star : '') + '"></button><span class="lbl">' + (s.sp ? '<span class="sym">' + s.sp + '<small>' + s.far + '</small></span>' : '') + '<b>' + s.name + '</b>' + (s.star ? '<i>' + s.star + '</i>' : '') + '</span>';
     labelsEl.appendChild(e); s.el = e;
     var b = e.querySelector('.hit');
     b.addEventListener('mouseenter', function () { hover(s); }); b.addEventListener('mouseleave', function () { hover(null); });

@@ -22,6 +22,12 @@
 - **Vie d'une étoile** (`themes/vie-etoile`) : six stades et deux destins (Soleil / étoile massive) ; chaque rubrique est un stade.
 - **Atome** (`themes/atome`, catégorie Sciences) : un atome de bore 11 en petit système solaire (canvas 2D, sans WebGL) ; chaque électron est une rubrique, clic = saut quantique + photon. Réglages : vitesse, éclat, traînées, modèle Bohr / Mixte / Nuage quantique. S'allège via `Codex.perf.scale`, redessiné à ~8 images/s quand le lecteur est ouvert.
 
+## Étiquettes « savantes » (octobre 2026)
+Principe commun : chaque rubrique porte au repos un symbole propre à l'univers du thème, et son nom se déplie au survol, au focus ou une fois choisie.
+- Atome : lettres façon symboles chimiques (C, A, L, O, P). Héliosphère : symboles planétaires ☿ ♁ ♂ ♄ ♅. Champ stellaire : désignations de Bayer (α Per, β Cas…).
+- Voisinage : types spectraux réels (G2 V, A1 V, K1.5 III…) avec la distance. Galactique : numéros de catalogue « CM » façon Messier.
+- Vie d'une étoile : désignations des stades (H₂, YSO I, G2 V / O7 V, M III / M Ia, PN / SN II, DA / NS). Ciel profond : désignations de relevé façon UAI (J hhmm±dd), calculées sur la position. Ciel d'ailleurs : glyphes inventés (SVG).
+
 ## Passe « références & thèmes » (octobre 2026)
 - Portrait : séparateurs entre fiches (Coups de cœur, Esprits, Mythes, Mondes, Symboles, Livres & idées) ; illustrations Wikimedia résolues à l'ouverture (`figure.wk[data-q]`, cache `codex.wk`, crédit et licence affichés ; la figure disparaît si rien n'est trouvé) ; « Gaming » devient « Jeu », numéros et icônes retirés (numéros conservés uniquement dans Synchronicités), Compétences en tableau.
 - Héliosphère : description, titre en haut à gauche, Soleil plus réaliste. Champ stellaire : constellation de Persée (Algol variable). Vie d'une étoile : disque/jets/cavité de la protoétoile et nébuleuse planétaire refaits.

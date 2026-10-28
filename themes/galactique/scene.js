@@ -458,10 +458,12 @@ window.__G = { PT_VERT: PT_VERT, STAR_FRAG: STAR_FRAG, NEB_FRAG: NEB_FRAG, DUST_
 
   /* ---------- Interface ---------- */
   var els = {}, tabButtons = {};
+  // numéros de catalogue façon Messier/NGC (catalogue « CM », celui de Codex Mental) : le nom se déplie au survol
+  var CAT = { codex: 'CM 1', profil: 'CM 13', atelier: 'CM 31', lab: 'CM 42', dashb: 'CM 57', blog: 'CM 64', rubis: 'CM 81' };
   SYS.forEach(function (d) {
     var s = SECTIONS[d.id], el = document.createElement('div');
     el.className = 'pl right';
-    el.innerHTML = '<button class="hit" type="button" aria-label="' + s.name + '"></button><span class="lbl"><b>' + s.name + '</b></span>';
+    el.innerHTML = '<button class="hit" type="button" aria-label="' + s.name + '"></button><span class="lbl">' + (CAT[d.id] ? '<span class="sym">' + CAT[d.id] + '</span>' : '') + '<b>' + s.name + '</b></span>';
     labelsEl.appendChild(el);
     var h = el.querySelector('.hit');
     h.addEventListener('focus', function () { hover = d.id; }); h.addEventListener('blur', function () { if (hover === d.id) hover = null; });

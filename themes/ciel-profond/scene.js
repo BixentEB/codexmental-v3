@@ -384,6 +384,9 @@ window.CodexScene = { ok: true };
     nodeEls.forEach(function (n) {
       var s = skyAt(n.offsetLeft, n.offsetTop);
       n.querySelector('.co').textContent = 'α ' + fmtRA(s[0], true) + '  δ ' + fmtDec(s[1], false);
+      // désignation de relevé à la manière de l'UAI (J hhmm ± dd) : le repère porte son nom de catalogue, la rubrique se lit au survol
+      var hr = ((s[0] % 24) + 24) % 24, hh = Math.floor(hr), mn = Math.floor((hr - hh) * 60), dg = Math.abs(s[1]), sy = n.querySelector('.sym');
+      if (sy) sy.textContent = 'J' + p2(hh) + p2(mn) + (s[1] < 0 ? '−' : '+') + p2(Math.floor(dg));
     });
   }
   function updateHud() {

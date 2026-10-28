@@ -176,3 +176,8 @@ html[data-theme="galactique"] #scene .stage { position: absolute !important; ins
 @media (max-width: 700px) { #scene #panel:not(.closed) { right: 10px !important; left: 10px !important; width: auto !important; bottom: 84px !important; } }
 #scene .caption { bottom: 96px !important; right: 20px !important; }
 @media (max-width: 700px) { #scene .caption { display: none !important; } }
+
+/* Numéros de catalogue (CM 1, CM 31…) au repos ; le nom du système se déplie au survol ou une fois choisi */
+#scene .pl .lbl .sym { font: 500 13px/1.1 var(--font-mono, 'IBM Plex Mono', monospace); letter-spacing: .1em; color: #e6ddff; text-shadow: 0 0 10px rgba(185,164,255,.6), 0 1px 6px #000; }
+#scene .pl .lbl b { max-height: 0; opacity: 0; overflow: hidden; transition: max-height .3s, opacity .25s; }
+#scene .pl.hov .lbl b, #scene .pl.active .lbl b { max-height: 22px; opacity: 1; }

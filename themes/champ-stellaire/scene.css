@@ -57,3 +57,10 @@ html.reading #scene #cs-const, html.reading #scene .cs-horizon { opacity: 0; vis
 #scene #cs-lines line { stroke: rgba(190,205,255,.3); }
 #scene .cs-dot::before { filter: brightness(1.15); }
 #scene #cs-lines line { stroke: rgba(200,215,255,.5); stroke-dasharray: 3 5; }
+
+/* Désignations de Bayer (α Per, β Cas…) : la lettre grecque au repos, le nom de la rubrique au survol */
+#scene .cs-star .lab { display: flex; align-items: baseline; gap: 4px; text-transform: none; letter-spacing: 0; top: 4px; }
+#scene .cs-star .lab b { font: italic 400 1.35rem/1 Georgia, 'Times New Roman', serif; color: #fff; text-shadow: 0 0 10px var(--c, #bcd0ff), 0 1px 6px #000; }
+#scene .cs-star .lab small { font: .66rem/1 var(--font-mono, monospace); letter-spacing: .06em; color: rgba(215,225,255,.7); }
+#scene .cs-star .lab .nm { max-width: 0; opacity: 0; overflow: hidden; margin-left: 4px; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: #dfe6ff; transition: max-width .35s, opacity .25s; }
+#scene .cs-star button:hover ~ .lab .nm, #scene .cs-star button:focus-visible ~ .lab .nm { max-width: 160px; opacity: 1; }
