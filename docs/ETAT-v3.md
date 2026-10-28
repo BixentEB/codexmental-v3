@@ -20,7 +20,7 @@
 ## Univers ajoutés
 - **Voisinage stellaire** (`themes/voisinage`) : carte 3D des étoiles proches ; chaque étoile dorée est une rubrique.
 - **Vie d'une étoile** (`themes/vie-etoile`) : six stades et deux destins (Soleil / étoile massive) ; chaque rubrique est un stade.
-- **Neurone** (`themes/neurone`, catégorie Sciences) : cerveau de profil en réseau de neurones (canvas 2D, réseau fixe dessiné une fois) ; influx de synapse en synapse, fibres longues entre aires ; cinq aires de Brodmann = rubriques (BA 10 Codex, BA 4 Laboratoire, BA 7 Atelier, BA 17 Observatoire, BA 38 Portrait) ; clic = salve ; réglages : rythme cérébral δ θ α β γ (vitesse, densité, ondes lentes, tracé EEG), activité, éclat.
+- **Neurone** (`themes/neurone`, catégorie Sciences) : cerveau de profil en réseau de neurones (canvas 2D, réseau fixe dessiné une fois) ; influx de synapse en synapse, fibres longues entre aires ; cinq aires de Brodmann = rubriques (BA 10 Codex, BA 4 Laboratoire, BA 7 Atelier, BA 17 Observatoire, BA 38 Portrait) ; clic = salve ; réglages : forme du cerveau (Trait par défaut — une seule silhouette, circonvolutions en lignes de niveau ; Anatomie — volume et sillons creusés ; Constellation — contour fin), rythme cérébral δ θ α β γ (vitesse, densité, ondes lentes, tracé EEG), activité, éclat.
 - **Atome** (`themes/atome`, catégorie Sciences) : un atome de bore 11 en petit système solaire (canvas 2D, sans WebGL) ; chaque électron est une rubrique, clic = saut quantique + photon. Réglages : vitesse, éclat, traînées, modèle Bohr / Mixte / Nuage quantique. S'allège via `Codex.perf.scale`, redessiné normalement quand le lecteur est ouvert (visible à côté sur grand écran).
 
 ## Étiquettes « savantes » (octobre 2026)

@@ -16,7 +16,7 @@ window.CodexScene = { ok: true };
   function Q() { return C.perf ? C.perf.scale : 1; }
 
   /* ---------- réglages ---------- */
-  var CFG = { band: 'alpha', act: 1, glow: 1 };
+  var CFG = { band: 'alpha', act: 1, glow: 1, form: 'trait' };
   try { var sv = JSON.parse(localStorage.getItem('codex.neurone') || 'null'); if (sv) Object.keys(CFG).forEach(function (k) { if (sv[k] != null) CFG[k] = sv[k]; }); } catch (e) {}
   function save() { try { localStorage.setItem('codex.neurone', JSON.stringify(CFG)); } catch (e) {} }
   var BANDS = {
@@ -66,6 +66,8 @@ window.CodexScene = { ok: true };
     return out;
   }
   var SHAPE = spline(OUT, 6);
+  // silhouette d'un seul tenant (cerveau + cervelet + tronc) pour les formes « Trait » et « Constellation »
+  var ONE = spline([[-1.0, -.05], [-.98, -.22], [-.92, -.38], [-.82, -.52], [-.68, -.63], [-.50, -.71], [-.30, -.76], [-.10, -.78], [.10, -.77], [.30, -.72], [.48, -.64], [.64, -.53], [.78, -.40], [.88, -.26], [.95, -.12], [.99, 0], [.965, .10], [.94, .155], [.97, .21], [.985, .30], [.95, .38], [.88, .46], [.74, .52], [.58, .53], [.46, .49], [.38, .47], [.35, .55], [.32, .66], [.30, .77], [.28, .84], [.21, .84], [.19, .75], [.16, .62], [.12, .50], [.07, .40], [.0, .35], [-.12, .34], [-.25, .32], [-.37, .30], [-.47, .27], [-.52, .20], [-.50, .13], [-.45, .09], [-.53, .07], [-.67, .09], [-.81, .09], [-.93, .05], [-.99, .02]], 6);
   // cervelet (sous le lobe occipital) et tronc cérébral (pont puis bulbe)
   var CBS = spline([[.40, .26], [.52, .19], [.68, .16], [.84, .16], [.94, .23], [.97, .33], [.91, .44], [.76, .51], [.58, .53], [.45, .48], [.38, .38]], 6);
   var STEM = spline([[.15, .24], [.33, .26], [.37, .40], [.35, .52], [.32, .64], [.30, .76], [.28, .83], [.21, .83], [.19, .74], [.16, .62], [.12, .50], [.11, .36]], 6);
@@ -181,6 +183,7 @@ window.CodexScene = { ok: true };
       x.globalCompositeOperation = 'lighter'; x.save(); x.translate(-1.1 * u, -1.1 * u); curve(P); x.lineWidth = Math.max(.6, .9 * u); x.strokeStyle = 'rgba(190,210,255,' + (al * .22) + ')'; x.stroke(); x.restore();
     }
 
+    function anatomie() {
     x.save(); union(); x.clip();
     x.globalCompositeOperation = 'source-over'; x.fillStyle = 'rgba(70,95,210,.12)'; x.fillRect(0, 0, w, h);
     x.globalCompositeOperation = 'lighter';
@@ -211,6 +214,61 @@ window.CodexScene = { ok: true };
     x.restore();
     x.globalCompositeOperation = 'lighter';
     outer(1.3, 'rgba(160,190,255,.4)');
+    }
+
+    // contour d'un seul trait : une ligne lumineuse qui fait tout le tour (cerveau, cervelet, tronc)
+    function line(P, wd, color) { curve(P); x.lineWidth = wd; x.strokeStyle = color; x.stroke(); }
+    function rim(P, glow) {
+      x.globalCompositeOperation = 'lighter'; x.beginPath(); sub(P);
+      x.lineWidth = 10 * u; x.strokeStyle = 'rgba(120,160,255,' + (.05 * glow) + ')'; x.stroke();
+      x.lineWidth = 4 * u; x.strokeStyle = 'rgba(150,185,255,' + (.08 * glow) + ')'; x.stroke();
+      x.lineWidth = 1.4; x.strokeStyle = 'rgba(175,200,255,' + (.42 * glow) + ')'; x.stroke();
+    }
+    function constellation() {   // l'esprit de la première version : un voile, un contour fin, deux sillons, le réseau au premier plan
+      x.save(); x.beginPath(); sub(ONE); x.clip();
+      x.globalCompositeOperation = 'lighter';
+      var gr = x.createRadialGradient(X(-.1), Y(-.15), 0, X(-.1), Y(-.15), R0 * 1.15); gr.addColorStop(0, 'rgba(80,110,230,.13)'); gr.addColorStop(1, 'rgba(60,80,200,.03)'); x.fillStyle = gr; x.fillRect(0, 0, w, h);
+      SULCI.slice(0, 2).forEach(function (sc) { line(sc[0], 1.8, 'rgba(140,170,255,.2)'); });
+      line([[.40, .245], [.60, .21], [.80, .21], [.96, .27]], 1.4, 'rgba(140,170,255,.18)');
+      for (var f = 0; f < 5; f++) { var yy = .3 + f * .045; line([[.42, yy + .03], [.62, yy - .01], [.82, yy], [.95, yy + .04]], 1, 'rgba(150,185,255,.1)'); }
+      x.restore(); rim(ONE, .85);
+    }
+    function trait() {   // une seule forme, tracée comme une gravure lumineuse : circonvolutions en longues lignes fluides
+      x.save(); x.beginPath(); sub(ONE); x.clip();
+      x.globalCompositeOperation = 'source-over'; x.fillStyle = 'rgba(60,85,205,.1)'; x.fillRect(0, 0, w, h);
+      x.globalCompositeOperation = 'lighter';
+      A.forEach(function (a) { var gr = x.createRadialGradient(X(a.x), Y(a.y), 0, X(a.x), Y(a.y), R0 * .6); gr.addColorStop(0, 'rgba(' + a.rgb + ',.13)'); gr.addColorStop(1, 'rgba(' + a.rgb + ',0)'); x.fillStyle = gr; x.fillRect(0, 0, w, h); });
+      var li = x.createLinearGradient(X(-.7), Y(-.8), X(.4), Y(.4)); li.addColorStop(0, 'rgba(200,215,255,.09)'); li.addColorStop(1, 'rgba(200,215,255,0)'); x.fillStyle = li; x.fillRect(0, 0, w, h);
+      // circonvolutions : les lignes de niveau d'un relief ondulé (calculées par carrés marchants) dessinent un labyrinthe régulier,
+      // sans croisements ni amas, comme les plis du cortex
+      function relief(px, py) { return Math.sin(px * 10.5 + Math.sin(py * 6.4) * 1.5) + Math.sin(py * 13.2 + Math.cos(px * 5.9) * 1.8) * .85 + Math.sin((px * .7 + py) * 17.5) * .35; }
+      x.save(); x.beginPath(); sub(SHAPE); x.clip();
+      var GXn = Math.round(210 * Math.max(.7, Q())), GYn = Math.round(GXn * .62), ax = -1.02, bx = 1.02, ay = -.82, by = .4, dx = (bx - ax) / GXn, dy = (by - ay) / GYn, V = [];
+      for (var gj = 0; gj <= GYn; gj++) { V.push([]); for (var gi2 = 0; gi2 <= GXn; gi2++) V[gj].push(relief(ax + gi2 * dx, ay + gj * dy)); }
+      [-1.5, -1.0, -.5, 0, .5, 1.0, 1.5].forEach(function (lv, li3) {
+        x.beginPath();
+        for (var cj = 0; cj < GYn; cj++) for (var ci = 0; ci < GXn; ci++) {
+          var a0 = V[cj][ci], a1 = V[cj][ci + 1], a2 = V[cj + 1][ci + 1], a3 = V[cj + 1][ci], code = (a0 > lv ? 8 : 0) | (a1 > lv ? 4 : 0) | (a2 > lv ? 2 : 0) | (a3 > lv ? 1 : 0);
+          if (code === 0 || code === 15) continue;
+          var X0 = ax + ci * dx, Y0 = ay + cj * dy;
+          var e = { t: [X0 + dx * (lv - a0) / (a1 - a0), Y0], r: [X0 + dx, Y0 + dy * (lv - a1) / (a2 - a1)], b: [X0 + dx * (lv - a3) / (a2 - a3), Y0 + dy], l: [X0, Y0 + dy * (lv - a0) / (a3 - a0)] };
+          var segs = { 1: ['l', 'b'], 2: ['b', 'r'], 3: ['l', 'r'], 4: ['t', 'r'], 5: ['l', 't', 'b', 'r'], 6: ['t', 'b'], 7: ['l', 't'], 8: ['l', 't'], 9: ['t', 'b'], 10: ['l', 'b', 't', 'r'], 11: ['t', 'r'], 12: ['l', 'r'], 13: ['b', 'r'], 14: ['l', 'b'] }[code];
+          for (var sg = 0; sg < segs.length; sg += 2) { var p1 = e[segs[sg]], p2 = e[segs[sg + 1]]; x.moveTo(X(p1[0]), Y(p1[1])); x.lineTo(X(p2[0]), Y(p2[1])); }
+        }
+        x.lineWidth = 1.1; x.strokeStyle = 'rgba(165,192,255,' + (li3 === 3 ? .3 : .19) + ')'; x.stroke();
+      });
+      x.restore();
+      // cervelet : lamelles fines et serrées ; tronc : deux fibres longitudinales
+      for (var f2 = 0; f2 < 10; f2++) { var y2 = .25 + f2 * .026; line([[.43, y2 + .03], [.58, y2 - .01], [.76, y2 - .01], [.90, y2 + .02], [.99, y2 + .06]], 1, 'rgba(160,190,255,.17)'); }
+      line([[.40, .23], [.55, .20], [.72, .19], [.86, .17], [.945, .155]], 1.8, 'rgba(175,200,255,.34)');   // fente transverse, jusqu'à l'encoche du contour
+      line([[.24, .40], [.25, .56], [.24, .70], [.245, .82]], 1, 'rgba(160,190,255,.14)'); line([[.31, .40], [.30, .56], [.28, .7]], 1, 'rgba(160,190,255,.1)');
+      // grands sillons : plus marqués, en lignes et non en creux
+      SULCI.forEach(function (sc, i) { line(sc[0], i < 2 ? 2 : 1.3, 'rgba(170,195,255,' + (i < 2 ? .3 : .17) + ')'); });
+      x.globalCompositeOperation = 'destination-out';
+      var sh = x.createLinearGradient(X(-.2), Y(-.3), X(.5), Y(.9)); sh.addColorStop(0, 'rgba(0,0,0,0)'); sh.addColorStop(1, 'rgba(0,0,0,.4)'); x.fillStyle = sh; x.fillRect(0, 0, w, h);
+      x.restore(); rim(ONE, 1.1);
+    }
+    if (CFG.form === 'constellation') constellation(); else if (CFG.form === 'trait') trait(); else anatomie();
     // synapses (légèrement courbes) et neurones
     x.lineWidth = .8;
     E.forEach(function (e, i) {
@@ -422,6 +480,16 @@ window.CodexScene = { ok: true };
       sw.appendChild(btn);
     });
     pop.appendChild(md);
+    var fm = document.createElement('div');
+    fm.innerHTML = '<span class="cx-l">Forme du cerveau</span><div class="cx-sw" role="radiogroup" aria-label="Forme du cerveau"></div>';
+    var fsw = fm.querySelector('.cx-sw');
+    [['trait', 'Trait'], ['anatomie', 'Anatomie'], ['constellation', 'Constellation']].forEach(function (o) {
+      var btn = document.createElement('button'); btn.type = 'button'; btn.setAttribute('role', 'radio'); btn.dataset.v = o[0]; btn.textContent = o[1];
+      btn.setAttribute('aria-checked', String(CFG.form === o[0]));
+      btn.addEventListener('click', function () { CFG.form = o[0]; save(); paintNet(); fsw.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-checked', String(x.dataset.v === CFG.form)); }); kick(); });
+      fsw.appendChild(btn);
+    });
+    pop.appendChild(fm);
     [['nr-act', 'Activité', .3, 2, .05, 'act'], ['nr-glow', 'Éclat', .4, 1.6, .05, 'glow']].forEach(function (o) {
       var d = document.createElement('div');
       d.innerHTML = '<label class="cx-l" for="' + o[0] + '">' + o[1] + '</label><input id="' + o[0] + '" type="range" min="' + o[2] + '" max="' + o[3] + '" step="' + o[4] + '" value="' + CFG[o[5]] + '">';
