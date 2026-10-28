@@ -282,3 +282,20 @@
 .prose details.note-collapsible > .note-body { padding: 0 16px 14px; }
 .prose details.note-collapsible > .note-body > :first-child { margin-top: 0; }
 .prose details.note-collapsible > .note-body > :last-child { margin-bottom: 0; }
+
+/* ---------- Observatoire : présentation et démo intégrée (content/dashb/index.html) ---------- */
+.pane:has(.obs-pres) { max-width: 940px; }
+.obs-demo { margin: 4px 0 22px; }
+.obs-demo iframe { display: block; width: 100%; aspect-ratio: 16 / 10; max-height: 70vh; border: 1px solid var(--line); border-radius: 14px; background: #03040a; }
+.obs-demo figcaption { margin-top: 8px; font-size: .78rem; color: var(--muted); }
+.obs-card { padding: 18px 20px; border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); border-radius: 14px; background: color-mix(in srgb, var(--accent) 6%, transparent); }
+.obs-card p { margin: 0 0 .7em; }
+.obs-card p:last-child { margin-bottom: 0; }
+.prose .obs-points { list-style: none; padding: 0; margin: 20px 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.prose .obs-points li { margin: 0; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; }
+.obs-points b { display: block; color: var(--accent); margin-bottom: 2px; }
+.obs-points span { display: block; font-size: .88rem; color: var(--fg-soft); line-height: 1.5; }
+.obs-cta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; margin-top: 20px; }
+.prose .obs-cta a { display: inline-block; padding: 10px 18px; border-radius: 999px; background: var(--accent); color: var(--bg); font-weight: 650; text-decoration: none; }
+.prose .obs-cta a:hover { filter: brightness(1.08); }
+.obs-cta small { color: var(--muted); font-size: .78rem; }

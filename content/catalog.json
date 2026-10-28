@@ -291,8 +291,8 @@
   {
    "id": "dashb",
    "label": "Observatoire",
-   "kicker": "Tableau de bord",
-   "intro": "Un espace d'exploration astronomique : cartes célestes, observations, visualisations.",
+   "kicker": "Immersion astronomique",
+   "intro": "Le système solaire et les étoiles voisines à leurs vraies positions, des données réelles et des hypothèses personnelles.",
    "layout": "page",
    "tree": [
     {
@@ -801,8 +801,10 @@
   },
   "dashb/index": {
    "title": "Observatoire",
-   "type": "pending",
-   "desc": "L'observatoire est une application interactive à part entière ; son portage dans v3 est prévu après les rubriques de lecture."
+   "src": "content/dashb/index.html",
+   "base": "dashb",
+   "type": "page",
+   "desc": "Une immersion astronomique : le système solaire et les étoiles voisines à leurs vraies positions."
   },
   "profil/bio/index": {
    "title": "Introduction",

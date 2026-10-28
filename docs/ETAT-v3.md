@@ -6,9 +6,9 @@
 - Le site est autonome : three.js (`vendor/`), polices (`fonts/`) et images d'articles (`img/articles/`) sont hébergés ici ; plus aucune dépendance à la v1 ni à la v2 (hors images Wikimedia Commons et vidéos YouTube intégrées dans certains articles).
 - Contenus : Codex (blog), Atelier, Laboratoire (vitrine : `content/lab/projects.json`), Portrait, Contact, Mentions légales (`codex/legal`).
 - Le Journal a été supprimé (il doublait le Codex).
+- Observatoire : application autonome sur obs.codexmental.com (dépôt `observatoire`). La rubrique présente le projet (`content/dashb/index.html`) avec une démo intégrée (`obs.codexmental.com/?demo` : léger accéléré, visite automatique) et un lien vers le site.
 
 ## Pas encore migré
-- **Observatoire** : à construire comme application autonome (voir la discussion) ; la rubrique affiche une page d'attente.
 - Pages complètes de v2 hors catalogue (`arc/`, `mentions/`, `blog/modele.html`) : non reprises, volontairement.
 - Brouillons : `psy/article2` et `altstates/revelucide` sont listés avec la mention « brouillon » (à décider : publier, masquer).
 
