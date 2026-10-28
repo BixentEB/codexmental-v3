@@ -139,8 +139,9 @@ window.CodexScene = { ok: true };
     var d = document.createElement('div'); d.className = 'at-e'; d.style.setProperty('--c', e.c);
     d.innerHTML = '<button type="button"></button><span class="at-l"></span><span class="at-t"></span>';
     var b = d.querySelector('button'); b.setAttribute('aria-label', e.name + ' — ' + e.info);
-    d.querySelector('.at-l').innerHTML = e.name + '<small>électron ' + e.orb + '</small>';
-    d.querySelector('.at-t').textContent = e.info;
+    // une lettre façon symbole chimique ; le nom complet apparaît au survol et pendant le saut quantique
+    d.querySelector('.at-l').innerHTML = '<b>' + e.name.charAt(0) + '</b><span class="at-n">' + e.name + '</span>';
+    d.querySelector('.at-t').innerHTML = '<b>' + e.name + '</b><small>électron ' + e.orb + '</small>' + e.info;
     b.addEventListener('click', function () { C.navigate(e.id); });
     nav.appendChild(d); e.el = d; e.back = null; e.flip = null;
   });
