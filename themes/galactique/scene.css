@@ -177,7 +177,11 @@ html[data-theme="galactique"] #scene .stage { position: absolute !important; ins
 #scene .caption { bottom: 96px !important; right: 20px !important; }
 @media (max-width: 700px) { #scene .caption { display: none !important; } }
 
-/* Numéros de catalogue (CM 1, CM 31…) au repos ; le nom du système se déplie au survol ou une fois choisi */
+/* Numéros de catalogue (CM 1, CM 31…) ; ils se changent sur place en nom de système (core/names.js) */
 #scene .pl .lbl .sym { font: 500 13px/1.1 var(--font-mono, 'IBM Plex Mono', monospace); letter-spacing: .1em; color: #e6ddff; text-shadow: 0 0 10px rgba(185,164,255,.6), 0 1px 6px #000; }
-#scene .pl .lbl b { max-height: 0; opacity: 0; overflow: hidden; transition: max-height .3s, opacity .25s; }
-#scene .pl.hov .lbl b, #scene .pl.active .lbl b { max-height: 22px; opacity: 1; }
+
+/* Survol / rubrique choisie : on montre l'autre nom (courant en mode scientifique ou alterné, scientifique en mode courant) */
+#scene .pl.hov .cx-nm > .cx-sci, #scene .pl.active .cx-nm > .cx-sci { opacity: 0; filter: blur(4px); }
+#scene .pl.hov .cx-nm > .cx-plain, #scene .pl.active .cx-nm > .cx-plain { opacity: 1; filter: none; }
+html.cxn-plain #scene .pl.hov .cx-nm > .cx-sci, html.cxn-plain #scene .pl.active .cx-nm > .cx-sci { opacity: 1; filter: none; }
+html.cxn-plain #scene .pl.hov .cx-nm > .cx-plain, html.cxn-plain #scene .pl.active .cx-nm > .cx-plain { opacity: 0; filter: blur(4px); }

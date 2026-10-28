@@ -153,7 +153,7 @@ window.CodexScene = { ok: false };
   var cardEl = document.getElementById('vs-card'), hov = null;
   named.forEach(function (s) {
     var e = document.createElement('div'); e.className = 'vs-pt' + (s.menu ? ' menu' : '');
-    e.innerHTML = '<button class="hit" type="button" aria-label="' + s.name + (s.star ? ' — ' + s.star : '') + '"></button><span class="lbl">' + (s.sp ? '<span class="sym">' + s.sp + '<small>' + s.far + '</small></span>' : '') + '<b>' + s.name + '</b>' + (s.star ? '<i>' + s.star + '</i>' : '') + '</span>';
+    e.innerHTML = '<button class="hit" type="button" aria-label="' + s.name + (s.star ? ' — ' + s.star : '') + '"></button><span class="lbl">' + '<b>' + (s.sp ? '<span class="cx-nm"><span class="cx-sci sym">' + s.sp + '<small>' + s.far + '</small></span><span class="cx-plain">' + s.name + '</span></span>' : s.name) + '</b>' + (s.star ? '<i>' + s.star + '</i>' : '') + '</span>';
     labelsEl.appendChild(e); s.el = e;
     var b = e.querySelector('.hit');
     b.addEventListener('mouseenter', function () { hover(s); }); b.addEventListener('mouseleave', function () { hover(null); });

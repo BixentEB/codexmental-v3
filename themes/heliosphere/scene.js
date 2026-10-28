@@ -837,7 +837,7 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
     d._k = (s.info ? ' pl-info' : ' pl-menu');
     d.className = 'pl right' + d._k;
     d.innerHTML = '<button class="hit" type="button" aria-label="' + s.name + (s.sub ? ' : ' + s.sub : '') + '"></button>' +
-      '<span class="lbl">' + (OBJ_SYM[P.id] ? '<span class="sym" aria-hidden="true">' + OBJ_SYM[P.id] + '\uFE0E</span>' : '') + '<b>' + s.name + '</b>' + (s.sub ? '<i>' + s.sub + '</i>' : '') + (OBJ_NAMES[P.id] ? '<em class="objn">' + OBJ_NAMES[P.id] + '</em>' : '') + '</span>';
+      '<span class="lbl">' + '<b>' + (OBJ_SYM[P.id] ? '<span class="cx-nm"><span class="cx-sci sym" aria-hidden="true">' + OBJ_SYM[P.id] + '\uFE0E</span><span class="cx-plain">' + s.name + '</span></span>' : s.name) + '</b>' + (s.sub ? '<i>' + s.sub + '</i>' : '') + (OBJ_NAMES[P.id] ? '<em class="objn">' + OBJ_NAMES[P.id] + '</em>' : '') + '</span>';
     labelsEl.appendChild(d);
     var hit = d.querySelector('.hit');
     hit.addEventListener('focus', function () { hover = P.id; showSolarHover(P.id); });

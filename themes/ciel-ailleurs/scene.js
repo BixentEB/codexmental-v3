@@ -404,7 +404,7 @@ void main(){
   var marks = document.getElementById('ca-marks'), mk = [];
   MENU.forEach(function (m) {
     var d = document.createElement('div'); d.className = 'ca-mk'; d.style.setProperty('--c', m[2]);
-    d.innerHTML = '<button type="button" aria-label="' + m[1] + ' — ' + m[4] + '"></button><span class="ring"></span><span class="lab"><svg class="gl" viewBox="0 0 20 24" aria-hidden="true"><path d="' + GLYPH[m[0]] + '"/></svg><span class="nm">' + m[1] + '</span></span><span class="tip"><em>' + m[4] + '</em></span>';
+    d.innerHTML = '<button type="button" aria-label="' + m[1] + ' — ' + m[4] + '"></button><span class="ring"></span><span class="lab"><span class="cx-nm"><svg class="gl cx-sci" viewBox="0 0 20 24" aria-hidden="true"><path d="' + GLYPH[m[0]] + '"/></svg><span class="cx-plain nm">' + m[1] + '</span></span></span><span class="tip"><em>' + m[4] + '</em></span>';
     d.querySelector('button').addEventListener('click', function () { Codex.navigate(m[0]); });
     marks.appendChild(d); mk.push({ el: d, b: BODY[m[3]] });
   });

@@ -463,7 +463,7 @@ window.__G = { PT_VERT: PT_VERT, STAR_FRAG: STAR_FRAG, NEB_FRAG: NEB_FRAG, DUST_
   SYS.forEach(function (d) {
     var s = SECTIONS[d.id], el = document.createElement('div');
     el.className = 'pl right';
-    el.innerHTML = '<button class="hit" type="button" aria-label="' + s.name + '"></button><span class="lbl">' + (CAT[d.id] ? '<span class="sym">' + CAT[d.id] + '</span>' : '') + '<b>' + s.name + '</b></span>';
+    el.innerHTML = '<button class="hit" type="button" aria-label="' + s.name + '"></button><span class="lbl">' + '<b>' + (CAT[d.id] ? '<span class="cx-nm"><span class="cx-sci sym">' + CAT[d.id] + '</span><span class="cx-plain">' + s.name + '</span></span>' : s.name) + '</b></span>';
     labelsEl.appendChild(el);
     var h = el.querySelector('.hit');
     h.addEventListener('focus', function () { hover = d.id; }); h.addEventListener('blur', function () { if (hover === d.id) hover = null; });

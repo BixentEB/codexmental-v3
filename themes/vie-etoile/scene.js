@@ -236,7 +236,7 @@ void main(){
     path.stages.forEach(function (s, i) {
       var b = document.createElement('button'); b.type = 'button'; if (s.menu) b.className = 'menu';
       // désignation astronomique du stade (G2 V, M III, DA…) ; le nom de la rubrique apparaît au survol ou sur le stade en cours
-      b.innerHTML = '<b class="sym">' + s.sym + '</b><small>' + (s.menu ? MENU_NAMES[s.id] : s.name) + '</small>';
+      b.innerHTML = '<b><span class="cx-nm"><span class="cx-sci sym">' + s.sym + '</span><span class="cx-plain">' + s.name + '</span></span></b><small>' + (s.menu ? MENU_NAMES[s.id] : s.name) + '</small>';
       b.title = s.name; b.setAttribute('aria-label', s.name + (s.menu ? ' — ' + MENU_NAMES[s.id] : ''));
       b.addEventListener('click', function () { userHold = 25; goStage(i); if (s.id) { /* clic sur une rubrique : on ouvre la page */ Codex.navigate(s.id); } });
       timeEl.appendChild(b);

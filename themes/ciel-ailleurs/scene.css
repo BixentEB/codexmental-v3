@@ -25,8 +25,12 @@ html.reading #scene .ca-hero, html.reading #scene .ca-clock { opacity: 0; visibi
 html.ca-moved #scene .ca-lead { opacity: .35; }
 html.ca-moved #scene .ca-sub { opacity: 0; }
 
-/* Glyphes extraterrestres au repos ; le nom de la rubrique se déplie au survol */
-#scene .ca-mk .lab { display: flex; align-items: center; gap: 6px; top: -14px; }
+/* Glyphes extraterrestres ; ils se changent sur place en nom de rubrique (core/names.js) */
+#scene .ca-mk .lab { top: -14px; }
 #scene .ca-mk .lab .gl { width: 20px; height: 24px; fill: none; stroke: #eaf2f6; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 5px var(--c, #7fe6b0)) drop-shadow(0 1px 4px #000); }
-#scene .ca-mk .lab .nm { max-width: 0; opacity: 0; overflow: hidden; transition: max-width .35s, opacity .25s; }
-#scene .ca-mk button:hover ~ .lab .nm, #scene .ca-mk button:focus-visible ~ .lab .nm { max-width: 160px; opacity: 1; }
+
+/* Survol / rubrique choisie : on montre l'autre nom (courant en mode scientifique ou alterné, scientifique en mode courant) */
+#scene .ca-mk button:hover ~ .lab .cx-nm > .cx-sci, #scene .ca-mk button:focus-visible ~ .lab .cx-nm > .cx-sci { opacity: 0; filter: blur(4px); }
+#scene .ca-mk button:hover ~ .lab .cx-nm > .cx-plain, #scene .ca-mk button:focus-visible ~ .lab .cx-nm > .cx-plain { opacity: 1; filter: none; }
+html.cxn-plain #scene .ca-mk button:hover ~ .lab .cx-nm > .cx-sci, html.cxn-plain #scene .ca-mk button:focus-visible ~ .lab .cx-nm > .cx-sci { opacity: 1; filter: none; }
+html.cxn-plain #scene .ca-mk button:hover ~ .lab .cx-nm > .cx-plain, html.cxn-plain #scene .ca-mk button:focus-visible ~ .lab .cx-nm > .cx-plain { opacity: 0; filter: blur(4px); }

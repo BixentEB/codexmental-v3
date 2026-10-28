@@ -350,10 +350,15 @@ body.nm-objects.nm-objn #scene .pl.pl-menu .lbl em.objn { display: block; }
 #scene .cx-who { position: fixed; z-index: 7; left: clamp(18px, 4vw, 68px); top: 300px; width: min(31rem, 40vw); margin: 0; }
 @media (max-width: 900px), (max-height: 700px) { #scene .cx-who { display: none; } }
 
-/* Symboles planétaires : au repos, seul le symbole ; le nom se déplie au survol ou sur la planète choisie */
+/* Symboles planétaires ☿ ♁ ♂ ♄ ♅ ; ils se changent sur place en nom de rubrique (core/names.js) */
 #scene .pl .lbl .sym { font: 400 22px/1 'Segoe UI Symbol', 'Noto Sans Symbols', 'DejaVu Sans', 'Apple Symbols', serif; color: #ffe0a0; text-shadow: 0 0 10px rgba(255,190,90,.7), 0 1px 6px #000; }
 #scene .pl.pl-menu .lbl b::before { content: none; }
-#scene .pl.pl-menu .lbl b, #scene .pl.pl-menu .lbl i { max-height: 0; opacity: 0; overflow: hidden; transition: max-height .3s, opacity .25s; }
-#scene .pl.pl-menu.hov .lbl b, #scene .pl.pl-menu.active .lbl b, #scene .pl.pl-menu.hov .lbl i, #scene .pl.pl-menu.active .lbl i { max-height: 24px; opacity: 1; }
+#scene .pl.pl-menu .lbl i { max-height: 0; opacity: 0; overflow: hidden; transition: max-height .3s, opacity .25s; }
+#scene .pl.pl-menu.hov .lbl i, #scene .pl.pl-menu.active .lbl i { max-height: 24px; opacity: 1; }
 #scene .pl.pl-menu .lbl { top: -14px; }
-body.nm-objects.nm-objn #scene .pl.pl-menu .lbl .sym { display: none; }
+
+/* Survol / rubrique choisie : on montre l'autre nom (courant en mode scientifique ou alterné, scientifique en mode courant) */
+#scene .pl.hov .cx-nm > .cx-sci, #scene .pl.active .cx-nm > .cx-sci { opacity: 0; filter: blur(4px); }
+#scene .pl.hov .cx-nm > .cx-plain, #scene .pl.active .cx-nm > .cx-plain { opacity: 1; filter: none; }
+html.cxn-plain #scene .pl.hov .cx-nm > .cx-sci, html.cxn-plain #scene .pl.active .cx-nm > .cx-sci { opacity: 1; filter: none; }
+html.cxn-plain #scene .pl.hov .cx-nm > .cx-plain, html.cxn-plain #scene .pl.active .cx-nm > .cx-plain { opacity: 0; filter: blur(4px); }

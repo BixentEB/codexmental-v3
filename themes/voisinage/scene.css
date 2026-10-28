@@ -32,9 +32,15 @@ html.reading #scene .vs-hero, html.reading #scene .vs-card, html.reading #scene 
 .vs-pt.vs-dim .lbl{opacity:0;pointer-events:none}
 .vs-pt.vs-dim .hit{pointer-events:auto}
 
-/* Types spectraux (G2 V, A1 V…) : la carte d'identité de l'étoile au repos, le nom de la rubrique au survol */
+/* Types spectraux (G2 V, A1 V…) ; ils se changent sur place en nom de rubrique (core/names.js) */
 #scene .vs-pt.menu .lbl .sym { display: flex; align-items: baseline; gap: 6px; font: 600 15px/1.1 var(--font-mono, monospace); letter-spacing: .04em; color: var(--accent-2); text-shadow: 0 0 10px color-mix(in srgb, var(--accent-2) 55%, transparent), 0 1px 6px #000; }
 #scene .vs-pt.menu .lbl .sym small { font-size: 10px; font-weight: 400; color: var(--muted); }
-#scene .vs-pt.menu .lbl b, #scene .vs-pt.menu .lbl i { max-height: 0; opacity: 0; overflow: hidden; transition: max-height .3s, opacity .25s; }
-#scene .vs-pt.menu.hov .lbl b, #scene .vs-pt.menu.hov .lbl i { max-height: 22px; opacity: 1; }
+#scene .vs-pt.menu .lbl i { max-height: 0; opacity: 0; overflow: hidden; transition: max-height .3s, opacity .25s; }
+#scene .vs-pt.menu.hov .lbl i { max-height: 22px; opacity: 1; }
 #scene .vs-pt.menu .lbl b::before { content: none; }
+
+/* Survol / rubrique choisie : on montre l'autre nom (courant en mode scientifique ou alterné, scientifique en mode courant) */
+#scene .vs-pt.hov .cx-nm > .cx-sci { opacity: 0; filter: blur(4px); }
+#scene .vs-pt.hov .cx-nm > .cx-plain { opacity: 1; filter: none; }
+html.cxn-plain #scene .vs-pt.hov .cx-nm > .cx-sci { opacity: 1; filter: none; }
+html.cxn-plain #scene .vs-pt.hov .cx-nm > .cx-plain { opacity: 0; filter: blur(4px); }

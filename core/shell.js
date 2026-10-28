@@ -30,6 +30,10 @@
     var opts = [['auto', 'Auto (' + P.label() + ')'], ['high', 'Haute'], ['medium', 'Moyenne'], ['low', 'Économe'], ['still', 'Minimale'], ['off', 'Sans animation']];
     return '<li class="perf-row" role="none"><label for="perf-sel">Qualité des animations</label><select id="perf-sel">' + opts.map(function (o) { return '<option value="' + o[0] + '"' + (o[0] === (P.pref === 'auto' || P.ORDER.indexOf(P.pref) < 0 ? 'auto' : P.pref) ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select><small class="perf-hint">Changer la qualité relance la scène : quelques secondes de fabrication.</small></li>';
   }
+  function namesRow() {   // noms des rubriques dans les scènes : alternés, scientifiques ou courants (core/names.js)
+    var N = Codex.names; if (!N) return '';
+    return '<li class="perf-row" role="none"><label for="names-sel">Noms des rubriques</label><select id="names-sel">' + N.MODES.map(function (o) { return '<option value="' + o[0] + '"' + (o[0] === N.mode ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></li>';
+  }
   Codex.ui.buildShell = function () {
     var bar = document.getElementById('topbar');
     var secs = (Codex.catalog ? Codex.catalog.sections : []).filter(function (s) { return !s.hidden && s.nav !== false; });
@@ -43,11 +47,12 @@
       (contact ? '<a class="nav-contact" href="#contact" data-section="contact" title="Me contacter" aria-label="Me contacter">' + ICONS.contact + '</a>' : '') +
       '<div class="themes"><button type="button" class="theme-btn" id="theme-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu">' +
       '<span class="sw cur" aria-hidden="true"></span><span class="lbl">Thème</span><span class="name">' + esc(Codex.theme.label) + '</span></button>' +
-      '<ul class="theme-menu" id="theme-menu" role="menu" aria-label="Choisir un thème" hidden>' + themeMenu() + perfRow() + '</ul></div>';
+      '<ul class="theme-menu" id="theme-menu" role="menu" aria-label="Choisir un thème" hidden>' + themeMenu() + namesRow() + perfRow() + '</ul></div>';
     var t = Codex.theme, sw = (Codex.themes.filter(function (x) { return x.id === t.id; })[0] || {}).swatch || [];
     bar.querySelector('.sw.cur').style.cssText = '--sw1:' + (sw[0] || 'var(--accent)') + ';--sw2:' + (sw[1] || 'var(--accent-2, var(--accent))');
 
     var btn = document.getElementById('theme-btn'), menu = document.getElementById('theme-menu');
+    var ns = document.getElementById('names-sel'); if (ns) { ns.addEventListener('change', function () { Codex.names.set(ns.value); }); Codex.on('names', function (m) { ns.value = m; }); }
     var ps = document.getElementById('perf-sel'); if (ps) ps.addEventListener('change', function () { Codex.perf.setPref(ps.value); });
     function setOpen(o) { menu.hidden = !o; btn.setAttribute('aria-expanded', String(o)); if (o) { var c = menu.querySelector('[aria-current]') || menu.querySelector('a'); c && c.focus({ preventScroll: true }); } }
     Codex.ui.openThemes = function () { setOpen(true); };

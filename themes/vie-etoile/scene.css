@@ -28,10 +28,17 @@ html.reading #scene .ve-hint { opacity: 0; }
 @media (min-height: 800px) and (min-width: 900px) { #scene .ve-card { top: calc(var(--topbar-h) + 385px); } }
 @media (max-height: 799px), (max-width: 899px) { #scene .cx-who { display: none; } }
 
-/* Désignations astronomiques des stades : H₂, YSO I, G2 V, M III, PN, DA… */
-#scene .ve-time button .sym { display: block; font: 600 .95rem/1.1 var(--font-mono, monospace); letter-spacing: .04em; color: var(--fg); }
+/* Désignations des stades (H₂, YSO I, G2 V…) ; elles se changent sur place en nom du stade (core/names.js) */
+#scene .ve-time button b { display: block; font-weight: inherit; }
+#scene .ve-time button .sym { font: 600 .95rem/1.1 var(--font-mono, monospace); letter-spacing: .04em; color: var(--fg); }
 #scene .ve-time button.menu .sym { color: color-mix(in srgb, var(--accent) 70%, #fff); text-shadow: 0 0 10px color-mix(in srgb, var(--accent) 45%, transparent); }
 #scene .ve-time button small { opacity: 0; transition: opacity .25s; }
 #scene .ve-time button:hover small, #scene .ve-time button:focus-visible small, #scene .ve-time button[aria-current="true"] small { opacity: 1; }
 #scene .ve-time button.menu small::before { content: none; }
 #scene .ve-time button { min-width: 74px; }
+
+/* Survol / rubrique choisie : on montre l'autre nom (courant en mode scientifique ou alterné, scientifique en mode courant) */
+#scene .ve-time button:hover .cx-nm > .cx-sci, #scene .ve-time button:focus-visible .cx-nm > .cx-sci { opacity: 0; filter: blur(4px); }
+#scene .ve-time button:hover .cx-nm > .cx-plain, #scene .ve-time button:focus-visible .cx-nm > .cx-plain { opacity: 1; filter: none; }
+html.cxn-plain #scene .ve-time button:hover .cx-nm > .cx-sci, html.cxn-plain #scene .ve-time button:focus-visible .cx-nm > .cx-sci { opacity: 1; filter: none; }
+html.cxn-plain #scene .ve-time button:hover .cx-nm > .cx-plain, html.cxn-plain #scene .ve-time button:focus-visible .cx-nm > .cx-plain { opacity: 0; filter: blur(4px); }

@@ -172,8 +172,13 @@ html[data-theme="ciel-profond"] body { font-size: 15px; -webkit-font-smoothing: 
   .labcard .gear { border: 0; }
 }
 
-/* Désignations de relevé (J0534+22…) au repos ; nom de la rubrique et coordonnées complètes au survol */
-.node .lbl .sym { display: block; font: 500 .74rem/1.1 var(--font-mono); letter-spacing: .08em; color: var(--accent); text-shadow: 0 0 10px color-mix(in srgb, var(--accent) 45%, transparent), 0 1px 6px #000; }
-.node .lbl b, .node .lbl .co { max-height: 0; max-width: 0; opacity: 0; overflow: hidden; margin-top: 0; transition: max-height .3s, max-width .35s, opacity .25s, margin .3s; }
-.node:hover .lbl b, .node:focus-visible .lbl b, .node[aria-pressed="true"] .lbl b { max-width: 260px; max-height: 20px; opacity: 1; margin-top: 4px; }
+/* Désignations de relevé (J0047+41…) ; elles se changent sur place en nom de rubrique (core/names.js) ; coordonnées complètes au survol */
+.node .lbl .sym { font: 500 .74rem/1.1 var(--font-mono); letter-spacing: .08em; text-transform: none; color: var(--accent); text-shadow: 0 0 10px color-mix(in srgb, var(--accent) 45%, transparent), 0 1px 6px #000; }
+.node .lbl .co { max-height: 0; max-width: 0; opacity: 0; overflow: hidden; margin-top: 0; transition: max-height .3s, max-width .35s, opacity .25s, margin .3s; }
 .node:hover .lbl .co, .node:focus-visible .lbl .co, .node[aria-pressed="true"] .lbl .co { max-width: 260px; max-height: 16px; opacity: 1; margin-top: 4px; }
+
+/* Survol / rubrique choisie : on montre l'autre nom (courant en mode scientifique ou alterné, scientifique en mode courant) */
+.node:hover .cx-nm > .cx-sci, .node:focus-visible .cx-nm > .cx-sci, .node[aria-pressed="true"] .cx-nm > .cx-sci { opacity: 0; filter: blur(4px); }
+.node:hover .cx-nm > .cx-plain, .node:focus-visible .cx-nm > .cx-plain, .node[aria-pressed="true"] .cx-nm > .cx-plain { opacity: 1; filter: none; }
+html.cxn-plain .node:hover .cx-nm > .cx-sci, html.cxn-plain .node:focus-visible .cx-nm > .cx-sci, html.cxn-plain .node[aria-pressed="true"] .cx-nm > .cx-sci { opacity: 1; filter: none; }
+html.cxn-plain .node:hover .cx-nm > .cx-plain, html.cxn-plain .node:focus-visible .cx-nm > .cx-plain, html.cxn-plain .node[aria-pressed="true"] .cx-nm > .cx-plain { opacity: 0; filter: blur(4px); }

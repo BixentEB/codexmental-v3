@@ -23,7 +23,7 @@
 - **Atome** (`themes/atome`, catégorie Sciences) : un atome de bore 11 en petit système solaire (canvas 2D, sans WebGL) ; chaque électron est une rubrique, clic = saut quantique + photon. Réglages : vitesse, éclat, traînées, modèle Bohr / Mixte / Nuage quantique. S'allège via `Codex.perf.scale`, redessiné à ~8 images/s quand le lecteur est ouvert.
 
 ## Étiquettes « savantes » (octobre 2026)
-Principe commun : chaque rubrique porte au repos un symbole propre à l'univers du thème, et son nom se déplie au survol, au focus ou une fois choisie.
+Principe commun (`core/names.js`) : chaque rubrique porte un symbole propre à l'univers du thème et un nom courant, superposés (`.cx-nm > .cx-sci + .cx-plain`), qui se changent sur place en fondu. Réglage « Noms des rubriques » (carte de réglages du thème et menu des thèmes, clé `codex.names`) : Alternés (défaut, chaque étiquette à son rythme), Scientifiques, Courants. Le survol ou la rubrique choisie montre l'autre nom.
 - Atome : lettres façon symboles chimiques (C, A, L, O, P). Héliosphère : symboles planétaires ☿ ♁ ♂ ♄ ♅. Champ stellaire : désignations de Bayer (α Per, β Cas…).
 - Voisinage : types spectraux réels (G2 V, A1 V, K1.5 III…) avec la distance. Galactique : numéros de catalogue « CM » façon Messier.
 - Vie d'une étoile : désignations des stades (H₂, YSO I, G2 V / O7 V, M III / M Ia, PN / SN II, DA / NS). Ciel profond : désignations de relevé façon UAI (J hhmm±dd), calculées sur la position. Ciel d'ailleurs : glyphes inventés (SVG).

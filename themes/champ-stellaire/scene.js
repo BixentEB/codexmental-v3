@@ -87,7 +87,7 @@ function build(i){
   cur.s.forEach(function(st,j){
     var k=cur.m.indexOf(j), d=document.createElement('div');
     if(k>=0){var M=MENU[k]; d.className='cs-star'; d.style.setProperty('--c',M[2]); d.style.setProperty('--tw',(2.6+k*.55)+'s');
-      d.innerHTML='<button type="button" aria-label="'+M[1]+' — '+M[3]+'"></button><span class="tip"><b>'+M[1]+'</b><em>'+M[3]+'</em></span><span class="core"></span><span class="lab"><b>'+cur.b[k]+'</b><small>'+cur.ab+'</small><span class="nm">'+M[1]+'</span></span>'+(st[3]?'<i class="real">'+st[3]+'</i>':'');
+      d.innerHTML='<button type="button" aria-label="'+M[1]+' — '+M[3]+'"></button><span class="tip"><b>'+M[1]+'</b><em>'+M[3]+'</em></span><span class="core"></span><span class="lab"><span class="cx-nm"><span class="cx-sci"><b>'+cur.b[k]+'</b><small>'+cur.ab+'</small></span><span class="cx-plain nm">'+M[1]+'</span></span></span>'+(st[3]?'<i class="real">'+st[3]+'</i>':'');
       d.querySelector('button').addEventListener('click',function(){C.navigate(M[0])});
     } else {d.className='cs-dot'; d.style.setProperty('--s',st[2]+'px'); if(st[3]) d.innerHTML='<i>'+st[3]+'</i>'}
     box.appendChild(d); built.push(d);
