@@ -1,0 +1,50 @@
+/* Thème Neurone — un cerveau de profil tissé de neurones (canvas 2D, aucune dépendance). */
+html[data-theme="neurone"] { --void: #050816; }
+#scene #nr-cv { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -2; display: block; background: radial-gradient(ellipse at 62% 50%, #121a44 0%, #0a0f2c 42%, #040612 86%); touch-action: pan-y; }
+#scene .hero { min-height: 100svh; display: grid; align-items: center; padding: calc(var(--topbar-h) + 52px) clamp(24px, 7vw, 125px) 65px; position: relative; z-index: 1; pointer-events: none; }
+#scene .hero-inner { max-width: 440px; pointer-events: auto; text-shadow: 0 2px 18px #040612, 0 0 3px #040612; }
+#scene .eyebrow { font-family: var(--font-body); font-size: 11px; letter-spacing: .25em; color: #9fe8ff; text-transform: uppercase; font-weight: 700; }
+#scene .hero h1 { font-family: var(--font-display); font-size: clamp(32px, 4.2vw, 58px); letter-spacing: .26em; font-weight: 600; line-height: 1.1; margin: 18px 0; background: linear-gradient(100deg, #8fefff 0%, #a9b8ff 40%, #ff9ad0 78%, #ffd88a 100%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; text-shadow: none; filter: drop-shadow(0 0 16px rgba(130, 170, 255, .4)); }
+#scene .hero p { color: #cdd3ec; font-size: 16px; max-width: 410px; }
+#scene .hero p.sub { font-family: var(--font-body); text-transform: none; letter-spacing: 0; font-size: 13px; line-height: 1.55; color: #9ea6cc; max-width: 380px; }
+#scene .status { position: fixed; bottom: 18px; left: 24px; color: #8f98c2; font: 11px/1 var(--font-mono, monospace); letter-spacing: .11em; pointer-events: none; }
+#scene .nr-hud { position: fixed; right: 26px; top: calc(var(--topbar-h) + 16px); display: flex; flex-direction: column; align-items: flex-end; gap: 4px; font: 11px/1 var(--font-mono, monospace); letter-spacing: .06em; color: #9aa3c8; pointer-events: none; }
+#scene .nr-hud canvas { width: 180px; height: 40px; }
+#scene .nr-hud b { font: 600 15px/1 var(--font-display); color: #9fe8ff; text-shadow: 0 0 10px #7fe9ff88; }
+#scene .nr-hud i { font-style: normal; color: #d3d9f0; }
+#scene .nr-hud em { font-style: normal; }
+
+/* aires cliquables (positionnées par scene.js) */
+#scene #nr-nav { position: fixed; inset: 0; z-index: 2; pointer-events: none; transition: opacity .5s; }
+#scene .nr-a { position: absolute; left: 0; top: 0; width: 0; height: 0; will-change: transform; }
+#scene .nr-a button { position: absolute; left: -26px; top: -26px; width: 52px; height: 52px; border: 0; padding: 0; background: transparent; border-radius: 50%; cursor: pointer; pointer-events: auto; }
+#scene .nr-a button:focus-visible { outline: 1.5px solid var(--c); outline-offset: 2px; }
+#scene .nr-l { position: absolute; left: 18px; top: -24px; white-space: nowrap; pointer-events: none; }
+#scene .nr-l .cx-sci { font: 600 .82rem/1 var(--font-mono, monospace); letter-spacing: .08em; color: #fff; text-shadow: 0 0 8px var(--c), 0 0 18px var(--c), 0 1px 4px #000; }
+#scene .nr-l .cx-plain { font: 600 .72rem/1 var(--font-body); letter-spacing: .16em; text-transform: uppercase; color: color-mix(in srgb, var(--c) 45%, #fff); text-shadow: 0 0 8px var(--c), 0 1px 6px #000; }
+#scene .nr-a.flip .nr-l { left: auto; right: 18px; text-align: right; }
+#scene .nr-t { position: absolute; left: 20px; top: 14px; min-width: 190px; max-width: 250px; padding: 9px 12px; border-radius: 10px; background: rgba(8, 11, 28, .93); border: 1px solid color-mix(in srgb, var(--c) 45%, transparent); box-shadow: 0 8px 26px rgba(0, 0, 0, .5), 0 0 22px color-mix(in srgb, var(--c) 18%, transparent); opacity: 0; transform: translateY(4px); transition: opacity .2s, transform .2s; pointer-events: none; font-size: .78rem; line-height: 1.4; color: #c1c8e6; z-index: 3; }
+#scene .nr-t b { display: block; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: #fff; }
+#scene .nr-t small { display: block; margin: 2px 0 5px; font: .64rem/1.3 var(--font-mono, monospace); color: color-mix(in srgb, var(--c) 75%, #fff); }
+#scene .nr-a.flip .nr-t { left: auto; right: 20px; }
+#scene .nr-a button:hover ~ .nr-t, #scene .nr-a button:focus-visible ~ .nr-t { opacity: 1; transform: none; }
+
+/* Survol / salve : on montre l'autre nom (courant en mode scientifique ou alterné, scientifique en mode courant) */
+#scene .nr-a.hot .cx-nm > .cx-sci, #scene .nr-a button:hover ~ .nr-l .cx-nm > .cx-sci, #scene .nr-a button:focus-visible ~ .nr-l .cx-nm > .cx-sci { opacity: 0; filter: blur(4px); }
+#scene .nr-a.hot .cx-nm > .cx-plain, #scene .nr-a button:hover ~ .nr-l .cx-nm > .cx-plain, #scene .nr-a button:focus-visible ~ .nr-l .cx-nm > .cx-plain { opacity: 1; filter: none; }
+html.cxn-plain #scene .nr-a.hot .cx-nm > .cx-sci, html.cxn-plain #scene .nr-a button:hover ~ .nr-l .cx-nm > .cx-sci, html.cxn-plain #scene .nr-a button:focus-visible ~ .nr-l .cx-nm > .cx-sci { opacity: 1; filter: none; }
+html.cxn-plain #scene .nr-a.hot .cx-nm > .cx-plain, html.cxn-plain #scene .nr-a button:hover ~ .nr-l .cx-nm > .cx-plain, html.cxn-plain #scene .nr-a button:focus-visible ~ .nr-l .cx-nm > .cx-plain { opacity: 0; filter: blur(4px); }
+
+html.reading #scene .hero, html.reading #scene .status, html.reading #scene .nr-hud, html.reading #scene #nr-nav { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .35s, visibility 0s .35s; }
+#scene .hero, #scene .status, #scene .nr-hud { transition: opacity .5s .1s, visibility 0s; }
+
+@media (max-width: 800px) {
+  #scene .hero { align-items: start; padding: calc(var(--topbar-h) + 22px) 22px 40px; }
+  #scene .hero-inner { max-width: none; }
+  #scene .hero h1 { font-size: 32px; margin: 10px 0; }
+  #scene .hero p { font-size: 14px; }
+  #scene .hero p.sub, #scene .hero-inner > .eyebrow:nth-of-type(2), #scene .status, #scene .nr-hud, #scene .nr-t { display: none; }
+  #scene .nr-l .cx-sci { font-size: .72rem; }
+  #scene .nr-l .cx-plain { font-size: .62rem; letter-spacing: .1em; }
+}
+@media (prefers-reduced-motion: reduce) { #scene *, #scene *::before, #scene *::after { transition: none !important; animation: none !important; } }

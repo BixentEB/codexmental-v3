@@ -1,0 +1,19 @@
+{
+  "label": "Neurone",
+  "palette": {
+    "bg": "#050816", "fg": "#eef2ff", "fgSoft": "#d3d9f0", "muted": "#9aa3c8", "hud": "#9fe8ff",
+    "accent": "#7fe9ff", "accent2": "#ff8fc8", "line": "rgba(150, 170, 230, 0.26)",
+    "panel": "rgba(10, 14, 34, 0.92)", "panelSolid": "rgba(8, 11, 28, 0.98)", "panelDeep": "rgba(4, 6, 16, 0.45)"
+  },
+  "fonts": {
+    "display": "'Sora', system-ui, -apple-system, 'Segoe UI', sans-serif",
+    "body": "'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif",
+    "mono": "'IBM Plex Mono', ui-monospace, monospace"
+  },
+  "customize": {"title": "Électrode", "sub": "Rythme, activité et éclat"},
+  "who": {"append": ".hero-inner"},
+  "reader": { "layout": "wide" },
+  "markup": "scene.html",
+  "css": ["scene.css"],
+  "scene": "scene.js"
+}

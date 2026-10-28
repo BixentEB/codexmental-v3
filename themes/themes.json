@@ -73,6 +73,16 @@
       "category": "Sciences"
     },
     {
+      "id": "neurone",
+      "label": "Neurone",
+      "description": "Un cerveau tissé de neurones où passent les influx : chaque aire du cortex est une rubrique.",
+      "swatch": [
+        "#7fe9ff",
+        "#ff8fc8"
+      ],
+      "category": "Sciences"
+    },
+    {
       "id": "ciel-ailleurs", "heavy": true, "enabled": false,
       "label": "Ciel d'ailleurs",
       "description": "Sur la terre ferme d'un monde inconnu : un ciel qui suit l'heure, des aurores, une lune et une planète à anneaux.",
