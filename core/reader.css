@@ -299,3 +299,7 @@
 .prose .obs-cta a { display: inline-block; padding: 10px 18px; border-radius: 999px; background: var(--accent); color: var(--bg); font-weight: 650; text-decoration: none; }
 .prose .obs-cta a:hover { filter: brightness(1.08); }
 .obs-cta small { color: var(--muted); font-size: .78rem; }
+@media (max-width: 600px) {
+  .obs-demo iframe { aspect-ratio: 1 / 1; max-height: 62vh; border-radius: 12px; }   /* plus haute sur téléphone : le système solaire y respire */
+  .obs-card { padding: 14px 16px; }
+}
