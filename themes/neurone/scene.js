@@ -30,11 +30,11 @@ window.CodexScene = { ok: true };
 
   /* ---------- les cinq aires = les cinq rubriques (coordonnées : cerveau de profil, front à gauche) ---------- */
   var A = [
-    { id: 'codex',   name: 'Codex',        ba: 'BA 10', lobe: 'Cortex préfrontal',          fn: 'réflexion, planification, pensée abstraite', info: 'Articles et réflexions',                  c: '#7fe9ff', x: -.79, y: -.08 },
-    { id: 'lab',     name: 'Laboratoire',  ba: 'BA 4',  lobe: 'Cortex moteur primaire',     fn: 'passer à l’action, fabriquer',              info: 'Applications et projets en construction', c: '#9dff8a', x: -.10, y: -.56 },
-    { id: 'atelier', name: 'Atelier',      ba: 'BA 7',  lobe: 'Cortex pariétal associatif', fn: 'imagerie mentale, assembler les idées',      info: 'Créations, théories, hypothèses',         c: '#ff8fc8', x: .42,  y: -.45 },
-    { id: 'dashb',   name: 'Observatoire', ba: 'BA 17', lobe: 'Cortex visuel primaire',     fn: 'voir, observer',                            info: 'Observations, cartes et explorations',    c: '#b79cff', x: .85,  y: -.01 },
-    { id: 'profil',  name: 'Portrait',     ba: 'BA 38', lobe: 'Pôle temporal',              fn: 'mémoire autobiographique, identité',        info: 'Parcours, passions et aspirations',       c: '#ffd27a', x: -.45, y: .32 }
+    { id: 'codex',   name: 'Codex',        ba: 'BA 10', lobe: 'Cortex préfrontal',          fn: 'réflexion, planification, pensée abstraite', info: 'Articles et réflexions',                  c: '#7fe9ff', x: -.86, y: -.25 },
+    { id: 'lab',     name: 'Laboratoire',  ba: 'BA 4',  lobe: 'Cortex moteur primaire',     fn: 'passer à l’action, fabriquer',              info: 'Applications et projets en construction', c: '#9dff8a', x: -.09, y: -.60 },
+    { id: 'atelier', name: 'Atelier',      ba: 'BA 7',  lobe: 'Cortex pariétal associatif', fn: 'imagerie mentale, assembler les idées',      info: 'Créations, théories, hypothèses',         c: '#ff8fc8', x: .38,  y: -.55 },
+    { id: 'dashb',   name: 'Observatoire', ba: 'BA 17', lobe: 'Cortex visuel primaire',     fn: 'voir, observer',                            info: 'Observations, cartes et explorations',    c: '#b79cff', x: .90,  y: -.06 },
+    { id: 'profil',  name: 'Portrait',     ba: 'BA 38', lobe: 'Pôle temporal',              fn: 'mémoire autobiographique, identité',        info: 'Parcours, passions et aspirations',       c: '#ffd27a', x: -.43, y: .23 }
   ];
   var NEUTRAL = [170, 190, 255];
   function rgb(h) { var n = parseInt(h.slice(1), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; }
@@ -52,7 +52,7 @@ window.CodexScene = { ok: true };
   var NSPR = sprite(NEUTRAL, true), WHITE = sprite([255, 255, 255], true);
 
   /* ---------- forme du cerveau ---------- */
-  var OUT = [[-.95, .08], [-.93, -.16], [-.82, -.38], [-.60, -.56], [-.32, -.66], [0, -.69], [.30, -.65], [.55, -.55], [.76, -.38], [.91, -.16], [.96, .06], [.90, .20], [.72, .27], [.50, .30], [.30, .40], [.02, .48], [-.26, .47], [-.44, .42], [-.55, .32], [-.53, .20], [-.62, .24], [-.82, .24]];
+  var OUT = [[-1.0, -.05], [-.98, -.22], [-.92, -.38], [-.82, -.52], [-.68, -.63], [-.50, -.71], [-.30, -.76], [-.10, -.78], [.10, -.77], [.30, -.72], [.48, -.64], [.64, -.53], [.78, -.40], [.88, -.26], [.95, -.12], [.99, 0], [.97, .08], [.90, .14], [.78, .17], [.62, .19], [.45, .22], [.28, .27], [.10, .31], [-.08, .33], [-.24, .32], [-.37, .30], [-.47, .27], [-.52, .20], [-.50, .13], [-.45, .09], [-.53, .07], [-.67, .09], [-.81, .09], [-.93, .05], [-.99, .02]];
   function spline(pts, n) {   // Catmull-Rom fermée
     var out = [], L = pts.length;
     for (var i = 0; i < L; i++) {
@@ -65,11 +65,29 @@ window.CodexScene = { ok: true };
     }
     return out;
   }
-  var SHAPE = spline(OUT, 8);
-  var CB = { x: .60, y: .44, rx: .27, ry: .15 };                 // cervelet
-  var STEM = [[.24, .41], [.42, .45], [.40, .62], [.37, .74], [.29, .74], [.27, .6]];  // tronc cérébral
+  var SHAPE = spline(OUT, 6);
+  // cervelet (sous le lobe occipital) et tronc cérébral (pont puis bulbe)
+  var CBS = spline([[.40, .26], [.52, .19], [.68, .16], [.84, .16], [.94, .23], [.97, .33], [.91, .44], [.76, .51], [.58, .53], [.45, .48], [.38, .38]], 6);
+  var STEM = spline([[.16, .30], [.33, .32], [.37, .43], [.34, .55], [.31, .70], [.29, .82], [.21, .82], [.20, .70], [.16, .58], [.10, .48], [.11, .38]], 6);
+  // grands sillons : [points, largeur, intensité]
+  var SULCI = [
+    [[[-.45, .09], [-.30, .04], [-.10, -.02], [.10, -.08], [.26, -.15], [.33, -.26]], 6, .85],                       // latéral (Sylvius)
+    [[[.03, -.79], [-.01, -.63], [-.06, -.50], [-.05, -.38], [-.11, -.24], [-.13, -.12], [-.18, -.03]], 5, .8],      // central (Rolando)
+    [[[-.13, -.77], [-.17, -.62], [-.21, -.50], [-.20, -.38], [-.26, -.24], [-.29, -.12], [-.32, -.03]], 4, .65],   // précentral
+    [[[.18, -.76], [.14, -.62], [.10, -.50], [.11, -.38], [.06, -.24], [.04, -.13], [.01, -.06]], 4, .65],          // postcentral
+    [[[-.20, -.56], [-.36, -.57], [-.52, -.54], [-.68, -.47], [-.80, -.38]], 4, .6],                                // frontal supérieur
+    [[[-.25, -.30], [-.40, -.30], [-.56, -.27], [-.72, -.20], [-.86, -.12]], 4, .6],                                // frontal inférieur
+    [[[.11, -.42], [.26, -.42], [.42, -.38], [.56, -.32], [.70, -.26], [.82, -.22]], 4, .6],                        // intrapariétal
+    [[[-.36, .17], [-.22, .14], [-.04, .10], [.16, .05], [.34, -.01], [.48, -.09], [.56, -.19]], 4.5, .65],         // temporal supérieur
+    [[[-.30, .27], [-.10, .25], [.12, .22], [.34, .17], [.56, .11], [.72, .07]], 3.5, .5],                          // temporal inférieur
+    [[[.73, -.47], [.67, -.40], [.65, -.31]], 4, .6],                                                            // pariéto-occipital
+    [[[.75, -.33], [.77, -.19], [.79, -.05], [.77, .08]], 3.5, .5],                                               // occipital transverse
+    [[[-.60, .03], [-.74, .01], [-.88, -.02]], 3, .45],                                                          // orbitaire
+    [[[-.29, .04], [-.33, -.07]], 3.5, .55], [[[-.36, .06], [-.45, .00]], 3.5, .55],                              // rameaux de Sylvius
+    [[[.30, -.20], [.40, -.29], [.47, -.21]], 3, .45], [[[.50, -.08], [.60, -.14], [.66, -.06]], 3, .45]           // supramarginal, angulaire
+  ];
   function inPoly(x, y, P) { var c = false; for (var i = 0, j = P.length - 1; i < P.length; j = i++) { if (((P[i][1] > y) !== (P[j][1] > y)) && (x < (P[j][0] - P[i][0]) * (y - P[i][1]) / (P[j][1] - P[i][1]) + P[i][0])) c = !c; } return c; }
-  function inCb(x, y) { var dx = (x - CB.x) / CB.rx, dy = (y - CB.y) / CB.ry; return dx * dx + dy * dy < 1; }
+  function inCb(x, y) { return inPoly(x, y, CBS); }
 
   /* ---------- réseau : neurones, synapses (fabriqué une fois, densité selon la puissance) ---------- */
   var N = [], E = [], ADJ = [];
@@ -78,9 +96,9 @@ window.CodexScene = { ok: true };
     N = []; E = []; ADJ = [];
     var q = Q(), nC = Math.round(540 * q + 60), nB = Math.round(nC * .17), nS = Math.round(nC * .04), k = 0, s = 1;
     A.forEach(function (a) { N.push({ x: a.x, y: a.y, z: a.i, hub: a, f: 0 }); });
-    while (k < nC && s < 40000) { var x = seed(s++) * 2 - 1, y = seed(s++) * 1.25 - .72; if (inPoly(x, y, SHAPE) && !inCb(x, y)) { N.push({ x: x, y: y, z: -1, f: 0 }); k++; } }
-    k = 0; while (k < nB && s < 80000) { var bx = CB.x + (seed(s++) * 2 - 1) * CB.rx, by = CB.y + (seed(s++) * 2 - 1) * CB.ry; if (inCb(bx, by)) { N.push({ x: bx, y: by, z: -2, f: 0 }); k++; } }
-    k = 0; while (k < nS && s < 90000) { var sx = .26 + seed(s++) * .16, sy = .42 + seed(s++) * .32; if (inPoly(sx, sy, STEM)) { N.push({ x: sx, y: sy, z: -2, f: 0 }); k++; } }
+    while (k < nC && s < 40000) { var x = seed(s++) * 2 - 1, y = seed(s++) * 1.15 - .8; if (inPoly(x, y, SHAPE)) { N.push({ x: x, y: y, z: -1, f: 0 }); k++; } }
+    k = 0; while (k < nB && s < 80000) { var bx = .36 + seed(s++) * .62, by = .15 + seed(s++) * .39; if (inCb(bx, by) && !inPoly(bx, by, SHAPE)) { N.push({ x: bx, y: by, z: -2, f: 0 }); k++; } }
+    k = 0; while (k < nS && s < 90000) { var sx = .05 + seed(s++) * .33, sy = .32 + seed(s++) * .5; if (inPoly(sx, sy, STEM) && !inCb(sx, sy) && !inPoly(sx, sy, SHAPE)) { N.push({ x: sx, y: sy, z: -2, f: 0 }); k++; } }
     // zone de chaque neurone : l'aire la plus proche (influence décroissante), sinon neutre
     N.forEach(function (n) {
       if (n.z >= 0 || n.z === -2) return;
@@ -128,43 +146,64 @@ window.CodexScene = { ok: true };
   }
   /* le réseau fixe (contour, sillons, synapses, neurones, dendrites des aires) dessiné une fois sur une toile à part */
   function paintNet() {
-    R0 = T.R; var w = 2.2 * R0, h = 1.75 * R0, ox = 1.1 * R0, oy = .82 * R0;
+    R0 = T.R; var w = 2.2 * R0, h = 1.75 * R0, ox = 1.1 * R0, oy = .82 * R0, u = R0 / 300;
     net = document.createElement('canvas'); net.width = Math.round(w * DPR); net.height = Math.round(h * DPR);
-    var x = net.getContext('2d'); x.scale(DPR, DPR);
+    var x = net.getContext('2d'); x.scale(DPR, DPR); x.lineCap = 'round'; x.lineJoin = 'round';
     function X(v) { return ox + v * R0; } function Y(v) { return oy + v * R0; }
     function path(P, close) { x.beginPath(); P.forEach(function (p, i) { if (i) x.lineTo(X(p[0]), Y(p[1])); else x.moveTo(X(p[0]), Y(p[1])); }); if (close) x.closePath(); }
-    x.globalCompositeOperation = 'lighter';
-    // silhouette : léger voile intérieur + contour lumineux
-    path(SHAPE, true); var gr = x.createRadialGradient(X(-.1), Y(-.15), 0, X(-.1), Y(-.15), R0 * 1.1);
-    gr.addColorStop(0, 'rgba(80,110,230,.13)'); gr.addColorStop(1, 'rgba(60,80,200,.03)'); x.fillStyle = gr; x.fill();
-    x.lineWidth = 6; x.strokeStyle = 'rgba(110,150,255,.05)'; x.stroke(); x.lineWidth = 1.3; x.strokeStyle = 'rgba(150,185,255,.32)'; x.stroke();
-    x.beginPath(); x.ellipse(X(CB.x), Y(CB.y), CB.rx * R0, CB.ry * R0, 0, 0, TAU); x.fillStyle = 'rgba(90,110,220,.08)'; x.fill(); x.lineWidth = 1.1; x.strokeStyle = 'rgba(150,185,255,.24)'; x.stroke();
-    for (var f = 1; f < 6; f++) { x.beginPath(); x.ellipse(X(CB.x), Y(CB.y + .015), CB.rx * R0 * (1 - f * .14), CB.ry * R0 * (1 - f * .15), 0, Math.PI * 1.05, Math.PI * 1.95); x.strokeStyle = 'rgba(150,185,255,.12)'; x.stroke(); }
-    path(STEM, true); x.fillStyle = 'rgba(90,110,220,.07)'; x.fill(); x.strokeStyle = 'rgba(150,185,255,.18)'; x.stroke();
-    // sillons : central (Rolando), latéral (Sylvius) et quelques circonvolutions
-    x.lineCap = 'round';
-    [[[.04, -.69], [-.02, -.45], [-.12, -.22], [-.16, .02]], [[-.52, .2], [-.25, .14], [.05, .06], [.32, -.06], [.44, -.16]],
-     [[-.3, -.64], [-.36, -.4], [-.42, -.2]], [[-.62, -.5], [-.58, -.3], [-.66, -.1]], [[.3, -.64], [.24, -.42], [.3, -.24]], [[.6, -.5], [.52, -.3], [.62, -.12]],
-     [[-.4, .3], [-.1, .3], [.2, .24]], [[.7, -.3], [.72, -.08], [.82, .1]]].forEach(function (s, i) {
-      x.beginPath(); x.moveTo(X(s[0][0]), Y(s[0][1])); for (var k = 1; k < s.length - 1; k++) { var mx = (s[k][0] + s[k + 1][0]) / 2, my = (s[k][1] + s[k + 1][1]) / 2; x.quadraticCurveTo(X(s[k][0]), Y(s[k][1]), X(mx), Y(my)); } x.lineTo(X(s[s.length - 1][0]), Y(s[s.length - 1][1]));
-      x.lineWidth = i < 2 ? 2 : 1.2; x.strokeStyle = 'rgba(140,170,255,' + (i < 2 ? .2 : .1) + ')'; x.stroke();
-    });
-    // circonvolutions : de courtes lignes sinueuses qui suivent un champ d'écoulement, pour donner le relief plissé du cortex
-    for (var gi = 0; gi < 80; gi++) {
-      var gx = seed(5000 + gi * 3) * 2 - 1, gy = seed(5001 + gi * 3) * 1.2 - .7; if (!inPoly(gx, gy, SHAPE) || inCb(gx, gy)) continue;
-      x.beginPath(); x.moveTo(X(gx), Y(gy)); var steps = 10 + Math.floor(seed(5002 + gi * 3) * 14);
-      for (var st = 0; st < steps; st++) {
-        var ang = Math.sin(gx * 5.1 + gy * 2.3) * 2.2 + Math.cos(gy * 6.7 - gx * 1.9) * 1.6 + gi;
-        var nx2 = gx + Math.cos(ang) * .022, ny2 = gy + Math.sin(ang) * .022; if (!inPoly(nx2, ny2, SHAPE)) break;
-        x.quadraticCurveTo(X(gx + Math.cos(ang + 1.2) * .01), Y(gy + Math.sin(ang + 1.2) * .01), X(nx2), Y(ny2)); gx = nx2; gy = ny2;
-      }
-      x.lineWidth = 1.6; x.strokeStyle = 'rgba(140,170,255,.13)'; x.stroke();
+    function curve(P) {   // tracé lissé passant par les points
+      x.beginPath(); x.moveTo(X(P[0][0]), Y(P[0][1]));
+      for (var k = 1; k < P.length - 1; k++) { var mx = (P[k][0] + P[k + 1][0]) / 2, my = (P[k][1] + P[k + 1][1]) / 2; x.quadraticCurveTo(X(P[k][0]), Y(P[k][1]), X(mx), Y(my)); }
+      x.lineTo(X(P[P.length - 1][0]), Y(P[P.length - 1][1]));
     }
-    // synapses
+    // matière d'une partie du cerveau : remplissage, teinte des lobes, lumière venue d'en haut à gauche, ombre en bas, liseré
+    function body(P, tint, base) {
+      x.save(); path(P, true); x.clip();
+      x.globalCompositeOperation = 'source-over'; x.fillStyle = 'rgba(70,95,210,' + base + ')'; x.fillRect(0, 0, w, h);
+      x.globalCompositeOperation = 'lighter';
+      if (tint) A.forEach(function (a) { var gr = x.createRadialGradient(X(a.x), Y(a.y), 0, X(a.x), Y(a.y), R0 * .62); gr.addColorStop(0, 'rgba(' + a.rgb + ',.16)'); gr.addColorStop(1, 'rgba(' + a.rgb + ',0)'); x.fillStyle = gr; x.fillRect(0, 0, w, h); });
+      var li = x.createLinearGradient(X(-.7), Y(-.8), X(.4), Y(.3)); li.addColorStop(0, 'rgba(200,215,255,.10)'); li.addColorStop(1, 'rgba(200,215,255,0)'); x.fillStyle = li; x.fillRect(0, 0, w, h);
+      path(P, true); x.lineWidth = 22 * u; x.strokeStyle = 'rgba(140,170,255,.06)'; x.stroke(); x.lineWidth = 8 * u; x.strokeStyle = 'rgba(160,190,255,.06)'; x.stroke();
+      x.globalCompositeOperation = 'destination-out';
+      var sh = x.createLinearGradient(X(-.2), Y(-.3), X(.5), Y(.6)); sh.addColorStop(0, 'rgba(0,0,0,0)'); sh.addColorStop(1, 'rgba(0,0,0,.55)'); x.fillStyle = sh; x.fillRect(0, 0, w, h);
+      x.restore();
+    }
+    // sillon : on creuse la matière (le fond apparaît), puis un fin reflet sur la lèvre éclairée
+    function groove(P, wd, al) {
+      x.globalCompositeOperation = 'destination-out'; curve(P); x.lineWidth = wd * u; x.strokeStyle = 'rgba(0,0,0,' + al + ')'; x.stroke();
+      x.globalCompositeOperation = 'lighter'; x.save(); x.translate(-1.1 * u, -1.1 * u); curve(P); x.lineWidth = Math.max(.6, .9 * u); x.strokeStyle = 'rgba(190,210,255,' + (al * .22) + ')'; x.stroke(); x.restore();
+    }
+
+    body(STEM, false, .13);
+    groove([[.12, .50], [.24, .53], [.35, .50]], 2.4, .5);                     // limite pont / bulbe
+    body(CBS, false, .15);
+    x.save(); path(CBS, true); x.clip();                                         // lamelles du cervelet
+    for (var f = 0; f < 12; f++) { var yy = .21 + f * .028; groove([[.30, yy + .06], [.50, yy - .01], [.70, yy - .02], [.90, yy + .03], [1.0, yy + .08]], 1.6, .55); }
+    x.restore();
+    body(SHAPE, true, .15);
+    x.save(); path(SHAPE, true); x.clip();
+    // sillons tertiaires : courtes rides qui découpent les circonvolutions
+    for (var gi = 0; gi < 150; gi++) {
+      var gx = seed(5000 + gi * 3) * 2 - 1, gy = seed(5001 + gi * 3) * 1.15 - .8; if (!inPoly(gx, gy, SHAPE)) continue;
+      var pts = [[gx, gy]], steps = 3 + Math.floor(seed(5002 + gi * 3) * 4), ang = seed(7000 + gi) * TAU;
+      for (var st = 0; st < steps; st++) { ang += Math.sin(gi * 1.7 + st * 2.1) * .9; gx += Math.cos(ang) * .035; gy += Math.sin(ang) * .035; pts.push([gx, gy]); }
+      groove(pts, 2.6, .42);
+    }
+    // grands sillons, d'après une vue latérale de l'hémisphère gauche
+    SULCI.forEach(function (sc) { groove(sc[0], sc[1], sc[2]); });
+    x.restore();
+    x.globalCompositeOperation = 'lighter';
+    path(SHAPE, true); x.lineWidth = 1.3; x.strokeStyle = 'rgba(160,190,255,.38)'; x.stroke();
+    path(CBS, true); x.lineWidth = 1.1; x.strokeStyle = 'rgba(160,190,255,.26)'; x.stroke();
+    path(STEM, true); x.strokeStyle = 'rgba(160,190,255,.2)'; x.stroke();
+    // synapses (légèrement courbes) et neurones
     x.lineWidth = .8;
-    E.forEach(function (e) { var a = N[e[0]], b = N[e[1]]; x.strokeStyle = 'rgba(' + a.rgb + ',' + (.16 * CFG.glow) + ')'; x.beginPath(); x.moveTo(X(a.x), Y(a.y)); x.lineTo(X(b.x), Y(b.y)); x.stroke(); });
-    // neurones
-    N.forEach(function (n) { if (n.hub) return; x.fillStyle = 'rgba(' + n.rgb + ',.55)'; x.beginPath(); x.arc(X(n.x), Y(n.y), 1.25, 0, TAU); x.fill(); });
+    E.forEach(function (e, i) {
+      var a = N[e[0]], b = N[e[1]], mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2, bend = (seed(9000 + i) - .5) * .35;
+      x.strokeStyle = 'rgba(' + a.rgb + ',' + (.14 * CFG.glow) + ')'; x.beginPath(); x.moveTo(X(a.x), Y(a.y));
+      x.quadraticCurveTo(X(mx - (b.y - a.y) * bend), Y(my + (b.x - a.x) * bend), X(b.x), Y(b.y)); x.stroke();
+    });
+    N.forEach(function (n) { if (n.hub) return; x.fillStyle = 'rgba(' + n.rgb + ',.6)'; x.beginPath(); x.arc(X(n.x), Y(n.y), 1.2, 0, TAU); x.fill(); });
     // dendrites ramifiées autour de chaque aire
     A.forEach(function (a, ai) {
       var r = 1;
@@ -197,7 +236,7 @@ window.CodexScene = { ok: true };
   }
   function tract(ai, bi) {
     var a = A[ai], b = A[bi], mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
-    tracts.push({ a: a, b: b, cx: mx * .45 + (-.05) * .55, cy: my * .45 + (-.12) * .55, t: 0, d: 1.5 });
+    tracts.push({ a: a, b: b, cx: mx * .45 + (-.05) * .55, cy: my * .45 + (-.28) * .55, t: 0, d: 1.5 });
   }
   function bz(tr, t) { var u = 1 - t; return [u * u * tr.a.x + 2 * u * t * tr.cx + t * t * tr.b.x, u * u * tr.a.y + 2 * u * t * tr.cy + t * t * tr.b.y]; }
   function burst(a, strong) {
