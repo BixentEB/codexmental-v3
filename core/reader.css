@@ -233,7 +233,9 @@
 .cform button:hover { background: color-mix(in srgb, var(--accent) 24%, transparent); }
 .cform button:disabled { opacity: .5; cursor: wait; }
 .cform .st { min-height: 1.4em; font-size: .9rem; color: var(--fg-soft); }
-.cform .st[data-error] { color: #ff9a9a; }
+.cform .st[data-error] { display: grid; gap: 8px; padding: 14px 16px; border: 1px solid rgba(255, 154, 154, .5); border-radius: 12px; background: rgba(255, 120, 120, .1); color: var(--fg); }
+.cform .st[data-error] b { color: #ffb4b4; font-weight: 600; }
+.cform .st[data-error] .mbtn-go { justify-self: start; padding: 10px 18px; border: 1px solid var(--accent); border-radius: 10px; background: color-mix(in srgb, var(--accent) 22%, transparent); color: var(--fg); font: inherit; cursor: pointer; }
 .cform .mlinkb { padding: 0; border: 0; background: none; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; font: inherit; cursor: pointer; justify-self: auto; }
 .cform .mlinkb:hover { background: none; color: var(--fg); }
 .cform .cnote { font-size: .8rem; color: var(--muted); max-width: 56ch; }

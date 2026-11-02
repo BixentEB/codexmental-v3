@@ -441,9 +441,20 @@
       var b = f.querySelector('button'), st = f.querySelector('.st');
       b.disabled = true; st.textContent = 'Envoi en cours…'; st.removeAttribute('data-error');
       fetch(f.action, { method: 'POST', body: new FormData(f), headers: { Accept: 'application/json' } }).then(function (r) {
-        if (!r.ok) throw new Error('x'); st.textContent = 'Merci ! Votre message a bien été envoyé.'; f.reset();
-      }).catch(function () { st.textContent = "L'envoi n'a pas abouti. Vous pouvez réessayer dans quelques instants."; st.setAttribute('data-error', ''); })
-        .then(function () { b.disabled = false; });
+        if (!r.ok) return r.json().catch(function () { return {}; }).then(function (j) { throw j || {}; });
+        st.textContent = 'Merci ! Votre message a bien été envoyé.'; f.reset();
+      }).catch(function (j) {
+        // échec (boîte du mois pleine, réseau…) : le message saisi n'est pas perdu, la messagerie prend le relais
+        var full = j && (j.code === 'FORM_SUBMISSION_LIMIT' || /limit|quota/i.test(String(j.error || '') + JSON.stringify(j.errors || '')));
+        st.setAttribute('data-error', '');
+        st.innerHTML = '<b>' + (full ? 'Devant l\'enthousiasme des visiteurs, la boîte du formulaire est pleine pour ce mois-ci\u00a0!' : 'Oups, le formulaire n\'a pas réussi à envoyer votre message.') + '</b>' +
+          '<span>Pas de panique, votre texte est toujours là. Envoyez-le plutôt depuis votre messagerie\u00a0:</span>' +
+          '<button type="button" class="mbtn-go">Écrire à Vincent avec ma messagerie</button>';
+        st.querySelector('.mbtn-go').addEventListener('click', function () {
+          var m = f.querySelector('.mbtn'), body = f.querySelector('textarea').value;
+          location.href = 'mai' + 'lto:' + rev(m.dataset.u) + String.fromCharCode(64) + rev(m.dataset.d) + '?subject=' + encodeURIComponent('Codex Mental') + '&body=' + encodeURIComponent(body);
+        });
+      }).then(function () { b.disabled = false; });
     });
   }
 
