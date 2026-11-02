@@ -234,6 +234,8 @@
 .cform button:disabled { opacity: .5; cursor: wait; }
 .cform .st { min-height: 1.4em; font-size: .9rem; color: var(--fg-soft); }
 .cform .st[data-error] { color: #ff9a9a; }
+.cform .mlinkb { padding: 0; border: 0; background: none; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; font: inherit; cursor: pointer; justify-self: auto; }
+.cform .mlinkb:hover { background: none; color: var(--fg); }
 .cform .cnote { font-size: .8rem; color: var(--muted); max-width: 56ch; }
 
 /* Sous-rubriques en onglets, à côté du titre de la rubrique */
