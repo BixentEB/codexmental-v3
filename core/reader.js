@@ -422,20 +422,16 @@
   }
   var UFO_ICON = '<svg class="contact-ufo" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 30c1-9 5-14 10-14s9 5 10 14"/><ellipse cx="32" cy="35" rx="25" ry="9"/><path d="M10 39c3 8 41 8 44 0"/><path d="M21 46l-4 8m15-7v9m11-10 4 8"/><circle cx="20" cy="35" r="1.5"/><circle cx="32" cy="37" r="1.5"/><circle cx="44" cy="35" r="1.5"/><path d="M9 17h4m-2-2v4M52 13h4m-2-2v4"/></svg>';
   function contactForm(a) {
-    return '<form class="cform" id="cform" action="' + esc(a.action) + '" method="POST"><label>Votre nom<input name="name" autocomplete="name" required maxlength="120"></label>' +
-      '<label>Votre adresse e-mail<input name="email" type="email" autocomplete="email" required maxlength="254"></label>' +
-      '<label>Votre message<textarea name="message" required maxlength="10000"></textarea></label>' +
-      '<button type="submit">Envoyer le message</button><p class="st" role="status" aria-live="polite"></p><p class="cnote">' + esc(a.note || '') + '</p>' +
-      '<p class="cnote">Vous préférez votre messagerie ? Écrivez à <a class="mlink" data-u="tcatnoc" data-d="moc.latnemxedoc" href="#">l\'adresse de contact</a>.</p></form>';
+    // un simple bouton : l'adresse n'est ni affichée ni écrite en clair, elle n'est assemblée qu'au clic
+    return '<div class="cform"><button type="button" class="mbtn" data-u="tcatnoc" data-d="moc.latnemxedoc">Écrire à Vincent</button><p class="cnote">' + esc(a.note || '') + '</p></div>';
   }
   /* adresse de contact : jamais écrite en clair dans la page ni dans le code (les robots qui aspirent les adresses ne la voient pas) */
   function rev(x) { return x.split('').reverse().join(''); }
   function bindContact() {
-    document.querySelectorAll('a.mlink').forEach(function (m) {
-      var ad = rev(m.dataset.u) + String.fromCharCode(64) + rev(m.dataset.d);
-      m.textContent = ad; m.href = 'mai' + 'lto:' + ad;
+    document.querySelectorAll('.mbtn').forEach(function (m) {
+      m.addEventListener('click', function () { location.href = 'mai' + 'lto:' + rev(m.dataset.u) + String.fromCharCode(64) + rev(m.dataset.d) + '?subject=' + encodeURIComponent('Codex Mental'); });
     });
-    var f = $('cform'); if (!f) return;
+    var f = $('cform'); if (!f || f.tagName !== 'FORM') return;
     f.addEventListener('submit', function (e) {
       e.preventDefault();
       var b = f.querySelector('button'), st = f.querySelector('.st');
