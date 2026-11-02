@@ -425,7 +425,8 @@
     return '<form class="cform" id="cform" action="' + esc(a.action) + '" method="POST"><label>Votre nom<input name="name" autocomplete="name" required maxlength="120"></label>' +
       '<label>Votre adresse e-mail<input name="email" type="email" autocomplete="email" required maxlength="254"></label>' +
       '<label>Votre message<textarea name="message" required maxlength="10000"></textarea></label>' +
-      '<button type="submit">Envoyer le message</button><p class="st" role="status" aria-live="polite"></p><p class="cnote">' + esc(a.note || '') + '</p></form>';
+      '<button type="submit">Envoyer le message</button><p class="st" role="status" aria-live="polite"></p><p class="cnote">' + esc(a.note || '') + '</p>' +
+      '<p class="cnote">Vous préférez votre messagerie ? Écrivez à <a href="mailto:contact@codexmental.com">contact@codexmental.com</a>.</p></form>';
   }
   function bindContact() {
     var f = $('cform'); if (!f) return;
