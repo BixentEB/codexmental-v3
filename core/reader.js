@@ -426,9 +426,15 @@
       '<label>Votre adresse e-mail<input name="email" type="email" autocomplete="email" required maxlength="254"></label>' +
       '<label>Votre message<textarea name="message" required maxlength="10000"></textarea></label>' +
       '<button type="submit">Envoyer le message</button><p class="st" role="status" aria-live="polite"></p><p class="cnote">' + esc(a.note || '') + '</p>' +
-      '<p class="cnote">Vous préférez votre messagerie ? Écrivez à <a href="mailto:contact@codexmental.com">contact@codexmental.com</a>.</p></form>';
+      '<p class="cnote">Vous préférez votre messagerie ? Écrivez à <a class="mlink" data-u="tcatnoc" data-d="moc.latnemxedoc" href="#">l\'adresse de contact</a>.</p></form>';
   }
+  /* adresse de contact : jamais écrite en clair dans la page ni dans le code (les robots qui aspirent les adresses ne la voient pas) */
+  function rev(x) { return x.split('').reverse().join(''); }
   function bindContact() {
+    document.querySelectorAll('a.mlink').forEach(function (m) {
+      var ad = rev(m.dataset.u) + String.fromCharCode(64) + rev(m.dataset.d);
+      m.textContent = ad; m.href = 'mai' + 'lto:' + ad;
+    });
     var f = $('cform'); if (!f) return;
     f.addEventListener('submit', function (e) {
       e.preventDefault();
