@@ -45,8 +45,11 @@
 #scene .cp-scr canvas { flex: none; }
 
 /* dôme radar du plafond */
-#scene .cp-dome { position: absolute; left: 520px; top: -12px; width: 240px; height: 82px; border-radius: 50%; overflow: hidden; pointer-events: none; mix-blend-mode: screen; }
-#scene .cp-dome-sweep { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 0deg, rgba(120, 200, 255, .4), rgba(120, 200, 255, 0) 16%); animation: cp-sweep 5s linear infinite; }
+/* le balayage tourne dans un disque, puis le disque est aplati à la forme du dôme peint : la ligne ne sort jamais du radar */
+#scene .cp-dome { position: absolute; left: 488px; top: 1px; width: 303px; height: 63px; border-radius: 50%; overflow: hidden; pointer-events: none; mix-blend-mode: screen; }
+#scene .cp-dome-sq { position: absolute; left: 0; top: 50%; width: 303px; height: 303px; margin-top: -151.5px; transform: scaleY(.208); }
+#scene .cp-dome-sweep { position: absolute; inset: 0; border-radius: 50%; animation: cp-sweep 6s linear infinite;
+  background: conic-gradient(from 0deg, rgba(120, 200, 255, 0) 0deg, rgba(120, 200, 255, 0) 290deg, rgba(120, 200, 255, .16) 340deg, rgba(150, 215, 255, .38) 356deg, rgba(210, 240, 255, .95) 359.4deg, rgba(120, 200, 255, 0) 360deg); }
 @keyframes cp-sweep { to { transform: rotate(360deg); } }
 #scene .cp-dome-blip { position: absolute; left: 60%; top: 40%; width: 7px; height: 7px; border-radius: 50%; background: #f4c77a; box-shadow: 0 0 10px 3px rgba(244, 199, 122, .8); opacity: 0; transition: opacity .6s, left 1s linear, top 1s linear; }
 #scene .cp-dome-blip.on { opacity: 1; animation: cp-blink 1s steps(2, end) infinite; }
