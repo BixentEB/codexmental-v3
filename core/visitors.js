@@ -145,7 +145,8 @@
       var w = 64, s = sprite('cxv-cat', CAT, w, 'Le chat de Schrödinger');
       s.style.left = (vw() * rnd(.12, .78)).toFixed(0) + 'px'; s.style.top = (vh() * rnd(.22, .62)).toFixed(0) + 'px';
       var fr = [{ opacity: 0 }], n = 9; for (var i = 1; i < n; i++) fr.push({ opacity: i % 2 ? rnd(.55, .95) : rnd(0, .2), offset: i / n }); fr.push({ opacity: 0 });
-      return run('chat', s, anim(s, fr, { duration: 7000, easing: 'steps(1, end)' }));
+      fr.forEach(function (k) { k.easing = 'steps(1, end)'; });   // le pas s'applique entre chaque image clé (sinon l'opacité resterait à 0 tout du long)
+      return run('chat', s, anim(s, fr, { duration: 7000 }));
     },
     neurone: function () {   // une idée lumineuse qui s'allume puis s'élève
       var w = 34, s = sprite('cxv-bulb', BULB, w, 'Une idée lumineuse'), x = vw() * rnd(.2, .75), y = vh() * rnd(.35, .6);
