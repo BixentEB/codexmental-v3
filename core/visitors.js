@@ -53,6 +53,10 @@
     '<path d="M15 30 Q20 22 25 30" fill="none" stroke="#ff9f2e" stroke-width="1.4"/>' +
     '<rect x="13" y="39" width="14" height="4" rx="1.5" fill="#b9c1cf"/><rect x="14" y="44" width="12" height="4" rx="1.5" fill="#8f98a8"/><path d="M17 49h6l-1.5 3h-3z" fill="#6c7484"/></svg>';
 
+  var UFOS = [{ f: 'soucoupe-dessous.webp', w: 120 }, { f: 'soucoupe-profil.webp', w: 130 }, { f: 'soucoupe-vieille.webp', w: 110, old: true }];
+  // teinte selon la lumière du thème : chaude près du Soleil, froide dans les ciels bleutés
+  var TINTS = { heliosphere: ' sepia(.18) hue-rotate(-8deg)', 'vie-etoile': ' sepia(.12)', galactique: ' hue-rotate(6deg)', atome: ' hue-rotate(12deg) saturate(1.1)', neurone: ' hue-rotate(10deg)' };
+  function TINT() { return TINTS[C.theme && C.theme.id] || ''; }
   /* ---------- trajets ---------- */
   function path(node, w, opt) {   // traversée en douceur avec un léger tangage
     var L = opt.ltr !== false, y0 = opt.y, y1 = y0 + rnd(-.12, .12) * vh(), x0 = L ? -w - 40 : vw() + 40, x1 = L ? vw() + 40 : -w - 40, n = 6, fr = [];
@@ -83,17 +87,29 @@
   }
 
   var KINDS = {
-    soucoupe: function () {
-      var w = Math.round(rnd(46, 70)), s = sprite('cxv-ufo', SAUCER + '<i class="cxv-beam"></i>', w, 'Une soucoupe volante : l’attraper');
-      var dur = rnd(9000, 14000), ltr = Math.random() < .5;
-      var a = path(s, w, { y: rnd(.14, .5) * vh(), ltr: ltr, dur: dur, wob: rnd(10, 26), ph: rnd(0, 6), tilt: 9, s0: 1, s1: 1 });
-      var beam = s.querySelector('.cxv-beam');
-      anim(beam, [{ opacity: 0 }, { opacity: 0, offset: .42 }, { opacity: .9, offset: .47 }, { opacity: .9, offset: .56 }, { opacity: 0, offset: .62 }, { opacity: 0 }], { duration: dur });
+    soucoupe: function (opt) {
+      // trois soucoupes photoréalistes ; la profondeur règle la taille, la netteté, la lumière et la vitesse
+      opt = opt || {};
+      var V = UFOS[opt.v != null ? opt.v : Math.floor(Math.random() * UFOS.length)], d = opt.d != null ? opt.d : rnd(.25, 1);
+      var w = Math.round((V.w * (.45 + .75 * d)) * Math.min(1, vw() / 1280 + .25));
+      var s = sprite('cxv-ufo' + (V.old ? ' cxv-old' : ''), '<i class="cxv-beam"></i><img src="img/visitors/' + V.f + '" alt="" draggable="false">', w, 'Une soucoupe volante : l\u2019attraper');
+      s.style.filter = 'brightness(' + (.72 + .3 * d).toFixed(2) + ') saturate(' + (.85 + .2 * d).toFixed(2) + ')' + (d < .45 ? ' blur(' + ((.45 - d) * 1.6).toFixed(2) + 'px)' : '') + TINT();
+      var dur = rnd(10000, 15000) * (1.25 - d * .4) * (V.old ? 1.35 : 1), ltr = Math.random() < .5;
+      var a = path(s, w, { y: rnd(.14, .48) * vh(), ltr: ltr, dur: dur, wob: rnd(8, 20) * (V.old ? 1.6 : 1), ph: rnd(0, 6), tilt: V.old ? 11 : 6, s0: 1, s1: 1 });
+      var beam = s.querySelector('.cxv-beam'), b0 = opt.beam != null ? opt.beam : rnd(.36, .5);
+      if (opt.beam !== false) {
+        var fr = [{ opacity: 0, transform: 'translateX(-50%) scaleY(.05)' }, { opacity: 0, transform: 'translateX(-50%) scaleY(.05)', offset: b0 },
+          { opacity: .85, transform: 'translateX(-50%) scaleY(1)', offset: b0 + .06 }];
+        if (V.old) fr.push({ opacity: .2, transform: 'translateX(-50%) scaleY(.9)', offset: b0 + .08 }, { opacity: .8, transform: 'translateX(-50%) scaleY(1)', offset: b0 + .1 }, { opacity: .15, transform: 'translateX(-50%) scaleY(.8)', offset: b0 + .13 }, { opacity: .7, transform: 'translateX(-50%) scaleY(1)', offset: b0 + .15 });
+        fr.push({ opacity: .85, transform: 'translateX(-50%) scaleY(1)', offset: b0 + .17 }, { opacity: 0, transform: 'translateX(-50%) scaleY(.2)', offset: b0 + .24 }, { opacity: 0, transform: 'translateX(-50%) scaleY(.05)' });
+        anim(beam, fr, { duration: dur });
+      }
       return run('soucoupe', s, a);
     },
     caeles: function () {
-      var w = Math.round(Math.min(vw() * .3, rnd(220, 340))), s = sprite('cxv-caeles', '<img src="img/visitors/caeles.webp" alt="" draggable="false">', w, 'Caeles, le vaisseau de Vincent : le saluer');
-      var y = rnd(.2, .55) * vh(), dur = rnd(11000, 15000), jump = Math.random() < .5;
+      var d = rnd(.4, 1), w = Math.round(Math.min(vw() * .16, 110 + 150 * d)), s = sprite('cxv-caeles', '<img src="img/visitors/caeles.webp" alt="" draggable="false">', w, 'Caeles, le vaisseau de Vincent : le saluer');
+      s.style.filter = 'brightness(' + (.8 + .2 * d).toFixed(2) + ') contrast(1.04)' + (d < .55 ? ' blur(' + ((.55 - d) * 1.2).toFixed(2) + 'px)' : '') + TINT();
+      var y = rnd(.2, .55) * vh(), dur = rnd(11000, 15000) * (1.2 - d * .3), jump = Math.random() < .5;
       if (!jump) return run('caeles', s, path(s, w, { y: y, ltr: true, dur: dur, wob: 6, ph: 0, tilt: 1.2, s0: .62, s1: 1.08 }));
       // variante : il traverse jusqu'au milieu, puis passe en hyperespace
       var xm = vw() * rnd(.42, .6), fr = [
@@ -108,8 +124,9 @@
       return run('caeles', s, a);
     },
     flotte: function () {
-      var jobs = [KINDS.caeles()];
-      for (var i = 0; i < 5; i++) (function (k) { jobs.push(new Promise(function (ok) { setTimeout(function () { KINDS.soucoupe().then(ok); }, 500 + k * 650); })); })(i);
+      // une flotte : profondeurs et modèles variés, faisceaux décalés (deux soucoupes sur cinq n'en allument pas)
+      var jobs = [KINDS.caeles()], beams = [.3, false, .42, .55, false].sort(function () { return Math.random() - .5; });
+      for (var i = 0; i < 5; i++) (function (k) { jobs.push(new Promise(function (ok) { setTimeout(function () { KINDS.soucoupe({ v: k % UFOS.length, d: rnd(.2, 1), beam: beams[k] }).then(ok); }, 400 + k * rnd(500, 900)); })); })(i);
       return Promise.all(jobs);
     }
   };

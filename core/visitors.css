@@ -8,8 +8,13 @@
 .cxv-ufo .lt:nth-of-type(2) { animation-delay: -.37s; fill: #ffe27a; }
 .cxv-ufo .lt:nth-of-type(3) { animation-delay: -.74s; }
 @keyframes cxv-blink { 50% { opacity: .25; } }
-.cxv-beam { position: absolute; left: 50%; top: 70%; width: 70%; height: 46vh; transform: translateX(-50%); opacity: 0; pointer-events: none;
-  background: linear-gradient(to bottom, rgba(170, 240, 255, .55), rgba(170, 240, 255, 0)); clip-path: polygon(38% 0, 62% 0, 100% 100%, 0 100%); }
+.cxv-ufo { overflow: visible; }
+.cxv-ufo img { position: relative; z-index: 1; filter: drop-shadow(0 4px 10px rgba(0, 0, 0, .55)); }
+/* faisceau : cône de lumière douce, plus dense près de la soucoupe, bords fondus */
+.cxv-beam { position: absolute; z-index: 0; left: 50%; top: 58%; width: 62%; height: 38vh; opacity: 0; pointer-events: none; transform-origin: 50% 0; transform: translateX(-50%) scaleY(.05);
+  background: linear-gradient(to bottom, rgba(190, 238, 255, .62), rgba(150, 215, 255, .22) 45%, rgba(150, 215, 255, .06) 80%, rgba(150, 215, 255, 0));
+  clip-path: polygon(40% 0, 60% 0, 100% 100%, 0 100%); filter: blur(3px); mix-blend-mode: screen; }
+.cxv-old .cxv-beam { background: linear-gradient(to bottom, rgba(255, 226, 170, .55), rgba(255, 200, 130, .16) 50%, rgba(255, 200, 130, 0)); }
 .cxv-caeles img { filter: drop-shadow(0 6px 18px rgba(0, 0, 0, .6)) drop-shadow(0 0 10px rgba(110, 180, 255, .25)); }
 .cxv-roadster svg { filter: drop-shadow(0 0 5px rgba(255, 120, 120, .35)); }
 .cxv-cat svg { filter: drop-shadow(0 0 8px rgba(159, 216, 255, .55)); }

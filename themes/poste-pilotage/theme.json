@@ -1,19 +1,40 @@
 {
   "label": "Poste de pilotage",
   "palette": {
-    "bg": "#02030a", "fg": "#eef3ff", "fgSoft": "#cdd6ea", "muted": "#93a0c0", "hud": "#9fd6ff",
-    "accent": "#f4c77a", "accent2": "#7fc8ff", "line": "rgba(170, 195, 240, 0.22)",
-    "panel": "rgba(8, 13, 28, 0.9)", "panelSolid": "rgba(6, 10, 22, 0.98)", "panelDeep": "rgba(2, 4, 12, 0.5)"
+    "bg": "#02030a",
+    "fg": "#eef3ff",
+    "fgSoft": "#cdd6ea",
+    "muted": "#93a0c0",
+    "hud": "#9fd6ff",
+    "accent": "#f4c77a",
+    "accent2": "#7fc8ff",
+    "line": "rgba(170, 195, 240, 0.22)",
+    "panel": "rgba(8, 13, 28, 0.9)",
+    "panelSolid": "rgba(6, 10, 22, 0.98)",
+    "panelDeep": "rgba(2, 4, 12, 0.5)"
   },
   "fonts": {
     "display": "'Syne', 'Trebuchet MS', system-ui, sans-serif",
     "body": "'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif",
     "mono": "'IBM Plex Mono', ui-monospace, monospace"
   },
-  "customize": {"title": "Console de bord", "sub": "Vitesse, saut et écrans"},
-  "who": {"append": ".cp-hero"},
-  "reader": { "layout": "wide" },
+  "customize": {
+    "title": "Console de bord",
+    "sub": "Vitesse, saut et écrans"
+  },
+  "who": {
+    "append": ".cp-hero"
+  },
+  "reader": {
+    "layout": "wide"
+  },
   "markup": "scene.html",
-  "css": ["scene.css"],
-  "scene": "scene.js"
+  "css": [
+    "scene.css"
+  ],
+  "scene": "scene.js",
+  "scripts": [
+    "vendor/three-r128/three.min.js",
+    "themes/poste-pilotage/worlds.js"
+  ]
 }

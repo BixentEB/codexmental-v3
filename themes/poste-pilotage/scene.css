@@ -1,7 +1,8 @@
 /* Poste de pilotage — à bord de Caeles. Trois couches : l'espace (canvas), le cockpit (image aux vitres
    transparentes), les écrans et commandes (posés en perspective sur l'image, en coordonnées 1280 × 640). */
 #scene { background: #010207; }
-#scene #cp-space { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+#scene #cp-space, #scene #cp-gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+#scene #cp-gl { pointer-events: none; }
 #scene .cp-visitors { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
 #scene .cp-cockpit { position: absolute; inset: 0; pointer-events: none; }
 #scene .cp-cockpit img { position: absolute; left: 50%; top: 50%; width: 100%; height: 100%; object-fit: cover; transform: translate(-50%, -50%); user-select: none; }
@@ -37,6 +38,7 @@
 #scene .cp-route .cp-tgc { fill: #f4c77a; }
 #scene .cp-log { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 3px; font-size: 14px; }
 #scene .cp-log li { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; animation: cp-in .6s ease; }
+#scene .cp-log li:first-child { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.25; }
 #scene .cp-log li b { font: 400 11px 'IBM Plex Mono', monospace; letter-spacing: 1px; color: #7fc8ff; margin-right: 8px; }
 #scene .cp-log li.warm { color: #f4c77a; }
 @keyframes cp-in { from { opacity: 0; transform: translateY(6px); } }
@@ -95,3 +97,17 @@ body.cp-away #scene .cp-hero { opacity: 0; pointer-events: none; }
   #scene .cp-wheel button { min-width: 84px; padding: 6px 8px; font-size: 12px; }
 }
 @media (prefers-reduced-motion: reduce) { #scene .cp-dome-sweep, #scene .cp-route path { animation: none; } }
+
+/* molette : projection holographique qui monte de la console */
+#scene .cp-holo { position: absolute; left: -150px; top: -210px; width: 300px; height: 210px; pointer-events: none; opacity: 0;
+  background: linear-gradient(to top, rgba(120, 210, 255, .34), rgba(120, 210, 255, .06) 70%, rgba(120, 210, 255, 0)); clip-path: polygon(44% 100%, 56% 100%, 100% 0, 0 0);
+  filter: blur(1px); transform-origin: 50% 100%; transform: scaleY(.2); transition: opacity .35s, transform .45s cubic-bezier(.2, .9, .3, 1); }
+#scene .cp-wheel.open .cp-holo { opacity: 1; transform: scaleY(1); animation: cp-holo 3.2s ease-in-out infinite; }
+@keyframes cp-holo { 0%, 100% { opacity: .85; } 47% { opacity: .85; } 50% { opacity: .55; } 53% { opacity: .9; } }
+#scene .cp-wheel button { background: linear-gradient(180deg, rgba(120, 210, 255, .14), rgba(6, 20, 44, .72)), repeating-linear-gradient(0deg, rgba(160, 220, 255, .07) 0 1px, transparent 1px 3px);
+  border-color: rgba(140, 215, 255, .55); box-shadow: 0 0 14px rgba(110, 200, 255, .28), inset 0 0 12px rgba(110, 200, 255, .15); text-shadow: 0 0 8px rgba(140, 215, 255, .7); }
+#scene .cp-wheel.open button { animation: cp-flick .5s steps(5, end) both; }
+#scene .cp-wheel.open button:nth-of-type(2) { animation-delay: .06s; } #scene .cp-wheel.open button:nth-of-type(3) { animation-delay: .12s; }
+#scene .cp-wheel.open button:nth-of-type(4) { animation-delay: .18s; } #scene .cp-wheel.open button:nth-of-type(5) { animation-delay: .24s; }
+@keyframes cp-flick { 0% { opacity: 0; } 20% { opacity: .8; } 35% { opacity: .15; } 55% { opacity: 1; } 70% { opacity: .5; } 100% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { #scene .cp-wheel.open .cp-holo, #scene .cp-wheel.open button { animation: none; } }

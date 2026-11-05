@@ -39,7 +39,8 @@
     var secs = (Codex.catalog ? Codex.catalog.sections : []).filter(function (s) { return !s.hidden && s.nav !== false; });
     var contact = Codex.catalog && Codex.catalog.sections.filter(function (s) { return s.id === 'contact'; })[0];
     var nav = secs.map(function (s) {
-      return '<a class="nav-item" href="#' + esc(s.id) + '" data-section="' + esc(s.id) + '">' + (ICONS[s.id] || '') + '<span>' + esc(s.label) + '</span></a>';
+      var ext = Codex.external && Codex.external[s.id];
+      return '<a class="nav-item" href="' + (ext ? esc(ext) : '#' + esc(s.id)) + '" data-section="' + esc(s.id) + '">' + (ICONS[s.id] || '') + '<span>' + esc(s.label) + '</span></a>';
     }).join('');
     bar.innerHTML =
       '<a class="brand" href="./" data-section="home">✦ CODEX MENTAL</a>' +
@@ -78,6 +79,7 @@
     // navigation : la scène s'anime ; sans scène, on ouvre le lecteur directement
     bar.addEventListener('click', function (e) {
       var a = e.target.closest('[data-section]'); if (!a || !bar.contains(a)) return;
+      if ((e.ctrlKey || e.metaKey || e.shiftKey || e.button === 1) && Codex.external && Codex.external[a.dataset.section]) return;   // nouvel onglet demandé : le navigateur s'en charge
       e.preventDefault();
       var id = a.dataset.section;
       if (!Codex.sceneOk || id === 'contact') {

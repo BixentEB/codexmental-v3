@@ -33,6 +33,25 @@
     profil:  { code: 'PRT-05', dist: 'ici',    kind: 'ice',    c: ['#cdbbff', '#7b62d8', '#efe8ff', '#4a3a9a', '#a796f0'], atmo: 'rgba(190,170,255,' }
   };
   var ORDER = ['codex', 'atelier', 'lab', 'dashb', 'profil'];
+  /* mondes visités (worlds.js) : on pioche sans remise, pour finir par tous les voir */
+  var Wd = window.CaelesWorlds, WL = Wd ? Wd.list : [], gl = false, world = null, nextWorld = null;
+  var bag = []; try { bag = JSON.parse(localStorage.getItem('codex.cockpit.bag') || '[]'); } catch (e) {}
+  var forced = null;   // essais : Codex.cockpit.next('saturne') puis choisir une rubrique
+  C.cockpit = { next: function (id) { forced = WL.filter(function (w) { return w.id === id; })[0] || null; return forced ? 'Prochain saut : ' + forced.name : 'Mondes : ' + WL.map(function (w) { return w.id; }).join(', '); }, get worlds() { return WL.map(function (w) { return w.id; }); } };
+  function pickWorld() {
+    if (forced) { var f = forced; forced = null; return f; }
+    if (!WL.length) return null;
+    bag = bag.filter(function (id) { return WL.some(function (w) { return w.id === id; }); });
+    if (!bag.length) {
+      bag = WL.map(function (w) { return w.id; });
+      for (var i = bag.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = bag[i]; bag[i] = bag[j]; bag[j] = t; }
+      if (world && bag[0] === world.id) bag.push(bag.shift());
+    }
+    var id = bag.shift(); try { localStorage.setItem('codex.cockpit.bag', JSON.stringify(bag)); } catch (e) {}
+    return WL.filter(function (w) { return w.id === id; })[0];
+  }
+  function ext(id) { return C.external && C.external[id]; }
+  function host(u) { return String(u).replace(/^https?:\/\//, '').replace(/\/$/, ''); }
   function sec(id) { return C.catalog && C.catalog.sections.filter(function (s) { return s.id === id; })[0]; }
   function label(id) { var s = sec(id); return s ? s.label : id; }
   function countArticles(id) {
@@ -56,6 +75,7 @@
     F = { x: ox - (mobile ? 460 * s : 0), y: oy, k: s };
     frame.style.transform = 'translate(' + F.x.toFixed(1) + 'px,' + F.y.toFixed(1) + 'px) scale(' + F.k.toFixed(4) + ')';
     buildStars(); bakeSky();
+    if (gl) Wd.resize(W, H, DPR);
   }
   function toScreen(x, y) { return { x: F.x + x * F.k, y: F.y + y * F.k }; }
   var VP = { x: 646, y: 232 };   // centre de la vitre centrale (repère 1280 × 640)
@@ -147,6 +167,20 @@
     if (D.kind === 'ringed') ring(cx, cy, r, D, false);
     g.restore();
   }
+  /* repli sans WebGL (ou qualité minimale) : la carte réelle à plat dans un disque, éclairée de côté */
+  var imgCache = {};
+  function drawWorld2D(w, cx, cy, r, alpha) {
+    g.save(); g.globalAlpha = alpha;
+    if (w.atmo) { var a = w.atmo.map(function (v) { return Math.round(v * 255); }).join(','), h = g.createRadialGradient(cx, cy, r * .92, cx, cy, r * 1.25); h.addColorStop(0, 'rgba(' + a + ',.3)'); h.addColorStop(1, 'rgba(' + a + ',0)'); g.fillStyle = h; g.beginPath(); g.arc(cx, cy, r * 1.25, 0, TAU); g.fill(); }
+    g.beginPath(); g.arc(cx, cy, r, 0, TAU); g.clip();
+    var im = w.tex && (imgCache[w.tex] || (imgCache[w.tex] = (function () { var i = new Image(); i.src = 'img/astres/' + w.tex; return i; })()));
+    if (im && im.complete && im.naturalWidth) g.drawImage(im, im.naturalWidth * .25, 0, im.naturalWidth * .5, im.naturalHeight, cx - r, cy - r, r * 2, r * 2);
+    else { var gr = g.createLinearGradient(0, cy - r, 0, cy + r); w.c.forEach(function (c, i) { gr.addColorStop(i / 3, c); }); g.fillStyle = gr; g.fillRect(cx - r, cy - r, r * 2, r * 2); }
+    var t = g.createLinearGradient(cx - r * .9, cy - r * .45, cx + r * .9, cy + r * .45);
+    t.addColorStop(0, 'rgba(0,0,0,0)'); t.addColorStop(.5, 'rgba(0,0,0,.05)'); t.addColorStop(.68, 'rgba(0,0,0,.7)'); t.addColorStop(.82, 'rgba(0,0,0,.95)'); t.addColorStop(1, 'rgba(0,0,0,.98)');
+    g.fillStyle = t; g.fillRect(cx - r, cy - r, r * 2, r * 2);
+    g.restore();
+  }
   function ring(cx, cy, r, D, back) {
     g.save(); g.translate(cx, cy); g.rotate(-.32); g.scale(1, .26);
     g.beginPath(); if (back) g.rect(-r * 2.4, -r * 2.4, r * 4.8, r * 2.4); else g.rect(-r * 2.4, 0, r * 4.8, r * 2.4); g.clip();
@@ -155,24 +189,30 @@
   }
 
   /* ---------- état du vol ---------- */
-  var cur = null, target = null, jumpT = -1, JUMP = reduce ? 0 : 2.1, arriveT = 1, pendingOpen = null, spin = 0, last = 0, fuel = 41, shake = 0;
+  var fuelFrom = 41, fuelTo = 41, lastCount = -1;
+  var cur = null, target = null, jumpT = -1, JUMP = reduce ? 0 : 2.8, arriveT = 1, pendingOpen = null, spin = 0, last = 0, fuel = 41, shake = 0;
   function jumpTo(id) {
     id = id && DEST[id] ? id : null;
     if (id === cur && jumpT < 0) { if (id) openSoon(id, 200); return; }
     target = id; pendingOpen = id;
+    nextWorld = id && !ext(id) ? pickWorld() : null;
     if (!cfg.jump || reduce) { arrive(); return; }
-    jumpT = 0; document.body.classList.add('cp-away');
-    lockHide(); nav('SAUT EN COURS', id ? label(id) : 'Vue d’ensemble', id ? DEST[id].code + ' · ' + DEST[id].dist : 'retour en orbite libre');
-    log(id ? 'Saut vers ' + label(id) + ' (' + DEST[id].code + ')' : 'Retour en orbite libre');
-    fuel = Math.max(6, fuel - rnd(3, 6)); gauges();
+    jumpT = 0; document.body.classList.add('cp-away'); if (gl) Wd.hide();
+    lockHide(); nav('SAUT EN COURS', id ? (nextWorld ? nextWorld.name : host(ext(id))) : 'Vue d’ensemble', id ? DEST[id].code + ' · ' + label(id) : 'retour en orbite libre');
+    log(id ? (ext(id) ? 'Cap sur ' + host(ext(id)) : 'Saut vers ' + nextWorld.name + ' · ' + label(id)) : 'Retour en orbite libre');
+    fuelFrom = fuel; fuelTo = Math.max(6, fuel - rnd(3, 6)); lastCount = -1;
   }
   function arrive() {
-    cur = target; jumpT = -1; arriveT = 0;
+    cur = target; jumpT = -1; arriveT = 0; world = cur ? nextWorld : null;
     if (!cur) document.body.classList.remove('cp-away');
+    if (gl) { if (world) Wd.show(world); else Wd.hide(); }
+    shipAt(0); gauges();
     C.emit('nav:active', cur);
     if (cur) {
-      nav('CIBLE VERROUILLÉE', label(cur) + ' · ' + DEST[cur].dist, DEST[cur].code + ' · ' + countArticles(cur) + ' articles à bord');
-      scan(cur); log('Arrivée : ' + label(cur));
+      if (world) nav('CIBLE VERROUILLÉE', world.name, DEST[cur].code + ' · ' + label(cur) + ' · ' + countArticles(cur) + ' articles');
+      else nav('SORTIE', host(ext(cur)), DEST[cur].code + ' · ' + label(cur) + ' · même onglet');
+      scan(cur); log(world ? 'Arrivée : ' + world.name : 'Ouverture du sas : ' + host(ext(cur)));
+      if (world) setTimeout(function () { if (world) log(world.fact); }, 1400);
       if (pendingOpen === cur) openSoon(cur, reduce ? 0 : 900);
     } else {
       nav('EN ORBITE', 'Vue d’ensemble', 'molette : choisir une destination'); scan(null);
@@ -183,6 +223,9 @@
   function openSoon(id, ms) { clearTimeout(openTimer); openTimer = setTimeout(function () { if (cur === id) C.reader.open(id); }, ms); }
 
   /* ---------- écrans ---------- */
+  var routeP = $('cp-route'), shipDot = document.querySelector('#cp-s-nav .cp-ship'), routeLen = 0;
+  try { routeLen = routeP.getTotalLength(); } catch (e) {}
+  function shipAt(q) { if (!routeLen || !shipDot) return; var pt = routeP.getPointAtLength(routeLen * q); shipDot.setAttribute('cx', pt.x.toFixed(1)); shipDot.setAttribute('cy', pt.y.toFixed(1)); }
   function nav(a, b, c) { $('cp-n1').textContent = a; $('cp-n2').textContent = b; $('cp-n3').textContent = c; }
   var logEl = $('cp-log');
   function hhmm() { var d = new Date(); return ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); }
@@ -200,17 +243,25 @@
     $('cp-g4').style.width = (100 + gv.g4 + 100) / 1.2 + '%'; $('cp-v4').textContent = '−' + Math.abs(gv.g4) + '°';
   }
   var scg = $('cp-scan').getContext('2d');
+  var scanImg = null;
   function scan(id) {
-    var s = id && sec(id);
+    var w = id && world;
     $('cp-sc0').textContent = id ? 'SCANNER · ' + DEST[id].code : 'SCANNER · CIBLE';
-    $('cp-sc1').textContent = id ? label(id) : 'Aucune cible';
-    $('cp-sc2').textContent = s ? (s.kicker || '') : 'choisir une destination';
-    $('cp-sc3').textContent = id ? countArticles(id) + ' articles' : '';
+    $('cp-sc1').textContent = w ? w.name : id ? label(id) : 'Aucune cible';
+    $('cp-sc2').textContent = w ? w.type + ' · ' + w.where : id ? host(ext(id) || '') : 'choisir une destination';
+    $('cp-sc3').textContent = w ? (w.artist ? 'Vue d’artiste d’après les données' : 'Carte : ' + w.credit) : '';
+    scanImg = null;
+    if (w && w.tex) { scanImg = new Image(); scanImg.src = 'img/astres/' + w.tex; }
   }
   function drawScan(t) {
     scg.clearRect(0, 0, 74, 74);
     scg.strokeStyle = 'rgba(127,200,255,.6)'; scg.lineWidth = 1.5; scg.beginPath(); scg.arc(37, 37, 35, 0, TAU); scg.stroke();
-    if (cur && DEST[cur].kind !== 'nebula') { scg.save(); scg.beginPath(); scg.arc(37, 37, 33, 0, TAU); scg.clip(); scg.globalAlpha = .55; scg.drawImage(bake(cur), -((t * 4) % 66), 4, 66, 66); scg.drawImage(bake(cur), 66 - ((t * 4) % 66), 4, 66, 66); scg.restore(); }
+    if (world) {
+      scg.save(); scg.beginPath(); scg.arc(37, 37, 33, 0, TAU); scg.clip(); scg.globalAlpha = .7;
+      if (scanImg && scanImg.complete && scanImg.naturalWidth) { var o = (t * 3) % 66; scg.drawImage(scanImg, -o, 4, 132, 66); scg.drawImage(scanImg, 132 - o, 4, 132, 66); }
+      else { var gr = scg.createLinearGradient(0, 4, 0, 70); world.c.forEach(function (c, i) { gr.addColorStop(i / 3, c); }); scg.fillStyle = gr; scg.fillRect(4, 4, 66, 66); }
+      scg.restore(); scg.globalAlpha = 1;
+    } else if (cur && DEST[cur].kind !== 'nebula' && !ext(cur) && false) { scg.save(); scg.beginPath(); scg.arc(37, 37, 33, 0, TAU); scg.clip(); scg.globalAlpha = .55; scg.drawImage(bake(cur), -((t * 4) % 66), 4, 66, 66); scg.drawImage(bake(cur), 66 - ((t * 4) % 66), 4, 66, 66); scg.restore(); }
     else if (cur) { scg.globalAlpha = .7; scg.drawImage(bake(cur), 2, 2, 70, 70); scg.globalAlpha = 1; }
     var y = 37 + Math.sin(t * 1.3) * 30; scg.fillStyle = '#f4c77a'; scg.shadowColor = '#f4c77a'; scg.shadowBlur = 8; scg.fillRect(4, y, 66, 2); scg.shadowBlur = 0;
   }
@@ -228,10 +279,11 @@
   var lock = $('cp-lock'), bodyBtn = $('cp-body');
   function placeLock() {
     if (!cur) { lockHide(); return; }
-    var r = BODY.r * (DEST[cur].kind === 'nebula' ? 1.3 : 1), x = BODY.x - r * .9, y = Math.max(128, BODY.y - r * .9), s = r * 1.8;
+    var r = BODY.r, x = BODY.x - r * .9, y = Math.max(128, BODY.y - r * .9), s = r * 1.8;
     lock.style.cssText = 'left:' + x + 'px;top:' + y + 'px;width:' + s + 'px;height:' + Math.min(s, 300 - y) + 'px';
+    if (!world) { lockHide(); return; }
     $('cp-lock-t').textContent = DEST[cur].code + ' · ' + label(cur).toUpperCase();
-    $('cp-lock-b').textContent = DEST[cur].dist.toUpperCase() + ' · VERROUILLÉ';
+    $('cp-lock-b').textContent = world.name.toUpperCase() + ' · ' + (world.artist ? 'VUE D’ARTISTE' : 'VERROUILLÉ');
     lock.hidden = false; bodyBtn.hidden = false;
     bodyBtn.style.cssText = 'left:' + (BODY.x - r) + 'px;top:' + Math.max(120, BODY.y - r) + 'px;width:' + r * 2 + 'px;height:' + (330 - Math.max(120, BODY.y - r)) + 'px';
     bodyBtn.setAttribute('aria-label', 'Entrer dans la rubrique ' + label(cur));
@@ -252,12 +304,12 @@
     if (o) {
       // ordinateur : un arc au-dessus de la molette ; téléphone (image recadrée, 360 de large) : deux rangées
       var MOB = [[-100, -178], [0, -186], [100, -178], [-52, -112], [52, -112]];
-      Array.prototype.forEach.call(wheel.children, function (b, i) {
+      Array.prototype.forEach.call(wheel.querySelectorAll('button'), function (b, i) {
         var a = Math.PI * (1.08 + i * .21), x = mobile ? MOB[i][0] : Math.cos(a) * 202, y = mobile ? MOB[i][1] : Math.sin(a) * 108 - 18;
         b.style.left = x.toFixed(0) + 'px'; b.style.top = y.toFixed(0) + 'px';
       });
-      Array.prototype.forEach.call(wheel.children, function (b) { b.querySelector('span').textContent = label(b.dataset.id); b.setAttribute('aria-current', String(b.dataset.id === cur)); });
-      wheel.hidden = false; requestAnimationFrame(function () { wheel.classList.add('open'); var f = wheel.querySelector('[aria-current="true"]') || wheel.firstChild; f.focus({ preventScroll: true }); });
+      Array.prototype.forEach.call(wheel.querySelectorAll('button'), function (b) { b.querySelector('span').textContent = label(b.dataset.id); b.setAttribute('aria-current', String(b.dataset.id === cur)); });
+      wheel.hidden = false; requestAnimationFrame(function () { wheel.classList.add('open'); var f = wheel.querySelector('[aria-current="true"]') || wheel.querySelector('button'); f.focus({ preventScroll: true }); });
     } else { wheel.classList.remove('open'); setTimeout(function () { if (knob.getAttribute('aria-expanded') !== 'true') wheel.hidden = true; }, 300); }
   }
   knob.addEventListener('click', function (e) { e.stopPropagation(); wheelOpen(knob.getAttribute('aria-expanded') !== 'true'); });
@@ -265,7 +317,7 @@
   document.addEventListener('keydown', function (e) {
     if (knob.getAttribute('aria-expanded') !== 'true') return;
     if (e.key === 'Escape') { wheelOpen(false); knob.focus(); }
-    else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { var bs = Array.prototype.slice.call(wheel.children), i = bs.indexOf(document.activeElement); bs[(i + (e.key === 'ArrowRight' ? 1 : -1) + bs.length) % bs.length].focus(); e.preventDefault(); }
+    else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { var bs = Array.prototype.slice.call(wheel.querySelectorAll('button')), i = bs.indexOf(document.activeElement); bs[(i + (e.key === 'ArrowRight' ? 1 : -1) + bs.length) % bs.length].focus(); e.preventDefault(); }
   });
 
   /* ---------- visiteurs inattendus : derrière les vitres, repérés par le radar ---------- */
@@ -296,11 +348,15 @@
     var vp = toScreen(VP.x, VP.y), cx = vp.x * DPR, cy = vp.y * DPR, sc = Math.max(W, H) * DPR * .55;
     var speed = (reduce ? .02 : .06) * cfg.cruise, streak = 0;
     if (jumpT >= 0) {
-      jumpT += dt / JUMP; var p = jumpT;
-      var k = p < .5 ? ease(p * 2) : ease((1 - p) * 2);
-      speed += k * 3.2; streak = k;
-      if (p >= .5 && target !== cur && !g._swapped) { g._swapped = true; }
-      if (p >= 1) { g._swapped = false; arrive(); }
+      jumpT += dt / JUMP; var p = Math.min(1, jumpT);
+      // trois temps : mise en route lente, croisière, freinage ; les instruments suivent le voyage
+      var sm = function (q) { q = clamp(q, 0, 1); return q * q * (3 - 2 * q); };
+      var k = p < .32 ? sm(p / .32) * sm(p / .32) : p < .7 ? 1 : 1 - sm((p - .7) / .3);
+      speed += k * 3.4; streak = k;
+      fuel = fuelFrom + (fuelTo - fuelFrom) * sm(p); shipAt(sm(p));
+      var left = Math.ceil((1 - p) * JUMP);
+      if (left !== lastCount) { lastCount = left; $('cp-n3').textContent = (p < .7 ? 'ARRIVÉE DANS 00:0' + left : 'DÉCÉLÉRATION · 00:0' + left); $('cp-g3').style.width = fuel + '%'; $('cp-v3').textContent = Math.round(fuel) + ' %'; $('cp-g2').style.width = (70 + k * 29) + '%'; $('cp-v2').textContent = Math.round(70 + k * 29) + ' %'; }
+      if (jumpT >= 1) arrive();
     }
     if (arriveT < 1) arriveT = Math.min(1, arriveT + dt / 1.2);
     spin += dt * .004 * cfg.cruise;
@@ -333,7 +389,8 @@
     // astre de la destination : il grandit en arrivant, dérive doucement ensuite
     if (cur && jumpT < 0) {
       var e2 = ease(arriveT), bp = toScreen(BODY.x + Math.sin(now / 9000) * 4, BODY.y + Math.cos(now / 11000) * 3);
-      drawBody(cur, bp.x * DPR, bp.y * DPR, BODY.r * F.k * DPR * (.55 + .45 * e2), e2, spin);
+      if (gl && world) { Wd.place(bp.x, bp.y, BODY.r * F.k * (.55 + .45 * e2), e2); Wd.render(dt); }
+      else if (world) drawWorld2D(world, bp.x * DPR, bp.y * DPR, BODY.r * F.k * DPR * (.55 + .45 * e2), e2);
     }
     // écrans : radar et scanner (cadence réduite)
     if (!reading || W > 1100) { if (((now / 66) | 0) % 2 === 0) { drawRadar(now / 1000); drawScan(now / 1000); } }
@@ -357,7 +414,10 @@
   /* ---------- démarrage ---------- */
   addEventListener('resize', function () { layout(); placeLock(); });
   C.on('perf', function () { layout(); });
-  layout(); gauges(); setInterval(gauges, 2600);
+  var glc = $('cp-gl');
+  if (Wd && glc && !(C.perf && C.perf.tier === 'still')) gl = Wd.init(glc);
+  if (!gl && glc) glc.style.display = 'none';
+  layout(); gauges(); setInterval(function () { if (jumpT < 0) gauges(); }, 2600);
   C.on('catalog', function () { scan(cur); });
   setTimeout(function () {
     log('Systèmes en ligne. Bonjour à bord.');

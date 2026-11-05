@@ -20,7 +20,9 @@
     navigate: function (id) { Codex.emit('navigate', { id: id === 'home' ? null : id, raw: id }); },
     /* Appelé par une scène quand elle arrive sur une rubrique : ouvre le lecteur. */
     open: function (id) { return Codex.reader && Codex.reader.open(id); },
-    ui: {}
+    ui: {},
+    /* rubriques qui sont des sites à part : le menu y mène directement (même onglet) */
+    external: { dashb: 'https://obs.codexmental.com/', lab: 'https://lab.codexmental.com/' }
   };
 
   var params = new URLSearchParams(location.search);

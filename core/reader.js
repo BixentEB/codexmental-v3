@@ -178,6 +178,8 @@
     R.expanded[id] = true;
   }
   function openSec(id, from) {
+    // Observatoire et Laboratoire sont des sites à part : on y va directement, dans le même onglet (comme une extension)
+    if (Codex.external && Codex.external[id]) { Codex.emit('leave', { id: id, url: Codex.external[id] }); location.assign(Codex.external[id]); return true; }
     var sec = secById(id); if (!sec) return false;
     if (from) R.opener = from;
     R.sec = id; tQ.value = ''; R.q = ''; R.expanded = loadTree(id, sec);
