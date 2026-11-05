@@ -829,15 +829,26 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
   /* ---------- Étiquettes et onglets ---------- */
   var els = {};
   var OBJ_NAMES = { codex: 'Mercure', dashb: 'Terre', atelier: 'Mars', profil: 'Saturne', lab: 'Uranus' };
-  // symboles astronomiques des planètes-rubriques (\uFE0E : forcer le glyphe texte, pas l'émoji)
-  var OBJ_SYM = { codex: '\u263F', dashb: '\u2641', atelier: '\u2642', profil: '\u2644', lab: '\u2645' };
+  // symboles des objets : astronomiques (UAI, par défaut) ou astrologiques (réglage « Symboles », clé codex.solar.sym).
+  // Seuls la Terre, Uranus et Pluton diffèrent. Police hébergée « CX Astro » (fonts/fonts.css) : Hauméa et Makémaké
+  // (Unicode 15) s'affichent même sans police système. ︎ : forcer le glyphe texte, pas l'émoji.
+  var SYM = {
+    astro:  { codex: '☿', d2: '♀', dashb: '⊕', atelier: '♂', ceres: '⚳', d3: '♃', profil: '♄', lab: '⛢', neptune: '♆', pluto: '♇', haumea: '🝻', makemake: '🝼', eris: '⯰' },
+    astrol: { dashb: '♁', lab: '♅', pluto: '⯓' }
+  };
+  var symSet = 'astro'; try { if (localStorage.getItem('codex.solar.sym') === 'astrol') symSet = 'astrol'; } catch (e) {}
+  function symOf(id) { return (symSet === 'astrol' && SYM.astrol[id]) || SYM.astro[id] || ''; }
+  // Planète 9 : aucun symbole officiel ; un « 9 » et un « ? » qui se relaient (elle n'a jamais été observée)
+  var P9 = '<span class="p9"><i>9</i><i>?</i></span>';
+  function symHtml(id) { return id === 'planet9' ? P9 : symOf(id) + '︎'; }
   function makeLabel(P) {
     var s = SECTIONS[P.id];
     var d = document.createElement('div');
     d._k = (s.info ? ' pl-info' : ' pl-menu');
     d.className = 'pl right' + d._k;
+    var hasSym = P.id === 'planet9' || symOf(P.id);
     d.innerHTML = '<button class="hit" type="button" aria-label="' + s.name + (s.sub ? ' : ' + s.sub : '') + '"></button>' +
-      '<span class="lbl">' + '<b>' + (OBJ_SYM[P.id] ? '<span class="cx-nm"><span class="cx-sci sym" aria-hidden="true">' + OBJ_SYM[P.id] + '\uFE0E</span><span class="cx-plain">' + s.name + '</span></span>' : s.name) + '</b>' + (s.sub ? '<i>' + s.sub + '</i>' : '') + (OBJ_NAMES[P.id] ? '<em class="objn">' + OBJ_NAMES[P.id] + '</em>' : '') + '</span>';
+      '<span class="lbl">' + '<b>' + (hasSym ? '<span class="cx-nm"><span class="cx-sci sym" aria-hidden="true">' + symHtml(P.id) + '</span><span class="cx-plain">' + s.name + '</span></span>' : s.name) + '</b>' + (s.sub ? '<i>' + s.sub + '</i>' : '') + (OBJ_NAMES[P.id] ? '<em class="objn">' + OBJ_NAMES[P.id] + '</em>' : '') + '</span>';
     labelsEl.appendChild(d);
     var hit = d.querySelector('.hit');
     hit.addEventListener('focus', function () { hover = P.id; showSolarHover(P.id); });
@@ -847,6 +858,19 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
   }
   planets.forEach(function (P) { if (!P.def.deco || P.def.info) makeLabel(P); });
   anchors.forEach(makeLabel);
+  var symSel = document.getElementById('symset');
+  if (symSel) {
+    symSel.value = symSet;
+    symSel.addEventListener('change', function () {
+      symSet = symSel.value === 'astrol' ? 'astrol' : 'astro';
+      try { localStorage.setItem('codex.solar.sym', symSet); } catch (e) {}
+      Object.keys(SYM.astrol).forEach(function (id) { var el = els[id] && els[id].querySelector('.cx-sci'); if (el) el.textContent = symOf(id) + '︎'; });
+    });
+  }
+  // nom lisible d'un objet pour le fil d'Ariane commun (core/nav.js)
+  Codex.sceneLabel = function (id) { return SECTIONS[id] ? SECTIONS[id].name : null; };
+  Codex.sceneRoot = 'Système solaire';
+  Codex.sceneKeepsOnClose = true;   // fermer le lecteur laisse la caméra sur la planète
   // One navigation only: the header controls the camera, not legacy pages.
   var tabButtons = {};
   // La barre commune demande une rubrique : la caméra y vole, puis le lecteur s'ouvre.

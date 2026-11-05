@@ -23,6 +23,8 @@ python3 -m http.server 8000      # puis http://localhost:8000
 | `core/media.js`, `media.css` | Images d'articles en miniatures + fenêtre d'agrandissement (croix, flèches, Échap) ; un seul bloc `<details>` ouvert à la fois |
 | `core/viz.js`, `viz.css` | Illustrations animées sans texte (`<figure class="viz" data-viz="imagination|concepts|creer">`), aux couleurs du thème |
 | `core/ufo.js`, `ufo.css` | Page Contact : la soucoupe (passage, balayage, salut, enlèvement de la vache) |
+| `core/nav.js` | Commandes communes des scènes : clic droit = retour d'une étape, Échap en cascade jusqu'à la vue d'ensemble, fil d'Ariane, rappel des raccourcis, réglage dans le menu des thèmes |
+| `core/visitors.js`, `visitors.css` | « Visiteurs inattendus » : soucoupes, Caeles, flotte (code Konami), clins d'œil par thème, compteur d'ovnis ; essais : `?ovni`, `?ovni=caeles` (ou soucoupe, flotte, special) ou `Codex.ovni('…')` dans la console |
 | `tools/import_from_v2.py` | Import initial depuis v2 (**ne plus relancer** : le contenu de v3 a été retouché à la main) |
 
 ## Principe
@@ -32,6 +34,7 @@ python3 -m http.server 8000      # puis http://localhost:8000
   - écouter `Codex.on('navigate', e => …)` (la barre demande la rubrique `e.id`, `null` = accueil) ;
   - ouvrir le lecteur : `Codex.reader.open('codex')` (ou `Codex.open(id)`) ;
   - réagir à `reader:open` / `reader:close` (décaler le décor, zoomer…) ;
+  - facultatif : `Codex.sceneLabel(id)` et `Codex.sceneRoot` (fil d'Ariane), `Codex.sceneKeepsOnClose = true` si la scène reste sur l'objet quand le lecteur se ferme, `Codex.visitorsHost` pour accueillir les visiteurs dans le décor ;
   - signaler `window.CodexScene = { ok: true }` (ou `false` si la scène ne peut pas démarrer : la barre ouvre alors le lecteur directement).
 
 ## Ajouter un thème

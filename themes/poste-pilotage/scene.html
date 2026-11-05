@@ -1,0 +1,51 @@
+<canvas id="cp-space" aria-hidden="true"></canvas>
+<div id="cp-visitors" class="cp-visitors" aria-hidden="true"></div>
+<picture class="cp-cockpit" aria-hidden="true">
+  <source media="(max-aspect-ratio: 4/5)" srcset="img/caeles/caeles-mobile.webp">
+  <img id="cp-img" src="img/caeles/caeles-2560.webp" srcset="img/caeles/caeles-1600.webp 1600w, img/caeles/caeles-2560.webp 2560w, img/caeles/caeles-3548.webp 3548w" sizes="100vw" alt="" draggable="false">
+</picture>
+<div class="cp-frame" id="cp-frame">
+  <div class="cp-lock" id="cp-lock" hidden><i></i><i></i><i></i><i></i><span class="cp-lock-t" id="cp-lock-t"></span><span class="cp-lock-b" id="cp-lock-b"></span></div>
+  <button class="cp-body" id="cp-body" type="button" hidden aria-label="Entrer dans la rubrique"></button>
+  <div class="cp-dome" aria-hidden="true"><i class="cp-dome-sweep"></i><i class="cp-dome-blip" id="cp-dome-blip"></i></div>
+
+  <div class="cp-scr" id="cp-s-radar" aria-hidden="true" style="width:300px;height:130px;transform:matrix3d(0.580665,0.250554,0,0.000740,0.225826,0.653033,0,0.000378,0,0,1,0,42.931229,445.727170,0,1)">
+    <div class="cp-k">RADAR · COURTE PORTÉE</div>
+    <div class="cp-row"><canvas id="cp-radar" width="92" height="92"></canvas>
+      <div class="cp-col"><div class="cp-k cp-warm" id="cp-r1">AUCUN CONTACT</div><div class="cp-t" id="cp-r2">Secteur dégagé</div><div class="cp-m" id="cp-r3">balayage continu</div></div></div>
+  </div>
+  <div class="cp-scr" id="cp-s-state" aria-hidden="true" style="width:300px;height:130px;transform:matrix3d(0.540747,-0.095099,0,-0.000141,0.572634,1.216685,0,0.001658,0,0,1,0,244.599775,409.605411,0,1)">
+    <div class="cp-k">CAELES · ÉTAT</div>
+    <div class="cp-gauges">
+      <span>Bouclier</span><b><i id="cp-g1"></i></b><em id="cp-v1">98 %</em>
+      <span>Réacteur</span><b><i id="cp-g2"></i></b><em id="cp-v2">74 %</em>
+      <span>Antimatière</span><b class="cp-warm"><i id="cp-g3"></i></b><em id="cp-v3" class="cp-warm">41 %</em>
+      <span>Coque</span><b><i id="cp-g4"></i></b><em id="cp-v4">−153°</em>
+    </div>
+  </div>
+  <div class="cp-scr cp-center" id="cp-s-nav" aria-hidden="true" style="width:520px;height:140px;transform:matrix3d(0.577649,-0.001897,0,-0.000007,-0.190972,0.483711,0,-0.000305,0,0,1,0,488.795490,375.119729,0,1)">
+    <div class="cp-col cp-grow">
+      <div class="cp-k">NAVIGATION · ROUTE</div>
+      <svg viewBox="0 0 270 86" class="cp-route"><path id="cp-route" d="M10 70 C 80 70, 120 10, 250 22"/><circle cx="10" cy="70" r="5" class="cp-ship"/><circle cx="250" cy="22" r="11" class="cp-tg"/><circle cx="250" cy="22" r="4" class="cp-tgc"/></svg>
+    </div>
+    <div class="cp-sep"></div>
+    <div class="cp-col cp-grow">
+      <div class="cp-k cp-warm" id="cp-n1">EN ORBITE</div>
+      <div class="cp-t cp-big" id="cp-n2">Vue d'ensemble</div>
+      <div class="cp-m" id="cp-n3">molette : choisir une destination</div>
+    </div>
+  </div>
+  <div class="cp-scr" id="cp-s-log" aria-hidden="true" style="width:300px;height:130px;transform:matrix3d(0.819748,0.133334,0,0.000214,1.715737,1.307795,0,0.001816,0,0,1,0,854.917700,397.267193,0,1)">
+    <div class="cp-k cp-nox">JOURNAL DE BORD · NOX</div>
+    <ol class="cp-log" id="cp-log"></ol>
+  </div>
+  <div class="cp-scr" id="cp-s-scan" aria-hidden="true" style="width:300px;height:130px;transform:matrix3d(0.266808,0.030330,0,-0.000126,-0.004608,0.493744,0,0.000145,0,0,1,0,1107.914318,421.240135,0,1)">
+    <div class="cp-k" id="cp-sc0">SCANNER · CIBLE</div>
+    <div class="cp-row"><canvas id="cp-scan" width="74" height="74"></canvas>
+      <div class="cp-col"><div class="cp-t" id="cp-sc1">—</div><div class="cp-m" id="cp-sc2"></div><div class="cp-m" id="cp-sc3"></div></div></div>
+  </div>
+
+  <button class="cp-knob" id="cp-knob" type="button" aria-expanded="false" aria-controls="cp-wheel" aria-label="Molette de navigation : choisir une destination"></button>
+  <div class="cp-wheel" id="cp-wheel" hidden></div>
+</div>
+<main class="cp-hero" id="home"><div class="cp-eyebrow">Codex Mental · à bord de Caeles</div><h1>POSTE DE PILOTAGE</h1><p>L'espace défile derrière les vitres. Choisissez une destination à la molette ou dans la barre : Caeles saute en hyperespace.</p></main>

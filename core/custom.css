@@ -55,3 +55,17 @@ html.reading .cx-lab, html.reading .cx-pop { opacity: 0; visibility: hidden; poi
 .cx-names .cx-sw { display: flex; flex-wrap: wrap; gap: 6px; }
 .cx-names .cx-sw button { font: inherit; font-family: var(--font-body); font-size: .75rem; color: var(--muted); background: none; border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
 .cx-names .cx-sw button[aria-checked="true"] { color: var(--fg); border-color: color-mix(in srgb, var(--accent) 60%, transparent); background: color-mix(in srgb, var(--accent) 14%, transparent); }
+
+/* ---------- Commandes communes des scènes (core/nav.js) ---------- */
+.cx-crumbs { position: fixed; z-index: 9400; left: max(18px, env(safe-area-inset-left, 0px)); bottom: 22px; display: flex; align-items: center; gap: 8px; padding: 7px 12px; font: 500 .74rem/1 var(--font-mono, monospace); letter-spacing: .08em; color: var(--muted); background: color-mix(in srgb, var(--panel) 70%, transparent); border: 1px solid var(--line); border-radius: 999px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.cx-crumbs[hidden] { display: none; }
+.cx-crumbs .cx-cr-root { font: inherit; letter-spacing: inherit; color: var(--hud, var(--fg)); background: none; border: 0; padding: 0; cursor: pointer; }
+.cx-crumbs .cx-cr-root:hover, .cx-crumbs .cx-cr-root:focus-visible { color: var(--accent); }
+.cx-crumbs .cx-cr-cur { color: var(--fg); }
+html.reading .cx-crumbs { display: none; }
+@media (max-width: 700px) { .cx-crumbs { bottom: 76px; left: 10px; } }
+.cx-hint { position: fixed; z-index: 10040; left: 50%; bottom: 28px; transform: translate(-50%, 8px); padding: 9px 16px; font-size: .8rem; color: var(--fg); background: var(--panel-solid, var(--panel)); border: 1px solid var(--line); border-radius: 999px; opacity: 0; transition: opacity .6s, transform .6s; pointer-events: none; }
+.cx-hint.on { opacity: 1; transform: translate(-50%, 0); }
+.cx-hint kbd, .theme-menu kbd { font: 500 .72em var(--font-mono, monospace); padding: 2px 6px; border: 1px solid var(--line); border-radius: 5px; color: var(--hud, var(--fg)); }
+.theme-menu .cx-keys-sw { display: flex; align-items: center; gap: 8px; color: var(--fg); cursor: pointer; }
+.theme-menu .cx-keys-sw input { width: 16px; height: 16px; accent-color: var(--accent); }

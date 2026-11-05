@@ -1,0 +1,22 @@
+/* Visiteurs inattendus (core/visitors.js) : au-dessus de la scène, sous la barre et le lecteur */
+.cxv-layer { position: fixed; inset: 0; z-index: 40; pointer-events: none; overflow: hidden; }
+.cxv-layer.cxv-in { position: absolute; z-index: auto; }
+.cxv { position: absolute; left: 0; top: 0; padding: 0; margin: 0; border: 0; background: none; cursor: crosshair; pointer-events: auto; will-change: transform, opacity; opacity: 0; -webkit-tap-highlight-color: transparent; }
+.cxv svg, .cxv img { display: block; width: 100%; height: auto; pointer-events: none; user-select: none; }
+.cxv-ufo svg { filter: drop-shadow(0 0 6px rgba(140, 220, 255, .45)); }
+.cxv-ufo .lt { fill: #9ff3ff; animation: cxv-blink 1.1s steps(2, end) infinite; }
+.cxv-ufo .lt:nth-of-type(2) { animation-delay: -.37s; fill: #ffe27a; }
+.cxv-ufo .lt:nth-of-type(3) { animation-delay: -.74s; }
+@keyframes cxv-blink { 50% { opacity: .25; } }
+.cxv-beam { position: absolute; left: 50%; top: 70%; width: 70%; height: 46vh; transform: translateX(-50%); opacity: 0; pointer-events: none;
+  background: linear-gradient(to bottom, rgba(170, 240, 255, .55), rgba(170, 240, 255, 0)); clip-path: polygon(38% 0, 62% 0, 100% 100%, 0 100%); }
+.cxv-caeles img { filter: drop-shadow(0 6px 18px rgba(0, 0, 0, .6)) drop-shadow(0 0 10px rgba(110, 180, 255, .25)); }
+.cxv-roadster svg { filter: drop-shadow(0 0 5px rgba(255, 120, 120, .35)); }
+.cxv-cat svg { filter: drop-shadow(0 0 8px rgba(159, 216, 255, .55)); }
+.cxv-bulb svg { filter: drop-shadow(0 0 10px rgba(255, 211, 106, .7)); }
+.cxv-flash { position: absolute; left: 0; right: 0; height: 2px; transform-origin: 0 50%; opacity: 0; pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(190, 225, 255, .9) 55%, #fff 80%, transparent); box-shadow: 0 0 14px rgba(150, 200, 255, .8); }
+.cxv-toast { position: fixed; z-index: 10050; left: 50%; top: calc(var(--topbar-h, 58px) + 14px); transform: translate(-50%, -8px); padding: 9px 16px; font: 500 .8rem/1.3 var(--font-body, sans-serif); color: var(--fg); background: var(--panel-solid, var(--panel)); border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius: 999px; opacity: 0; pointer-events: none; transition: opacity .5s, transform .5s; max-width: calc(100vw - 32px); text-align: center; }
+.cxv-toast.on { opacity: 1; transform: translate(-50%, 0); }
+html.reading .cxv-layer { display: none; }
+@media (prefers-reduced-motion: reduce) { .cxv-layer { display: none; } }

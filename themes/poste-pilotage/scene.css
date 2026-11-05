@@ -1,0 +1,97 @@
+/* Poste de pilotage — à bord de Caeles. Trois couches : l'espace (canvas), le cockpit (image aux vitres
+   transparentes), les écrans et commandes (posés en perspective sur l'image, en coordonnées 1280 × 640). */
+#scene { background: #010207; }
+#scene #cp-space { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+#scene .cp-visitors { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+#scene .cp-cockpit { position: absolute; inset: 0; pointer-events: none; }
+#scene .cp-cockpit img { position: absolute; left: 50%; top: 50%; width: 100%; height: 100%; object-fit: cover; transform: translate(-50%, -50%); user-select: none; }
+
+#scene .cp-frame { position: absolute; left: 0; top: 0; width: 1280px; height: 640px; transform-origin: 0 0; pointer-events: none; }
+#scene .cp-frame > * { pointer-events: auto; }
+
+/* écrans de la console */
+#scene .cp-scr { position: absolute; left: 0; top: 0; transform-origin: 0 0; box-sizing: border-box; padding: 12px 18px; pointer-events: none;
+  color: #d9ecff; font: 400 15px/1.3 'DM Sans', system-ui, sans-serif; text-shadow: 0 0 8px rgba(90, 180, 255, .55); }
+#scene .cp-center { display: flex; gap: 26px; padding: 14px 26px; }
+#scene .cp-k { font: 400 12px/1.2 'IBM Plex Mono', monospace; letter-spacing: 3px; color: #7fc8ff; }
+#scene .cp-t { font-size: 16px; color: #eef6ff; }
+#scene .cp-big { font: 700 26px/1.1 'Syne', sans-serif; letter-spacing: .02em; }
+#scene .cp-m { font: 400 12px/1.4 'IBM Plex Mono', monospace; letter-spacing: 1px; color: #9fc6e8; }
+#scene .cp-warm { color: #f4c77a !important; text-shadow: 0 0 8px rgba(244, 199, 122, .6); }
+#scene .cp-nox { color: #c9b8ff; text-shadow: 0 0 8px rgba(185, 164, 255, .6); }
+#scene .cp-row { display: flex; gap: 14px; align-items: center; margin-top: 6px; }
+#scene .cp-col { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+#scene .cp-grow { flex: 1; justify-content: center; }
+#scene .cp-sep { width: 1px; background: rgba(127, 200, 255, .35); }
+#scene .cp-gauges { display: grid; grid-template-columns: 104px 1fr 50px; gap: 5px 10px; align-items: center; margin-top: 8px; }
+#scene .cp-gauges b { height: 7px; border-radius: 4px; background: rgba(127, 200, 255, .15); overflow: hidden; }
+#scene .cp-gauges b > i { display: block; height: 100%; width: 50%; border-radius: 4px; background: #7fc8ff; box-shadow: 0 0 8px rgba(127, 200, 255, .8); transition: width 1.2s ease; }
+#scene .cp-gauges b.cp-warm { background: rgba(244, 199, 122, .15); }
+#scene .cp-gauges b.cp-warm > i { background: #f4c77a; box-shadow: 0 0 8px rgba(244, 199, 122, .8); }
+#scene .cp-gauges em { font: 400 12px 'IBM Plex Mono', monospace; font-style: normal; color: #9fc6e8; }
+#scene .cp-route { width: 270px; height: 86px; overflow: visible; }
+#scene .cp-route path { fill: none; stroke: #f4c77a; stroke-width: 2; stroke-dasharray: 6 6; animation: cp-dash 2.4s linear infinite; }
+@keyframes cp-dash { to { stroke-dashoffset: -24; } }
+#scene .cp-route .cp-ship { fill: #d9ecff; }
+#scene .cp-route .cp-tg { fill: none; stroke: #f4c77a; stroke-width: 2; }
+#scene .cp-route .cp-tgc { fill: #f4c77a; }
+#scene .cp-log { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 3px; font-size: 14px; }
+#scene .cp-log li { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; animation: cp-in .6s ease; }
+#scene .cp-log li b { font: 400 11px 'IBM Plex Mono', monospace; letter-spacing: 1px; color: #7fc8ff; margin-right: 8px; }
+#scene .cp-log li.warm { color: #f4c77a; }
+@keyframes cp-in { from { opacity: 0; transform: translateY(6px); } }
+#scene .cp-scr canvas { flex: none; }
+
+/* dôme radar du plafond */
+#scene .cp-dome { position: absolute; left: 520px; top: -12px; width: 240px; height: 82px; border-radius: 50%; overflow: hidden; pointer-events: none; mix-blend-mode: screen; }
+#scene .cp-dome-sweep { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 0deg, rgba(120, 200, 255, .4), rgba(120, 200, 255, 0) 16%); animation: cp-sweep 5s linear infinite; }
+@keyframes cp-sweep { to { transform: rotate(360deg); } }
+#scene .cp-dome-blip { position: absolute; left: 60%; top: 40%; width: 7px; height: 7px; border-radius: 50%; background: #f4c77a; box-shadow: 0 0 10px 3px rgba(244, 199, 122, .8); opacity: 0; transition: opacity .6s, left 1s linear, top 1s linear; }
+#scene .cp-dome-blip.on { opacity: 1; animation: cp-blink 1s steps(2, end) infinite; }
+@keyframes cp-blink { 50% { opacity: .35; } }
+
+/* viseur sur la vitre + astre cliquable */
+#scene .cp-lock { position: absolute; pointer-events: none; transition: opacity .5s; }
+#scene .cp-lock > i { position: absolute; width: 20px; height: 20px; border: 0 solid rgba(244, 199, 122, .9); }
+#scene .cp-lock > i:nth-child(1) { left: 0; top: 0; border-left-width: 1px; border-top-width: 1px; }
+#scene .cp-lock > i:nth-child(2) { right: 0; top: 0; border-right-width: 1px; border-top-width: 1px; }
+#scene .cp-lock > i:nth-child(3) { left: 0; bottom: 0; border-left-width: 1px; border-bottom-width: 1px; }
+#scene .cp-lock > i:nth-child(4) { right: 0; bottom: 0; border-right-width: 1px; border-bottom-width: 1px; }
+#scene .cp-lock span { position: absolute; font: 300 11px 'IBM Plex Mono', monospace; letter-spacing: 2.4px; color: rgba(244, 199, 122, .95); text-shadow: 0 0 8px rgba(244, 199, 122, .5); white-space: nowrap; }
+#scene .cp-lock-t { left: 28px; top: 4px; }
+#scene .cp-lock-b { right: 28px; bottom: 4px; opacity: .8; }
+#scene .cp-lock[hidden], #scene .cp-body[hidden] { display: none; }
+#scene .cp-body { position: absolute; border-radius: 50%; border: 0; background: transparent; cursor: pointer; }
+#scene .cp-body:focus-visible { outline: 1px dashed rgba(244, 199, 122, .8); outline-offset: 6px; }
+
+/* molette et roulette des destinations */
+#scene .cp-knob { position: absolute; left: 606px; top: 468px; width: 68px; height: 40px; border-radius: 50%; border: 0; background: transparent; cursor: pointer; }
+#scene .cp-knob::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 1px solid rgba(244, 199, 122, 0); box-shadow: 0 0 0 rgba(244, 199, 122, 0); transition: border-color .3s, box-shadow .3s; }
+#scene .cp-knob:hover::after, #scene .cp-knob:focus-visible::after, #scene .cp-knob[aria-expanded="true"]::after { border-color: rgba(244, 199, 122, .85); box-shadow: 0 0 16px rgba(244, 199, 122, .5); }
+#scene .cp-wheel { position: absolute; left: 640px; top: 488px; width: 0; height: 0; }
+#scene .cp-wheel[hidden] { display: none; }
+#scene .cp-wheel button { position: absolute; transform: translate(-50%, -50%) scale(.6); opacity: 0; display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 104px; padding: 7px 12px; border-radius: 12px;
+  border: 1px solid rgba(127, 200, 255, .4); background: rgba(4, 12, 28, .88); color: #eef6ff; font: 600 13px/1.1 'Syne', sans-serif; cursor: pointer; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  transition: transform .35s cubic-bezier(.2, .9, .3, 1.2), opacity .3s, border-color .2s; }
+#scene .cp-wheel.open button { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+#scene .cp-wheel button small { font: 400 10px 'IBM Plex Mono', monospace; letter-spacing: 2px; color: #7fc8ff; }
+#scene .cp-wheel button:hover, #scene .cp-wheel button:focus-visible, #scene .cp-wheel button[aria-current="true"] { border-color: #f4c77a; outline: none; }
+#scene .cp-wheel button[aria-current="true"] small { color: #f4c77a; }
+
+/* texte d'accueil : dans la vitre de gauche */
+#scene .cp-hero { position: absolute; left: max(22px, 2.4vw); top: calc(var(--topbar-h, 58px) + 3vh); width: min(330px, 24vw); padding: 16px 18px; border-radius: 14px; background: rgba(4, 8, 20, .55); border: 1px solid rgba(170, 195, 240, .16); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: opacity .5s; }
+#scene .cp-eyebrow { font: 400 10px/1.3 'IBM Plex Mono', monospace; letter-spacing: 2.6px; text-transform: uppercase; color: #7fc8ff; }
+#scene .cp-hero h1 { margin: 8px 0 8px; font: 700 clamp(20px, 1.9vw, 30px)/1.05 'Syne', sans-serif; letter-spacing: .06em; color: #eef3ff; }
+#scene .cp-hero p { margin: 0; font-size: .86rem; line-height: 1.5; color: #cdd6ea; }
+#scene .cp-hero .cx-who { margin-top: 12px; }
+body.cp-away #scene .cp-hero { opacity: 0; pointer-events: none; }
+@media (max-width: 1100px), (max-height: 940px) { #scene .cp-hero .cx-who p { display: none; } }
+
+/* téléphone : image recadrée sur la console, seuls l'écran central, la molette et le dôme restent */
+@media (max-aspect-ratio: 4/5) {
+  #scene #cp-s-radar, #scene #cp-s-state, #scene #cp-s-log, #scene #cp-s-scan { display: none; }
+  #scene .cp-hero { width: auto; right: 16px; left: 16px; top: calc(var(--topbar-h, 58px) + 10px); padding: 12px 14px; }
+  #scene .cp-hero p { font-size: .8rem; }
+  #scene .cp-wheel button { min-width: 84px; padding: 6px 8px; font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) { #scene .cp-dome-sweep, #scene .cp-route path { animation: none; } }
