@@ -97,12 +97,20 @@ def page_url(aid):
     return '%s/articles/%s/' % (SITE, aid)
 
 
+BAR = ('<header class="bar"><a class="brand" href="/"><img src="/img/favicon-96x96.png" alt="" width="26" height="26"><span>CODEX MENTAL</span></a>'
+       '<a class="enter" href="/">Entrer dans Codex Mental <span aria-hidden="true">→</span></a></header>')
+PROMO = ('<a class="promo%s" href="/"><img src="/articles/apercu.webp" alt="Aperçu du site" width="1280" height="720" loading="lazy">'
+         '<span class="promo-t"><b>Codex Mental, l’univers complet</b><span>Ce texte vient de Codex Mental : un espace vivant d’idées, d’articles et d’expériences, avec ses thèmes animés, son ciel d’observation et son lecteur immersif.</span>'
+         '<span class="enter">Entrer dans Codex Mental <span aria-hidden="true">→</span></span></span></a>')
+OG_IMAGE = 'https://codexmental.com/articles/apercu.webp'
+
+
 FOOT = ('<footer class="foot"><p>© %s — %s. Citation et reprise d\'extraits bienvenues, avec le nom de '
         'l\'auteur et un lien vers la page d\'origine. Pour une reprise plus large, <a href="%s">écrivez-moi</a>.</p>'
         '<p><a href="/articles/">Toutes les publications</a> · <a href="/">Entrer dans Codex Mental</a></p></footer>')
 
 
-def shell(title, desc, canonical, body, jsonld, og_type='article'):
+def shell(title, desc, canonical, body, jsonld, og_type='article', top=False):
     return '''<!doctype html>
 <html lang="fr">
 <head>
@@ -118,18 +126,22 @@ def shell(title, desc, canonical, body, jsonld, og_type='article'):
 <meta property="og:description" content="{desc}">
 <meta property="og:url" content="{canonical}">
 <meta property="og:locale" content="fr_FR">
+<meta property="og:image" content="{ogimg}">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="/img/favicon-96x96.png">
 <link rel="stylesheet" href="/articles/lisible.css">
 <script type="application/ld+json">{jsonld}</script>
 </head>
 <body>
+{bar}
 <main class="page">
-{body}
+{top}{body}
+{promo}
 {foot}
 </main>
 </body>
 </html>
-'''.format(title=esc(title), desc=esc(desc), author=esc(AUTHOR), canonical=esc(canonical),
+'''.format(bar=BAR, promo=PROMO % '', top=(PROMO % ' top') if top else '', ogimg=OG_IMAGE, title=esc(title), desc=esc(desc), author=esc(AUTHOR), canonical=esc(canonical),
            og_type=og_type, site=esc(SITE_NAME), body=body, foot=FOOT % (esc(AUTHOR), esc(SITE_NAME), esc(CONTACT)),
            jsonld=json.dumps(jsonld, ensure_ascii=False).replace('</', '<\\/'))
 
@@ -216,7 +228,7 @@ def main():
     with open(os.path.join(OUT, 'index.html'), 'w', encoding='utf8') as f:
         f.write(shell('Toutes les publications — ' + SITE_NAME,
                       'Sommaire des articles, réflexions et explorations de Codex Mental, par ' + AUTHOR + '.',
-                      SITE + '/articles/', '\n'.join(parts), ld, og_type='website'))
+                      SITE + '/articles/', '\n'.join(parts), ld, og_type='website', top=True))
 
     # sitemap
     urls = [SITE + '/', SITE + '/articles/'] + [page_url(aid) for _, aid, _, _, _ in listing]
