@@ -1,0 +1,31 @@
+name: Pages lisibles
+# Régénère articles/, sitemap.xml et le nettoyage de content/search.json
+# à chaque modification du catalogue ou des contenus.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'content/catalog.json'
+      - 'content/**/*.html'
+      - 'tools/build_static.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: pages-lisibles
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python3 tools/build_static.py
+      - name: Enregistrer les pages générées
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add articles sitemap.xml content/search.json
+          git diff --cached --quiet || (git commit -m "Pages lisibles régénérées" && git push)
