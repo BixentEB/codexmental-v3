@@ -496,35 +496,40 @@
    "src": "content/codex/codex/presentation.html",
    "base": "",
    "words": 207,
-   "type": "page"
+   "type": "page",
+   "published": "2025-06-09"
   },
   "codex/codeurs": {
    "title": "Nexus",
    "src": "content/codex/codex/codeurs.html",
    "base": "",
    "words": 338,
-   "type": "page"
+   "type": "page",
+   "published": "2025-07-11"
   },
   "codex/voyage": {
    "title": "Odyssée",
    "src": "content/codex/codex/voyage.html",
    "base": "",
    "words": 353,
-   "type": "page"
+   "type": "page",
+   "published": "2025-07-08"
   },
   "codex/ecrit": {
    "title": "Grimoire",
    "src": "content/codex/codex/ecrit.html",
    "base": "",
    "words": 877,
-   "type": "page"
+   "type": "page",
+   "published": "2025-07-08"
   },
   "codex/merci": {
    "title": "Reliques",
    "src": "content/codex/codex/merci.html",
    "base": "",
    "words": 831,
-   "type": "page"
+   "type": "page",
+   "published": "2025-07-11"
   },
   "ai/correct": {
    "title": "De la correction à la perfection",
@@ -589,7 +594,8 @@
    "tags": [
     "IntelligenceArtificielle"
    ],
-   "type": "article"
+   "type": "article",
+   "published": "2025-06-17"
   },
   "ai/aivie": {
    "title": "La place de l'IA dans ma vie",
@@ -599,7 +605,8 @@
    "tags": [
     "IntelligenceArtificielle"
    ],
-   "type": "article"
+   "type": "article",
+   "published": "2025-06-15"
   },
   "ai/miroirintro": {
    "title": "Miroir de l'humanité",
@@ -609,7 +616,8 @@
    "tags": [
     "IntelligenceArtificielle"
    ],
-   "type": "article"
+   "type": "article",
+   "published": "2025-06-22"
   },
   "ai/miroir0": {
    "title": "0. Genèse",
@@ -619,7 +627,8 @@
    "tags": [
     "IntelligenceArtificielle"
    ],
-   "type": "article"
+   "type": "article",
+   "published": "2025-06-27"
   },
   "ai/miroir1": {
    "title": "1. Révélation",
@@ -629,7 +638,8 @@
    "tags": [
     "IntelligenceArtificielle"
    ],
-   "type": "article"
+   "type": "article",
+   "published": "2025-06-16"
   },
   "aiautor/intro": {
    "title": "Introduction",
@@ -640,7 +650,8 @@
     "IntelligenceArtificielle",
     "Écriture"
    ],
-   "type": "article"
+   "type": "article",
+   "published": "2025-06-24"
   },
   "aiautor/manifeste": {
    "title": "Manifeste du Code Partagé",
@@ -651,7 +662,8 @@
     "IntelligenceArtificielle",
     "Écriture"
    ],
-   "type": "article"
+   "type": "article",
+   "published": "2025-06-24"
   },
   "aiautor/complexa": {
    "title": "Complexité apprivoisée",
@@ -662,14 +674,16 @@
     "IntelligenceArtificielle",
     "Écriture"
    ],
-   "type": "article"
+   "type": "article",
+   "published": "2025-06-28"
   },
   "psy/article2": {
    "title": "Surfonctionner sans s’effondrer",
    "src": "content/codex/psy/article2.html",
    "base": "blog/articles/psy",
    "words": 5,
-   "type": "article"
+   "type": "article",
+   "published": "2025-06-16"
   },
   "hp/cameleon": {
    "title": "Le Caméléon",
@@ -691,7 +705,8 @@
    "tags": [
     "Philosophie"
    ],
-   "type": "article"
+   "type": "article",
+   "published": "2025-07-03"
   },
   "philo/identite": {
    "title": "Qui suis-je ?",
@@ -729,7 +744,8 @@
     "Symbolisme",
     "Tarot"
    ],
-   "type": "article"
+   "type": "article",
+   "published": "2025-07-03"
   },
   "introspection/seulsilence": {
    "title": "Penser seul, douter en silence",
@@ -748,343 +764,392 @@
    "base": "atelier",
    "words": 273,
    "type": "page",
-   "hidden": true
+   "hidden": true,
+   "published": "2025-06-21"
   },
   "atelier/explo/modelexplo": {
    "title": "Modèle d'exploration",
    "src": "content/atelier/atelier/explo/modelexplo.html",
    "base": "atelier/explo",
    "words": 226,
-   "type": "page"
+   "type": "page",
+   "published": "2025-06-21"
   },
   "atelier/explo/cryodynamic": {
    "title": "Cryodynamique",
    "src": "content/atelier/atelier/explo/cryodynamic.html",
    "base": "atelier/explo",
    "words": 572,
-   "type": "page"
+   "type": "page",
+   "published": "2025-06-21"
   },
   "atelier/explo/polaris": {
    "title": "POLARIS",
    "src": "content/atelier/atelier/explo/polaris.html",
    "base": "atelier/explo",
    "words": 742,
-   "type": "page"
+   "type": "page",
+   "published": "2025-06-21"
   },
   "atelier/explo/solunar": {
    "title": "SOLUNAR",
    "src": "content/atelier/atelier/explo/solunar.html",
    "base": "atelier/explo",
    "words": 371,
-   "type": "page"
+   "type": "page",
+   "published": "2025-06-20"
   },
   "atelier/aievo/b12": {
    "title": "B12 Project",
    "src": "content/atelier/atelier/aievo/b12.html",
    "base": "atelier/aievo",
    "words": 701,
-   "type": "page"
+   "type": "page",
+   "published": "2025-06-14"
   },
   "atelier/projets/ia1": {
    "title": "IA et outils",
    "src": "content/atelier/atelier/projets/ia1.html",
    "base": "atelier/projets",
    "words": 255,
-   "type": "page"
+   "type": "page",
+   "published": "2025-06-15"
   },
   "lab/index": {
    "title": "Laboratoire",
    "src": "content/lab/lab/index.html",
    "base": "lab",
    "words": 53,
-   "type": "page"
+   "type": "page",
+   "published": "2025-07-17"
   },
   "dashb/index": {
    "title": "Observatoire",
    "src": "content/dashb/index.html",
    "base": "dashb",
    "type": "page",
-   "desc": "Une immersion astronomique : le système solaire et les étoiles voisines à leurs vraies positions."
+   "desc": "Une immersion astronomique : le système solaire et les étoiles voisines à leurs vraies positions.",
+   "published": "2026-10-28"
   },
   "profil/bio/index": {
    "title": "Introduction",
    "src": "content/profil/profil/bio/index.html",
    "base": "profil/sections/bio",
    "words": 392,
-   "type": "page"
+   "type": "page",
+   "published": "2026-09-18"
   },
   "profil/bio/cv": {
    "title": "Trajectoire",
    "src": "content/profil/profil/bio/cv.html",
    "base": "profil/sections/bio",
    "words": 473,
-   "type": "page"
+   "type": "page",
+   "published": "2026-09-26"
   },
   "profil/bio/philo": {
    "title": "Philo",
    "src": "content/profil/profil/bio/philo.html",
    "base": "profil/sections/bio",
    "words": 505,
-   "type": "page"
+   "type": "page",
+   "published": "2025-07-02"
   },
   "profil/bio/reseaux": {
    "title": "Ailleurs",
    "src": "content/profil/profil/bio/reseaux.html",
    "base": "profil/sections/bio",
    "words": 114,
-   "type": "page"
+   "type": "page",
+   "published": "2026-09-27"
   },
   "profil/bio/fun": {
    "title": "Fragments",
    "src": "content/profil/profil/bio/fun.html",
    "base": "profil/sections/bio",
    "words": 1017,
-   "type": "page"
+   "type": "page",
+   "published": "2026-09-27"
   },
   "profil/passions/index": {
    "title": "Introduction",
    "src": "content/profil/profil/passions/index.html",
    "base": "profil/sections/passions",
    "words": 511,
-   "type": "page"
+   "type": "page",
+   "published": "2026-09-28"
   },
   "profil/passions/civilisations": {
    "title": "Civilisations",
    "src": "content/profil/profil/passions/civilisations.html",
    "base": "profil/sections/passions",
    "words": 245,
-   "type": "page"
+   "type": "page",
+   "published": "2026-09-28"
   },
   "profil/passions/cosmos": {
    "title": "Cosmos",
    "src": "content/profil/profil/passions/cosmos.html",
    "base": "profil/sections/passions",
    "words": 172,
-   "type": "page"
+   "type": "page",
+   "published": "2026-09-28"
   },
   "profil/passions/imagination": {
    "title": "Imagination",
    "src": "content/profil/profil/passions/imagination.html",
    "base": "profil/sections/passions",
    "words": 217,
-   "type": "page"
+   "type": "page",
+   "published": "2026-09-28"
   },
   "profil/passions/concepts": {
    "title": "Concepts",
    "src": "content/profil/profil/passions/concepts.html",
    "base": "profil/sections/passions",
    "words": 352,
-   "type": "page"
+   "type": "page",
+   "published": "2026-09-28"
   },
   "profil/passions/creer": {
    "title": "Créer",
    "src": "content/profil/profil/passions/creer.html",
    "base": "profil/sections/passions",
    "words": 152,
-   "type": "page"
+   "type": "page",
+   "published": "2026-09-28"
   },
   "profil/passions/fascinations": {
    "title": "Fascinations",
    "src": "content/profil/profil/passions/fascinations.html",
    "base": "profil/sections/passions",
    "words": 282,
-   "type": "page"
+   "type": "page",
+   "published": "2026-09-28"
   },
   "profil/influences/index": {
    "title": "Introduction",
    "src": "content/profil/profil/influences/index.html",
    "base": "profil/sections/influences",
    "words": 172,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-08"
   },
   "profil/influences/coeur": {
    "title": "Coups de cœur",
    "src": "content/profil/profil/influences/coeur.html",
    "base": "profil/sections/influences",
    "words": 304,
-   "type": "page"
+   "type": "page",
+   "published": "2026-09-18"
   },
   "profil/influences/playlist": {
    "title": "Musicothèque",
    "src": "content/profil/profil/influences/playlist.html",
    "base": "profil/sections/influences",
    "words": 71,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-08"
   },
   "profil/references/index": {
    "title": "Introduction",
    "src": "content/profil/profil/references/index.html",
    "base": "profil/sections/references",
    "words": 164,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-15"
   },
   "profil/references/alice": {
    "title": "Alice",
    "src": "content/profil/profil/references/alice.html",
    "base": "profil/sections/references",
    "words": 519,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-15"
   },
   "profil/references/drennan": {
    "title": "Talos",
    "src": "content/profil/profil/references/drennan.html",
    "base": "profil/sections/references",
    "words": 1793,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-08"
   },
   "profil/references/mondes": {
    "title": "Mondes",
    "src": "content/profil/profil/references/mondes.html",
    "base": "profil/sections/references",
    "words": 127,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-16"
   },
   "profil/references/figures": {
    "title": "Figures",
    "src": "content/profil/profil/references/figures.html",
    "base": "profil/sections/references",
    "words": 484,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-15"
   },
   "profil/references/esprits": {
    "title": "Esprits",
    "src": "content/profil/profil/references/esprits.html",
    "base": "profil/sections/references",
    "words": 999,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-16"
   },
   "profil/references/mythes": {
    "title": "Mythes",
    "src": "content/profil/profil/references/mythes.html",
    "base": "profil/sections/references",
    "words": 596,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-16"
   },
   "profil/references/symboles": {
    "title": "Symboles",
    "src": "content/profil/profil/references/symboles.html",
    "base": "profil/sections/references",
    "words": 208,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-16"
   },
   "profil/references/lectures": {
    "title": "Livres & idées",
    "src": "content/profil/profil/references/lectures.html",
    "base": "profil/sections/references",
    "words": 284,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-17"
   },
   "profil/references/synchronicites": {
    "title": "Synchronicités",
    "src": "content/profil/profil/references/synchronicites.html",
    "base": "profil/sections/references",
    "words": 271,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-16"
   },
   "profil/gaming/index": {
    "title": "Introduction",
    "src": "content/profil/profil/gaming/index.html",
    "base": "profil/sections/gaming",
    "words": 209,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-18"
   },
   "profil/gaming/parcours": {
    "title": "Mon parcours",
    "src": "content/profil/profil/gaming/parcours.html",
    "base": "profil/sections/gaming",
    "words": 149,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-18"
   },
   "profil/gaming/mmo": {
    "title": "MMORPG",
    "src": "content/profil/profil/gaming/mmo.html",
    "base": "profil/sections/gaming",
    "words": 244,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-18"
   },
   "profil/gaming/survie": {
    "title": "Survie & construction",
    "src": "content/profil/profil/gaming/survie.html",
    "base": "profil/sections/gaming",
    "words": 118,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-18"
   },
   "profil/gaming/experiences": {
    "title": "Immersion & sens",
    "src": "content/profil/profil/gaming/experiences.html",
    "base": "profil/sections/gaming",
    "words": 93,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-18"
   },
   "profil/gaming/creations": {
    "title": "Mes créations",
    "src": "content/profil/profil/gaming/creations.html",
    "base": "profil/sections/gaming",
    "words": 102,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-18"
   },
   "profil/gaming/competences": {
    "title": "Compétences",
    "src": "content/profil/profil/gaming/competences.html",
    "base": "profil/sections/gaming",
    "words": 172,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-18"
   },
   "profil/voyages/index": {
    "title": "Introduction",
    "src": "content/profil/profil/voyages/index.html",
    "base": "profil/sections/voyages",
    "words": 161,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-18"
   },
   "profil/voyages/regards": {
    "title": "Regards & découvertes",
    "src": "content/profil/profil/voyages/regards.html",
    "base": "profil/sections/voyages",
    "words": 78,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-18"
   },
   "profil/voyages/carnet": {
    "title": "Carnet de voyages",
    "src": "content/profil/profil/voyages/carnet.html",
    "base": "profil/sections/voyages",
    "words": 48,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-18"
   },
   "profil/voyages/horizons": {
    "title": "Horizons & envies",
    "src": "content/profil/profil/voyages/horizons.html",
    "base": "profil/sections/voyages",
    "words": 73,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-18"
   },
   "profil/aspirations/index": {
    "title": "Introduction",
    "src": "content/profil/profil/aspirations/index.html",
    "base": "profil/sections/aspirations",
    "words": 209,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-18"
   },
   "profil/aspirations/fondations": {
    "title": "Mes fondations",
    "src": "content/profil/profil/aspirations/fondations.html",
    "base": "profil/sections/aspirations",
    "words": 109,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-18"
   },
   "profil/aspirations/destinee": {
    "title": "Ma destinée",
    "src": "content/profil/profil/aspirations/destinee.html",
    "base": "profil/sections/aspirations",
    "words": 126,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-18"
   },
   "profil/aspirations/horizons": {
    "title": "Mes horizons",
    "src": "content/profil/profil/aspirations/horizons.html",
    "base": "profil/sections/aspirations",
    "words": 151,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-18"
   },
   "contact/form": {
    "title": "Entrons en contact",
@@ -1100,7 +1165,8 @@
    "words": 1741,
    "type": "article",
    "hidden": true,
-   "within": "symbol/tarot/13"
+   "within": "symbol/tarot/13",
+   "published": "2025-07-03"
   },
   "codex/spiritualite/bientot": {
    "title": "Spiritualité",
@@ -1112,14 +1178,16 @@
    "src": "content/codex/codex/legal.html",
    "base": "",
    "words": 380,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-25"
   },
   "atelier/projets/nox": {
    "title": "NOX Electron Lab",
    "src": "content/atelier/atelier/projets/nox.html",
    "base": "atelier/projets",
    "words": 211,
-   "type": "page"
+   "type": "page",
+   "published": "2026-10-26"
   },
   "ai/comparaison": {
    "title": "Comparaison",

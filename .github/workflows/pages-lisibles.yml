@@ -9,14 +9,17 @@ on:
       - 'content/**/*.html'
       - 'tools/build_static.py'
   workflow_dispatch:
-permissions:
-  contents: write
+# Moindre privilège : aucun droit par défaut pour le workflow,
+# seul le job de génération peut écrire le contenu du dépôt (rien d'autre).
+permissions: {}
 concurrency:
   group: pages-lisibles
   cancel-in-progress: true
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

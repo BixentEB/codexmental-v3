@@ -10,6 +10,9 @@ Usage : python3 tools/build_static.py
 - sitemap.xml ;
 - content/search.json : nettoyé des publications exclues (voir plus bas).
 
+Date de publication : "date" (affichée aussi dans le lecteur du site) ou, à défaut, "published"
+(utilisée seulement ici ; retrouvée dans l'historique des versions 1 et 2 du site).
+
 Exclus partout : publications masquées ("hidden": true), brouillons ("status": "draft"),
 pages en attente ("type": "pending") et formulaire de contact. Pour exclure une publication
 sans la masquer sur le site : "index": false dans son entrée du catalogue.
@@ -152,6 +155,7 @@ def main():
     person = {'@type': 'Person', 'name': AUTHOR, 'url': AUTHOR_URL}
     listing = []
     for aid, a in keep:
+        a = dict(a, date=a.get('date') or a.get('published'))
         with open(os.path.join(ROOT, a['src']), encoding='utf8') as f:
             frag = f.read()
         title = a.get('title') or aid
