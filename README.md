@@ -53,3 +53,11 @@ Voir `docs/ETAT-v3.md`.
 - Une rubrique peut avoir un texte d'accueil tiré d'un article : `"introArticle": "<id>"` dans `catalog.json` (utilisé par l'Atelier).
 - Les émojis des rubriques restent dans le catalogue mais l'interface ne les affiche plus (`SHOW_EMOJI` dans `core/reader.js`).
 - Les images d'un article n'ont rien à déclarer : toutes deviennent des miniatures cliquables.
+
+## Pages lisibles (moteurs de recherche et IA)
+
+`tools/build_static.py` génère, à partir de `content/catalog.json`, une page HTML simple par publication dans `articles/` (titre, auteur, date, texte, lien vers la version immersive, métadonnées Schema.org), le sommaire `articles/index.html` et `sitemap.xml`. Le site immersif n'est pas modifié. L'action `.github/workflows/pages-lisibles.yml` relance le script à chaque modification du contenu.
+
+Exclus des pages, du sitemap et de la recherche : `"hidden": true`, `"status": "draft"`, `"type": "pending"`, le formulaire de contact, et toute entrée marquée `"index": false`. Une date de publication s'ajoute avec `"date": "AAAA-MM-JJ"` dans l'entrée du catalogue.
+
+`robots.txt` accueille les robots de recherche et refuse les robots d'entraînement connus (une demande, pas une protection technique).

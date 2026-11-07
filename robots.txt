@@ -1,0 +1,32 @@
+# Codex Mental — règles pour les robots
+# Recherche et citation : bienvenues (moteurs de recherche, ChatGPT Search, Claude, Perplexity…).
+# Entraînement de modèles d'IA : refusé. Ces règles sont une demande, respectée par les
+# opérateurs qui s'y engagent ; elles ne sont pas une protection technique.
+# Version lisible des publications : https://codexmental.com/articles/
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Meta-ExternalAgent
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: *
+Allow: /
+Content-Usage: train-ai=n
+
+Sitemap: https://codexmental.com/sitemap.xml

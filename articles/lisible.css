@@ -1,0 +1,25 @@
+/* Pages lisibles de Codex Mental : sobres, rapides, sans JavaScript. */
+@font-face { font-family: "DM Sans"; src: url("/fonts/DMSans.woff") format("woff"); font-display: swap; }
+@font-face { font-family: "Michroma"; src: url("/fonts/Michroma.woff") format("woff"); font-display: swap; }
+:root { color-scheme: dark; --fg: #e6ebff; --soft: #c3cbe4; --muted: #8f9abd; --line: rgba(150, 180, 255, .16); --cyan: #86d9ff; --gold: #ffd27a; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #050914; color: var(--fg); font: 17px/1.7 "DM Sans", system-ui, sans-serif; }
+.page { max-width: 760px; margin: 0 auto; padding: 28px 18px 40px; }
+a { color: var(--cyan); }
+.crumbs { font-size: 13px; color: var(--muted); }
+.crumbs a { color: var(--muted); }
+.head { border-bottom: 1px solid var(--line); padding-bottom: 18px; margin-bottom: 22px; }
+h1 { font-family: Michroma, sans-serif; font-weight: 400; font-size: clamp(24px, 5vw, 34px); line-height: 1.25; margin: 14px 0 8px; }
+h2, h3 { line-height: 1.3; }
+.meta { color: var(--muted); font-size: 14px; margin: 0 0 12px; }
+.go { display: inline-block; padding: 8px 16px; border: 1px solid var(--gold); border-radius: 999px; color: var(--gold); text-decoration: none; font-size: 14px; }
+.go:hover { background: var(--gold); color: #050914; }
+.txt { color: var(--soft); }
+.txt img, .txt video, .txt iframe { max-width: 100%; height: auto; border-radius: 10px; }
+.txt table { border-collapse: collapse; width: 100%; display: block; overflow-x: auto; }
+.txt td, .txt th { border: 1px solid var(--line); padding: 6px 10px; }
+.txt blockquote { margin: 1em 0; padding-left: 14px; border-left: 2px solid var(--line); color: var(--muted); }
+.cite { margin-top: 32px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; font-size: 14px; color: var(--muted); word-break: break-word; }
+.list { padding-left: 18px; } .list li { margin: 0 0 12px; } .list span { color: var(--muted); font-size: 14px; }
+.list time, .head time { color: var(--muted); font-size: 13px; }
+.foot { margin-top: 40px; border-top: 1px solid var(--line); padding-top: 14px; font-size: 13px; color: var(--muted); }
