@@ -343,6 +343,36 @@
     "Concept"
    ],
    "tab": "reflexion"
+  },
+  {
+   "id": "reseau-propulsion",
+   "name": "Réseau d'assistance propulsive",
+   "mark": "◎",
+   "accent": "#9fe3e8",
+   "platform": "Concept (article)",
+   "tagline": "Des stations orbitales qui aident les vaisseaux à accélérer, corriger leur trajectoire ou freiner, sans les rendre dépendants.",
+   "summary": "Concept personnel exploratoire d'infrastructure modulaire d'assistance propulsive pour les déplacements interplanétaires.",
+   "detail": "Plutôt que de reposer uniquement sur les véhicules, ce concept propose des stations orbitales indépendantes, réparties à des emplacements stratégiques. Chaque station apporte une assistance ponctuelle et facultative : accélération, correction de trajectoire ou décélération. Le texte complet, avec sa méthodologie, est publié dans le Codex.",
+   "features": [
+    "Stations d'assistance indépendantes, sans liaison permanente entre elles",
+    "Véhicules autonomes, qui peuvent utiliser le réseau sans en dépendre",
+    "Capsules standardisées : cargo, scientifiques, logistiques, habitées",
+    "Plusieurs technologies envisagées : électromagnétique, laser, faisceaux de particules, câbles rotatifs"
+   ],
+   "tech": "Concept : mécanique orbitale, propulsion, transfert d'énergie",
+   "next": "Modélisation numérique : comparer un transfert Terre–Mars conventionnel et des transferts assistés",
+   "state": "Concept en réflexion",
+   "access": "Public",
+   "diffusion": "Article sur le Codex (Atelier / explo)",
+   "license": "À définir",
+   "download": "Sans objet",
+   "tags": [
+    "Science",
+    "Concept",
+    "Recherche"
+   ],
+   "tab": "reflexion",
+   "link": "codexmental.com/articles/atelier/explo/reseau/"
   }
  ]
 }
