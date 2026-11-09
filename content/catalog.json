@@ -258,6 +258,9 @@
       },
       {
        "article": "atelier/explo/solunar"
+      },
+      {
+       "article": "atelier/explo/reseau"
       }
      ]
     },
@@ -1199,6 +1202,19 @@
     "IntelligenceArtificielle"
    ],
    "type": "article"
+  },
+  "atelier/explo/reseau": {
+   "title": "Réseau modulaire d'assistance propulsive",
+   "src": "content/atelier/atelier/explo/reseau.html",
+   "base": "atelier/explo",
+   "words": 2094,
+   "type": "page",
+   "published": "2026-11-09",
+   "tags": [
+    "Espace",
+    "Astronautique",
+    "Propulsion"
+   ]
   }
  }
 }
