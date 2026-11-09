@@ -248,9 +248,6 @@
      "emoji": "🧭",
      "children": [
       {
-       "article": "atelier/explo/modelexplo"
-      },
-      {
        "article": "atelier/explo/cryodynamic"
       },
       {
@@ -273,6 +270,15 @@
       },
       {
        "article": "atelier/projets/ia1"
+      }
+     ]
+    },
+    {
+     "label": "Méthode de présentation",
+     "emoji": "🧩",
+     "children": [
+      {
+       "article": "atelier/explo/modelexplo"
       }
      ]
     }
