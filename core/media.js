@@ -190,12 +190,16 @@
   Codex.on('reader:close', close);
 
   /* ---------- un seul bloc <details> ouvert ---------- */
+  // seul un clic sur le titre d'un bloc déclenche le recalage : un bloc déjà ouvert à l'arrivée ne fait pas défiler la page
+  var byClick = false;
+  main.addEventListener('click', function (e) { byClick = !!(e.target.closest && e.target.closest('.prose summary')); }, true);
   main.addEventListener('toggle', function (e) {
-    var d = e.target;
+    var d = e.target, user = byClick; byClick = false;
     if (!d || d.tagName !== 'DETAILS' || !d.open || !d.closest('.prose')) return;
     main.querySelectorAll('.prose details[open]').forEach(function (o) {
       if (o !== d && !o.contains(d) && !d.contains(o)) o.removeAttribute('open');
     });
+    if (!user) return;
     requestAnimationFrame(function () {   // le bloc refermé libère de la place : on recale la vue sur celui qu'on vient d'ouvrir
       var r = d.getBoundingClientRect(), m = main.getBoundingClientRect();
       if (r.top < m.top + 6 || r.top > m.bottom - 80) main.scrollBy({ top: r.top - m.top - 14, behavior: reduce ? 'auto' : 'smooth' });
