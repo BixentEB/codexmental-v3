@@ -513,6 +513,8 @@ window.__GLSL = { PLANET_VERT: PLANET_VERT, PLANET_FRAG: PLANET_FRAG, RING_VERT:
   canvas.setAttribute('aria-hidden', 'true');
   stage.insertBefore(canvas, stage.firstChild);
 
+  // les visiteurs inattendus (core/visitors.js) volent dans le système lui-même : à la bonne distance, cachés derrière les planètes
+  Codex.scene3d = { T: T, scene: scene, camera: camera, canvas: canvas, R: [24, 95], y: 6, size: 11, span: 170 };
   var controls = new T.OrbitControls(camera, canvas);
   controls.enableDamping = true; controls.dampingFactor = .07;
   controls.enablePan = true; controls.panSpeed = .85; controls.screenSpacePanning = true; controls.zoomSpeed = .8; controls.rotateSpeed = .6;

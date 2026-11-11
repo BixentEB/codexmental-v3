@@ -29,3 +29,6 @@ html.reading .cxv-layer { display: none; }
 /* 1er avril : la soucoupe vole à l'envers */
 .cxv-flip img { transform: scaleY(-1); }
 .cxv-flip .cxv-beam { display: none; }
+
+/* visiteur dans une scène 3D : zone cliquable invisible qui suit le sprite */
+.cxv.cxv-hit { position: absolute; left: 0; top: 0; background: none; border: 0; padding: 0; cursor: crosshair; }

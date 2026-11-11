@@ -84,16 +84,58 @@
         .finished.then(function () { a.cancel(); s.remove(); }).catch(function () {});
     });
   }
+  function run3(type, file, opt) { C.emit('visitor', { type: type, phase: 'start' }); return fly3d(type, file, opt).then(function () { C.emit('visitor', { type: type, phase: 'end' }); }); }
   function run(type, s, a) {
     C.emit('visitor', { type: type, phase: 'start' });
     flee(s, a, type);
     return a.finished.then(function () { s.remove(); }, function () {}).then(function () { C.emit('visitor', { type: type, phase: 'end' }); });
   }
 
+  /* ---------- dans une scène 3D (Codex.scene3d exposé par le thème) ----------
+     Le visiteur devient un sprite three.js posé dans la scène : il passe à la bonne distance, devant ou derrière
+     les astres (le tampon de profondeur s'en charge). Un bouton invisible le suit à l'écran pour pouvoir l'attraper. */
+  var TEX = {};
+  function tex3(file) { var S = C.scene3d; if (!TEX[file]) { TEX[file] = new S.T.TextureLoader().load('img/visitors/' + file); } return TEX[file]; }
+  function fly3d(type, file, opt) {
+    var S = C.scene3d, T = S.T, cam = S.camera;
+    var mat = new T.SpriteMaterial({ map: tex3(file), transparent: true, depthTest: true, depthWrite: false, opacity: 0 });
+    var sp = new T.Sprite(mat), w = S.size * (opt.k || 1), ar = opt.ar || .55;
+    sp.scale.set(w, w * ar, 1); sp.renderOrder = 5; S.scene.add(sp);
+    // trajectoire : une corde à travers le système, à une distance choisie du centre, tangente à cette distance
+    var r = S.R[0] + Math.random() * (S.R[1] - S.R[0]), th = Math.random() * Math.PI * 2, dir = Math.random() < .5 ? 1 : -1;
+    var P0 = new T.Vector3(Math.cos(th) * r, (Math.random() - .5) * 2 * S.y, Math.sin(th) * r);
+    var D = new T.Vector3(-Math.sin(th) * dir, (Math.random() - .5) * .08, Math.cos(th) * dir).normalize();
+    var half = S.span / 2, dur = opt.dur, t0 = performance.now(), done = false, v = new T.Vector3(), caughtAt = 0;
+    var btn = sprite('cxv-hit', '', 10, opt.label); btn.style.opacity = '0';
+    return new Promise(function (ok) {
+      function end() { if (done) return; done = true; S.scene.remove(sp); mat.dispose(); btn.remove(); ok(); }
+      btn.addEventListener('click', function () { if (caughtAt) return; caughtAt = performance.now(); caught(type); });
+      (function step(now) {
+        if (done) return;
+        var f = (now - t0) / dur; if (f >= 1 || !sp.parent) { end(); return; }
+        var k = -half + f * 2 * half, wob = Math.sin(f * 14 + th) * (opt.wob || .6);
+        sp.position.copy(P0).addScaledVector(D, k); sp.position.y += wob;
+        if (opt.accel && f > .7) sp.position.addScaledVector(D, Math.pow((f - .7) / .3, 3) * half * 1.4);   // Caeles : il file en hyperespace
+        var a = Math.min(1, f / .08, (1 - f) / .08);
+        if (caughtAt) { var c = (now - caughtAt) / 700; if (c >= 1) { end(); return; } sp.position.addScaledVector(D, c * c * half); sp.scale.set(w * (1 + c), w * ar * (1 - c * .6), 1); a *= 1 - c; }
+        mat.opacity = a;
+        // le bouton invisible suit le sprite à l'écran
+        v.copy(sp.position).project(cam);
+        var on = v.z < 1 && v.z > -1, px = (v.x * .5 + .5) * vw(), py = (-v.y * .5 + .5) * vh();
+        var dist = cam.position.distanceTo(sp.position), pxw = Math.max(18, w / (2 * dist * Math.tan(cam.fov * Math.PI / 360)) * vh());
+        btn.style.width = pxw + 'px'; btn.style.height = pxw * ar + 'px'; btn.style.transform = 'translate(' + (px - pxw / 2).toFixed(0) + 'px,' + (py - pxw * ar / 2).toFixed(0) + 'px)';
+        btn.style.pointerEvents = on && a > .3 ? 'auto' : 'none';
+        requestAnimationFrame(step);
+      })(t0);
+    });
+  }
+  function in3d() { return !!(C.scene3d && C.scene3d.scene && C.scene3d.T && C.scene3d.T.Sprite); }
+
   var KINDS = {
     soucoupe: function (opt) {
       // trois soucoupes photoréalistes ; la profondeur règle la taille, la netteté, la lumière et la vitesse
       opt = opt || {};
+      if (in3d() && !opt.flip) { var V3 = UFOS[opt.v != null ? opt.v : Math.floor(Math.random() * UFOS.length)]; return run3('soucoupe', V3.f, { dur: rnd(14000, 20000) * (V3.old ? 1.3 : 1), k: V3.old ? .9 : 1, ar: .5, wob: V3.old ? 1.4 : .6, label: 'Une soucoupe volante : l\u2019attraper' }); }
       var V = UFOS[opt.v != null ? opt.v : Math.floor(Math.random() * UFOS.length)], d = opt.d != null ? opt.d : rnd(.25, 1);
       var w = Math.round((V.w * (.45 + .75 * d)) * Math.min(1, vw() / 1280 + .25));
       var s = sprite('cxv-ufo' + (V.old ? ' cxv-old' : '') + (opt.flip ? ' cxv-flip' : ''), '<i class="cxv-beam"></i><img src="img/visitors/' + V.f + '" alt="" draggable="false">', w, 'Une soucoupe volante : l\u2019attraper');
@@ -111,6 +153,7 @@
       return run('soucoupe', s, a);
     },
     caeles: function () {
+      if (in3d()) return run3('caeles', 'caeles.webp', { dur: rnd(13000, 17000), k: 1.6, ar: .45, wob: .3, accel: true, label: 'Caeles, le vaisseau de Vincent : le saluer' });
       var d = rnd(.4, 1), w = Math.round(Math.min(vw() * .16, 110 + 150 * d)), s = sprite('cxv-caeles', '<img src="img/visitors/caeles.webp" alt="" draggable="false">', w, 'Caeles, le vaisseau de Vincent : le saluer');
       s.style.filter = 'brightness(' + (.8 + .2 * d).toFixed(2) + ') contrast(1.04)' + (d < .55 ? ' blur(' + ((.55 - d) * 1.2).toFixed(2) + 'px)' : '') + TINT();
       var y = rnd(.2, .55) * vh(), dur = rnd(11000, 15000) * (1.2 - d * .3), jump = Math.random() < .5;
