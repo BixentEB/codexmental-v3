@@ -42,3 +42,19 @@ html.reading #scene .ve-hint { opacity: 0; }
 #scene .ve-time button:hover .cx-nm > .cx-plain, #scene .ve-time button:focus-visible .cx-nm > .cx-plain { opacity: 1; filter: none; }
 html.cxn-plain #scene .ve-time button:hover .cx-nm > .cx-sci, html.cxn-plain #scene .ve-time button:focus-visible .cx-nm > .cx-sci { opacity: 1; filter: none; }
 html.cxn-plain #scene .ve-time button:hover .cx-nm > .cx-plain, html.cxn-plain #scene .ve-time button:focus-visible .cx-nm > .cx-plain { opacity: 0; filter: blur(4px); }
+
+/* frise d'exploration des stades (plus de menu) : un fil, un point par stade, le nom et la durée toujours lisibles */
+#scene .ve-time { padding: 10px 10px 8px; }
+#scene .ve-time .ve-st { position: relative; min-width: 118px; max-width: 150px; padding: 18px 10px 6px; text-align: left; border-radius: 10px; }
+#scene .ve-time .ve-st::before { content: ''; position: absolute; left: 0; right: -6px; top: 9px; height: 1px; background: var(--line); }
+#scene .ve-time .ve-st:first-child::before { left: 14px; }
+#scene .ve-time .ve-st:nth-last-child(2)::before { right: auto; width: 14px; }
+#scene .ve-time .ve-dot { position: absolute; left: 10px; top: 5px; width: 9px; height: 9px; border-radius: 50%; background: var(--panel); border: 1px solid var(--muted); }
+#scene .ve-time .ve-st[aria-current="true"] .ve-dot { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 10px var(--accent); }
+#scene .ve-time .ve-st b { display: block; font-size: .78rem; color: var(--fg); font-weight: 500; }
+#scene .ve-time .ve-st small { display: block; opacity: 1; margin-top: 3px; font-size: .62rem; line-height: 1.35; color: var(--muted); letter-spacing: 0; }
+#scene .ve-time .ve-st small .sym { font: 600 .66rem var(--font-mono, monospace); color: var(--accent-2); }
+#scene .ve-time .ve-st[aria-current="true"] { background: color-mix(in srgb, var(--accent) 12%, transparent); border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
+#scene .ve-time .ve-st { min-width: 100px; max-width: 124px; padding-right: 6px; }
+@media (min-width: 901px) { #scene .ve-time { max-width: calc(100vw - 2 * 330px); overflow-x: auto; } }
+@media (max-width: 900px) { #scene .ve-card { bottom: 142px; max-height: 30vh; overflow: auto; } #scene .ve-time { right: 72px; } }

@@ -234,11 +234,11 @@ void main(){
   function buildTime() {
     var path = PATHS[cfg.path]; timeEl.innerHTML = '';
     path.stages.forEach(function (s, i) {
-      var b = document.createElement('button'); b.type = 'button'; if (s.menu) b.className = 'menu';
-      // désignation astronomique du stade (G2 V, M III, DA…) ; le nom de la rubrique apparaît au survol ou sur le stade en cours
-      b.innerHTML = '<b><span class="cx-nm"><span class="cx-sci sym">' + s.sym + '</span><span class="cx-plain">' + s.name + '</span></span></b><small>' + (s.menu ? MENU_NAMES[s.id] : s.name) + '</small>';
-      b.title = s.name; b.setAttribute('aria-label', s.name + (s.menu ? ' — ' + MENU_NAMES[s.id] : ''));
-      b.addEventListener('click', function () { userHold = 25; goStage(i); if (s.id) { /* clic sur une rubrique : on ouvre la page */ Codex.navigate(s.id); } });
+      // frise d'exploration : chaque stade se visite (la carte l'explique) ; les rubriques passent par la barre du haut
+      var b = document.createElement('button'); b.type = 'button'; b.className = 've-st';
+      b.innerHTML = '<i class="ve-dot" aria-hidden="true"></i><b>' + s.name + '</b><small><span class="sym">' + s.sym + '</span> · ' + s.dur + '</small>';
+      b.setAttribute('aria-label', 'Stade ' + (i + 1) + ' : ' + s.name + ', ' + s.dur);
+      b.addEventListener('click', function () { userHold = 25; goStage(i); });
       timeEl.appendChild(b);
     });
     var pb = document.createElement('button'); pb.type = 'button'; pb.className = 've-path'; pb.title = 'Changer de destin'; pb.textContent = cfg.path === 'sun' ? 'Destin ⇄' : 'Destin ⇄'; pb.title = 'Changer de destin (' + PATHS[cfg.path].label + ')';
@@ -246,6 +246,12 @@ void main(){
     pb.addEventListener('click', function () { cfg.path = cfg.path === 'sun' ? 'massive' : 'sun'; save(); userHold = 25; buildTime(); goStage(Math.min(stage, 5)); syncPop(); });
     timeEl.appendChild(pb);
   }
+  // flèches gauche / droite dans la frise : stade précédent, stade suivant
+  timeEl.addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault(); userHold = 25; goStage(stage + (e.key === 'ArrowRight' ? 1 : -1));
+    var b = timeEl.querySelectorAll('.ve-st')[stage]; if (b) b.focus();
+  });
   function goStage(i) {
     stage = clamp(i, 0, 5); var s = PATHS[cfg.path].stages[stage];
     setTarget(s.p);
