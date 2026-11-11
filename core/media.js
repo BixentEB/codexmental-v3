@@ -86,10 +86,25 @@
   function typo(root) {
     if (!root || !root.ownerDocument) return;
     var w = root.ownerDocument.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), n, list = [];
-    while ((n = w.nextNode())) { if (n.nodeValue && /[ \u00a0][:;!?»]|«[ \u00a0]/.test(n.nodeValue) && !n.parentNode.closest('code,pre,script,style,textarea')) list.push(n); }
-    list.forEach(function (t) { t.nodeValue = t.nodeValue.replace(/[ \u00a0]+([:»])/g, '\u00a0$1').replace(/[ \u00a0]+([;!?])/g, '\u202f$1').replace(/«[ \u00a0]+/g, '«\u00a0'); });
+    if (root.nodeType === 3) { w = null; if (root.parentNode && TYPO_TEST.test(root.nodeValue) && !root.parentNode.closest('code,pre,script,style,textarea')) list.push(root); }
+    else while ((n = w.nextNode())) { if (n.nodeValue && TYPO_TEST.test(n.nodeValue) && n.parentNode && !n.parentNode.closest('code,pre,script,style,textarea')) list.push(n); }
+    list.forEach(function (t) { var v = t.nodeValue.replace(/[ \t\n\u00a0]+([:»])/g, '\u00a0$1').replace(/[ \t\n\u00a0]+([;!?])/g, '\u202f$1').replace(/«[ \t\n\u00a0]+/g, '«\u00a0'); if (v !== t.nodeValue) t.nodeValue = v; });
   }
+  var TYPO_TEST = /[ \t\n\u00a0][:;!?»]|«[ \t\n\u00a0]/;
   Codex.typo = typo;
+  /* partout sur le site (menus, cartes, thèmes, fenêtres), y compris le texte ajouté ou changé plus tard (noms qui alternent…) */
+  (function () {
+    function start() {
+      typo(document.body);
+      new MutationObserver(function (list) {
+        list.forEach(function (m) {
+          if (m.type === 'characterData') { typo(m.target); return; }
+          for (var i = 0; i < m.addedNodes.length; i++) { var a = m.addedNodes[i]; if (a.nodeType === 1 || a.nodeType === 3) typo(a); }
+        });
+      }).observe(document.body, { childList: true, subtree: true, characterData: true });
+    }
+    if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
+  })();
   function enhance(root) {
     root = root || main;
     var prose = root.querySelector('.prose'); if (!prose) return;

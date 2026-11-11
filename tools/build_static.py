@@ -110,6 +110,22 @@ FOOT = ('<footer class="foot"><p>© %s — %s. Citation et reprise d\'extraits b
         '<p><a href="/articles/">Toutes les publications</a> · <a href="/">Entrer dans Codex Mental</a></p></footer>')
 
 
+# typographie française pour les pages générées : espace insécable avant : ; ! ? » et après «,
+# appliquée au texte seulement (jamais aux balises, scripts, styles, code) ; les sources ne changent pas
+_TYPO_SPLIT = re.compile(r'(<script[\s\S]*?</script>|<style[\s\S]*?</style>|<pre[\s\S]*?</pre>|<code[\s\S]*?</code>|<textarea[\s\S]*?</textarea>|<[^>]+>)', re.I)
+
+
+def typo_html(s):
+    out = []
+    for i, part in enumerate(_TYPO_SPLIT.split(s)):
+        if i % 2 == 0 and part:
+            part = re.sub(r'[ \t\n]+([:»])', ' \\1', part)
+            part = re.sub(r'[ \t\n]+([;!?])', ' \\1', part)
+            part = re.sub(r'«[ \t\n]+', '« ', part)
+        out.append(part)
+    return ''.join(out)
+
+
 def shell(title, desc, canonical, body, jsonld, og_type='article', top=False):
     return '''<!doctype html>
 <html lang="fr">
@@ -202,7 +218,7 @@ def main():
         dest = os.path.join(OUT, *aid.split('/'))
         os.makedirs(dest, exist_ok=True)
         with open(os.path.join(dest, 'index.html'), 'w', encoding='utf8') as f:
-            f.write(shell(title + ' — ' + SITE_NAME, desc, url, body, ld))
+            f.write(typo_html(shell(title + ' — ' + SITE_NAME, desc, url, body, ld)))
         listing.append((trail[0] if trail else '', aid, title, a.get('date', ''), desc))
 
     # sommaire
@@ -226,9 +242,9 @@ def main():
           'url': SITE + '/articles/', 'inLanguage': 'fr', 'author': person,
           'hasPart': [{'@type': 'CreativeWork', 'name': t, 'url': page_url(a)} for _, a, t, _, _ in listing]}
     with open(os.path.join(OUT, 'index.html'), 'w', encoding='utf8') as f:
-        f.write(shell('Toutes les publications — ' + SITE_NAME,
+        f.write(typo_html(shell('Toutes les publications — ' + SITE_NAME,
                       'Sommaire des articles, réflexions et explorations de Codex Mental, par ' + AUTHOR + '.',
-                      SITE + '/articles/', '\n'.join(parts), ld, og_type='website', top=True))
+                      SITE + '/articles/', '\n'.join(parts), ld, og_type='website', top=True)))
 
     # sitemap
     urls = [SITE + '/', SITE + '/articles/'] + [page_url(aid) for _, aid, _, _, _ in listing]
