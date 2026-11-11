@@ -307,3 +307,18 @@
   .obs-demo iframe { aspect-ratio: 1 / 1; max-height: 62vh; border-radius: 12px; }   /* plus haute sur téléphone : le système solaire y respire */
   .obs-card { padding: 14px 16px; }
 }
+
+/* carte de départ vers un autre site (objet cliqué dans une scène) */
+.cx-depart { position: fixed; z-index: 60; left: 50%; bottom: 96px; transform: translate(-50%, 12px); width: min(380px, calc(100vw - 28px)); padding: 18px 20px 16px;
+  background: var(--panel, rgba(12,14,24,.92)); border: 1px solid var(--line, rgba(255,255,255,.12)); border-radius: 14px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  color: var(--fg, #eef); opacity: 0; transition: opacity .25s, transform .25s; box-shadow: 0 18px 50px rgba(0,0,0,.45); }
+.cx-depart.on { opacity: 1; transform: translate(-50%, 0); }
+.cx-depart[hidden] { display: none; }
+.cx-dep-k { margin: 0; font: 500 .66rem var(--font-mono, monospace); letter-spacing: .14em; text-transform: uppercase; color: var(--accent, #f4c77a); }
+.cx-depart h2 { margin: 4px 0 6px; font-family: var(--font-display, inherit); font-weight: 400; font-size: 1.35rem; }
+.cx-dep-t { margin: 0 0 6px; font-size: .86rem; line-height: 1.55; color: var(--fg-soft, #c9cde0); }
+.cx-dep-u { margin: 0 0 14px; font: .72rem var(--font-mono, monospace); color: var(--muted, #8a90a8); }
+.cx-dep-a { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.cx-dep-go { display: inline-flex; gap: 6px; align-items: center; padding: 9px 14px; border-radius: 10px; background: var(--accent, #f4c77a); color: #14110a; font-weight: 600; font-size: .86rem; text-decoration: none; }
+.cx-dep-go:hover { filter: brightness(1.08); }
+.cx-dep-a button { font: inherit; font-size: .84rem; padding: 9px 12px; border-radius: 10px; border: 1px solid var(--line, rgba(255,255,255,.15)); background: transparent; color: var(--fg-soft, #c9cde0); cursor: pointer; }

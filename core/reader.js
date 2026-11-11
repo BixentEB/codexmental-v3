@@ -179,7 +179,12 @@
   }
   function openSec(id, from) {
     // Observatoire et Laboratoire sont des sites à part : on y va directement, dans le même onglet (comme une extension)
-    if (Codex.external && Codex.external[id]) { Codex.emit('leave', { id: id, url: Codex.external[id] }); location.assign(Codex.external[id]); return true; }
+    if (Codex.external && Codex.external[id]) {
+      // depuis le menu du haut : on part tout de suite ; depuis un objet de la scène : on montre d'abord où il mène
+      if (Codex.leaveNow === id) { Codex.leaveNow = null; Codex.emit('leave', { id: id, url: Codex.external[id] }); location.assign(Codex.external[id]); }
+      else departCard(id);
+      return true;
+    }
     var sec = secById(id); if (!sec) return false;
     if (from) R.opener = from;
     R.sec = id; tQ.value = ''; R.q = ''; R.expanded = loadTree(id, sec);
@@ -191,6 +196,26 @@
     if (!was) setTimeout(function () { var c = rd.querySelector('[data-act="close"]'); if (c) c.focus({ preventScroll: true }); }, 60);
     return true;
   }
+  /* carte de départ : l'objet cliqué dans la scène mène à un autre site (Observatoire, Laboratoire) */
+  var dep = null;
+  function departCard(id) {
+    var sec = secById(id) || { label: id }, url = Codex.external[id];
+    if (!dep) {
+      dep = document.createElement('aside'); dep.className = 'cx-depart'; dep.setAttribute('role', 'dialog'); dep.setAttribute('aria-label', 'Quitter Codex Mental ?');
+      document.body.appendChild(dep);
+      dep.addEventListener('click', function (e) { if (e.target.closest('[data-dep="stay"]')) closeDepart(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && dep && !dep.hidden) closeDepart(); });
+    }
+    dep.innerHTML = '<p class="cx-dep-k">' + esc(sec.kicker || 'Un autre site') + '</p><h2>' + esc(sec.label) + '</h2>' +
+      (sec.intro ? '<p class="cx-dep-t">' + esc(sec.intro) + '</p>' : '') +
+      '<p class="cx-dep-u">' + esc(url.replace(/^https?:\/\//, '').replace(/\/$/, '')) + '</p>' +
+      '<div class="cx-dep-a"><a class="cx-dep-go" href="' + esc(url) + '">Entrer dans ' + (/^[AEIOUYÉ]/i.test(sec.label) ? 'l\u2019' : 'le ') + esc(sec.label) + ' <span aria-hidden="true">→</span></a>' +
+      '<button type="button" data-dep="stay">Rester ici</button></div>';
+    dep.querySelector('.cx-dep-go').addEventListener('click', function () { Codex.emit('leave', { id: id, url: url }); });
+    dep.hidden = false; requestAnimationFrame(function () { dep.classList.add('on'); });
+    setTimeout(function () { var a = dep.querySelector('.cx-dep-go'); if (a) a.focus({ preventScroll: true }); }, 80);
+  }
+  function closeDepart() { if (!dep) return; dep.classList.remove('on'); setTimeout(function () { dep.hidden = true; }, 250); Codex.emit('reader:close'); }
   function goHub() { R.view = 'hub'; R.gid = null; R.aid = null; R.mview = 'tree'; render(); mainTop(); }
   /* Sous-rubriques en onglets : « Psychologie » affiche ses onglets « Psychologie » et « Haut potentiel » ;
      les séries (ex. « Miroir de l'humanité ») restent des sections à l'intérieur d'un onglet. */

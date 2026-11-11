@@ -82,6 +82,8 @@
       if ((e.ctrlKey || e.metaKey || e.shiftKey || e.button === 1) && Codex.external && Codex.external[a.dataset.section]) return;   // nouvel onglet demandé : le navigateur s'en charge
       e.preventDefault();
       var id = a.dataset.section;
+      Codex.leaveNow = Codex.external && Codex.external[id] ? id : null;   // menu du haut : départ direct vers l'Observatoire ou le Labo (le temps que la scène s'anime)
+      if (Codex.leaveNow) setTimeout(function () { if (Codex.leaveNow === id) Codex.leaveNow = null; }, 15000);
       if (!Codex.sceneOk || id === 'contact') {
         if (id === 'home') Codex.reader.close(); else Codex.reader.open(id, a);
         Codex.emit('navigate', { id: id === 'home' ? null : id, raw: id, direct: true });
