@@ -136,3 +136,12 @@ html.reading .cx-who { opacity: 0; visibility: hidden; }
 .lite-card small { display: block; margin-top: 3px; font-size: .78rem; color: var(--muted); }
 @media (prefers-reduced-motion: reduce) { .lite-card { transition: none; } }
 html.noscene .cx-lab, html.noscene .cx-pop { display: none !important; }   /* réglages de scène : sans objet sans scène */
+
+/* grands écrans aussi : icône un peu plus grande, nom en petit dessous (barre plus compacte, de la place pour de futures rubriques) */
+@media (min-width: 1100px) {
+  .topbar .nav { gap: 4px; }
+  .nav-item { flex-direction: column; gap: 4px; padding: 6px 10px 5px; border-radius: 10px; font-size: 10.5px; line-height: 1.1; letter-spacing: .03em; }
+  .nav-item svg { width: 21px; height: 21px; }
+  .nav-contact { padding: 10px; }
+  .nav-contact svg { width: 20px; height: 20px; }
+}
