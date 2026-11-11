@@ -1,23 +1,27 @@
 /* ======================================================================
    CODEX MENTAL v3 — « visiteurs inattendus » (easter eggs des scènes)
-   De temps en temps, quelque chose traverse la scène : une soucoupe, Caeles
-   (le vaisseau de Vincent), ou un clin d'œil propre au thème (le Roadster
-   dans l'Héliosphère, le chat de Schrödinger dans l'Atome, une idée lumineuse
-   dans le Neurone…). Au clic : il file, et le compteur d'ovnis repérés monte.
-   - premier passage 8 à 15 s après l'arrivée, seulement à la première visite du jour ;
-     ensuite toutes les 4 à 8 minutes ; Caeles ≈ un passage sur cinq ;
-   - code Konami (↑ ↑ ↓ ↓ ← → ← → B A) : une flotte entière ;
-   - réglage « Visiteurs inattendus » dans le menu des thèmes (activé par défaut),
-     coupé si le système demande moins d'animations ;
-   - essais : ?ovni (ou ?ovni=caeles|soucoupe|flotte|special) et, dans la console,
-     Codex.ovni('soucoupe' | 'caeles' | 'flotte' | 'special').
+   Règle (décidée le 05/11/2026) : spéciaux, rares, sous conditions, jamais des parasites sans but.
+   - au plus UNE apparition spontanée par jour, et pas à chaque visite (≈ une visite sur quatre,
+     une sur deux la nuit entre 22 h et 5 h : les soucoupes sortent la nuit) ;
+   - dates : 24 juin (Kenneth Arnold, 1947, naissance des « soucoupes volantes ») et 2 juillet
+     (journée mondiale des OVNI) : passage garanti ; 1er avril : une surprise ;
+   - gestes : une longue contemplation (3 minutes sans toucher à rien) ou trois visites du même astre ;
+   - soucoupes, Caeles et flotte : seulement dans les thèmes spatiaux ; Caeles au plus une fois par jour ;
+     Atome et Neurone gardent leurs clins d'œil (le chat de Schrödinger, l'idée lumineuse) ;
+   - code Konami (↑ ↑ ↓ ↓ ← → ← → B A) : la flotte (thèmes spatiaux), la superposition (Atome), Eurêka (Neurone) ;
+   - réglage « Visiteurs inattendus » dans le menu des thèmes (activé par défaut), coupé si le système demande
+     moins d'animations ;
+   - essais : ?ovni (ou ?ovni=caeles|soucoupe|flotte|special|konami|avril) et, dans la console,
+     Codex.ovni('soucoupe' | 'caeles' | 'flotte' | 'special' | 'konami' | 'avril').
    Une scène peut ajouter ses propres visiteurs : Codex.visitors.add('nom', function (layer, done) {…}).
    Événement émis : Codex.emit('visitor', { type, phase: 'start' | 'end' | 'caught' }).
    ====================================================================== */
 (function () {
   'use strict';
   var C = window.Codex; if (!C) return;
-  var KEY_ON = 'codex.visitors', KEY_DAY = 'codex.visitors.day', KEY_N = 'codex.ovnis';
+  var KEY_ON = 'codex.visitors', KEY_DAY = 'codex.visitors.day', KEY_N = 'codex.ovnis', KEY_CAELES = 'codex.visitors.caeles';
+  // thèmes où soucoupes, Caeles et flotte ont leur place
+  var SPACE = ['heliosphere', 'galactique', 'voisinage', 'ciel-profond', 'champ-stellaire', 'vie-etoile', 'poste-pilotage', 'ciel-ailleurs'];
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var on = true; try { on = localStorage.getItem(KEY_ON) !== '0'; } catch (e) {}
   var layer = null, busy = false, timer = null, toastEl = null, toastT = null;
@@ -92,7 +96,7 @@
       opt = opt || {};
       var V = UFOS[opt.v != null ? opt.v : Math.floor(Math.random() * UFOS.length)], d = opt.d != null ? opt.d : rnd(.25, 1);
       var w = Math.round((V.w * (.45 + .75 * d)) * Math.min(1, vw() / 1280 + .25));
-      var s = sprite('cxv-ufo' + (V.old ? ' cxv-old' : ''), '<i class="cxv-beam"></i><img src="img/visitors/' + V.f + '" alt="" draggable="false">', w, 'Une soucoupe volante : l\u2019attraper');
+      var s = sprite('cxv-ufo' + (V.old ? ' cxv-old' : '') + (opt.flip ? ' cxv-flip' : ''), '<i class="cxv-beam"></i><img src="img/visitors/' + V.f + '" alt="" draggable="false">', w, 'Une soucoupe volante : l\u2019attraper');
       s.style.filter = 'brightness(' + (.72 + .3 * d).toFixed(2) + ') saturate(' + (.85 + .2 * d).toFixed(2) + ')' + (d < .45 ? ' blur(' + ((.45 - d) * 1.6).toFixed(2) + 'px)' : '') + TINT();
       var dur = rnd(10000, 15000) * (1.25 - d * .4) * (V.old ? 1.35 : 1), ltr = Math.random() < .5;
       var a = path(s, w, { y: rnd(.14, .48) * vh(), ltr: ltr, dur: dur, wob: rnd(8, 20) * (V.old ? 1.6 : 1), ph: rnd(0, 6), tilt: V.old ? 11 : 6, s0: 1, s1: 1 });
@@ -125,8 +129,9 @@
     },
     flotte: function () {
       // une flotte : profondeurs et modèles variés, faisceaux décalés (deux soucoupes sur cinq n'en allument pas)
-      var jobs = [KINDS.caeles()], beams = [.3, false, .42, .55, false].sort(function () { return Math.random() - .5; });
+      var jobs = [], beams = [.3, false, .42, .55, false].sort(function () { return Math.random() - .5; });
       for (var i = 0; i < 5; i++) (function (k) { jobs.push(new Promise(function (ok) { setTimeout(function () { KINDS.soucoupe({ v: k % UFOS.length, d: rnd(.2, 1), beam: beams[k] }).then(ok); }, 400 + k * rnd(500, 900)); })); })(i);
+      if (caelesFree()) { put(KEY_CAELES, today()); jobs.push(KINDS.caeles()); }   // Caeles : au plus une fois par jour, même dans la flotte
       return Promise.all(jobs);
     }
   };
@@ -141,7 +146,8 @@
       var w = 92, s = sprite('cxv-roadster', ROADSTER, w, 'Un roadster en orbite autour du Soleil');
       return run('roadster', s, path(s, w, { y: rnd(.18, .5) * vh(), ltr: Math.random() < .5, dur: rnd(16000, 22000), wob: 8, ph: rnd(0, 6), tilt: 28, s0: .9, s1: 1 }));
     },
-    atome: function () {   // le chat de Schrödinger : là… et pas là
+    atome: function () {   // le chat de Schrödinger : là… et pas là (dans l'atome lui-même, en nuage de probabilité)
+      var inScene = C.atomeFx && C.atomeFx.cat(); if (inScene) { C.emit('visitor', { type: 'chat', phase: 'start' }); return inScene.then(function () { C.emit('visitor', { type: 'chat', phase: 'end' }); }); }
       var w = 64, s = sprite('cxv-cat', CAT, w, 'Le chat de Schrödinger');
       s.style.left = (vw() * rnd(.12, .78)).toFixed(0) + 'px'; s.style.top = (vh() * rnd(.22, .62)).toFixed(0) + 'px';
       var fr = [{ opacity: 0 }], n = 9; for (var i = 1; i < n; i++) fr.push({ opacity: i % 2 ? rnd(.55, .95) : rnd(0, .2), offset: i / n }); fr.push({ opacity: 0 });
@@ -174,30 +180,81 @@
     toastT = setTimeout(function () { toastEl.classList.remove('on'); }, 3600);
   }
 
-  /* ---------- choix et rythme ---------- */
+  /* ---------- choix ---------- */
+  function themeId() { return C.theme && C.theme.id; }
+  function spatial() { return SPACE.indexOf(themeId()) >= 0; }
+  function today() { var d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+  function caelesFree() { return get(KEY_CAELES, '') !== today(); }
   function allowed() { return on && !reduce && C.sceneOk && !html.classList.contains('noscene') && !document.hidden && !html.classList.contains('reading'); }
   function pickKind() {
-    var id = C.theme && C.theme.id, r = Math.random();
-    if (r < .2) return 'caeles';
-    if (SPECIAL[id] && r < .45) return 'special';
+    var id = themeId(), r = Math.random();
+    if (!spatial()) return SPECIAL[id] ? 'special' : null;           // Atome, Neurone : leurs clins d'œil seulement
+    if (caelesFree() && r < .2) return 'caeles';
+    if (SPECIAL[id] && r < .5) return 'special';
     return 'soucoupe';
   }
   function play(kind, force) {
     if (!layer) return Promise.resolve(false);
     if (!force && (!allowed() || busy)) return Promise.resolve(false);
-    var id = C.theme && C.theme.id, k = kind || pickKind(), fn;
-    if (k === 'special') fn = SPECIAL[id] || KINDS.soucoupe; else fn = KINDS[k];
-    if (!fn) { console.warn('[Codex] visiteur inconnu : ' + k + ' (soucoupe, caeles, flotte, special' + Object.keys(KINDS).filter(function (x) { return ['soucoupe', 'caeles', 'flotte'].indexOf(x) < 0; }).map(function (x) { return ', ' + x; }).join('') + ')'); return Promise.resolve(false); }
+    var id = themeId(), k = kind || pickKind(), fn;
+    if (!k) return Promise.resolve(false);
+    if (k === 'special') fn = SPECIAL[id] || KINDS.soucoupe;
+    else if (k === 'konami') fn = konami;
+    else if (k === 'avril') fn = avril;
+    else fn = KINDS[k];
+    if (!fn) { console.warn('[Codex] visiteur inconnu : ' + k + ' (soucoupe, caeles, flotte, special, konami, avril' + Object.keys(KINDS).filter(function (x) { return ['soucoupe', 'caeles', 'flotte'].indexOf(x) < 0; }).map(function (x) { return ', ' + x; }).join('') + ')'); return Promise.resolve(false); }
+    if (k === 'caeles') put(KEY_CAELES, today());
     busy = true;
     return Promise.resolve().then(fn).catch(function (e) { console.warn('[Codex] visiteur :', e && e.message || e); }).then(function () { busy = false; return true; });
   }
-  function schedule(ms) {
-    clearTimeout(timer);
-    timer = setTimeout(function () {
-      if (!allowed()) { schedule(rnd(30000, 60000)); return; }   // lecteur ouvert, onglet caché… on repasse plus tard
-      play().then(function () { schedule(rnd(4, 8) * 60000); });
-    }, ms);
+  // 1er avril : une soucoupe à l'envers, qui n'a visiblement pas compris
+  function avril() { toast('1er avril : quelqu’un pilote à l’envers.'); return KINDS.soucoupe({ flip: true, beam: false }); }
+  // code Konami : la surprise dépend du thème
+  function konami() {
+    var id = themeId();
+    if (id === 'atome' && C.atomeFx) { var sp = C.atomeFx.superposition(); if (sp) { toast('Code Konami : superposition ! Le chat est sur toutes les orbites à la fois.'); return sp; } }
+    if (id === 'neurone' && C.neuroneFx) { var eu = C.neuroneFx.eureka(); if (eu) { toast('Code Konami : Eurêka !'); return Promise.all([eu, ideas()]); } }
+    if (!spatial()) return Promise.resolve(false);
+    toast('Code Konami : la flotte arrive !');
+    return KINDS.flotte();
   }
+  function ideas() {   // Eurêka : une pluie d'idées lumineuses au-dessus du cerveau
+    var b = C.neuroneFx && C.neuroneFx.box(), jobs = [];
+    for (var i = 0; i < 7; i++) (function (k) {
+      jobs.push(new Promise(function (ok) { setTimeout(function () {
+        var w = 26, s = sprite('cxv-bulb', BULB, w, 'Une idée lumineuse'), x = b ? b.x + b.w * (.12 + Math.random() * .76) : vw() * rnd(.2, .8), y = b ? b.y + b.h * (.15 + Math.random() * .5) : vh() * rnd(.3, .6);
+        run('idee', s, anim(s, [
+          { transform: 'translate(' + x + 'px,' + y + 'px) scale(.5)', opacity: 0 },
+          { transform: 'translate(' + x + 'px,' + y + 'px) scale(1)', opacity: 1, filter: 'brightness(1.6) drop-shadow(0 0 12px #ffd36a)', offset: .25 },
+          { transform: 'translate(' + (x + rnd(-20, 20)) + 'px,' + (y - vh() * .22) + 'px) scale(.7)', opacity: 0 }
+        ], { duration: 4200, easing: 'ease-out' })).then(ok);
+      }, 500 + k * 380); }));
+    })(i);
+    return Promise.all(jobs);
+  }
+
+  /* ---------- conditions ---------- */
+  var timer = null, idleT = null, gestureUsed = false, visits = {};
+  function chance() {   // une apparition spontanée aujourd'hui ? (au plus une par jour)
+    if (get(KEY_DAY, '') === today()) return null;
+    var d = new Date(), m = d.getMonth() + 1, j = d.getDate(), h = d.getHours();
+    if ((m === 6 && j === 24) || (m === 7 && j === 2)) return 'garanti';
+    if (m === 4 && j === 1) return 'avril';
+    var p = h >= 22 || h < 5 ? .5 : .25;
+    return Math.random() < p ? 'oui' : null;
+  }
+  function whenFree(fn, tries) {   // attendre que le lecteur soit refermé, l'onglet visible…
+    clearTimeout(timer);
+    timer = setTimeout(function () { if (allowed() && !busy) fn(); else if ((tries || 0) < 40) whenFree(fn, (tries || 0) + 1); }, tries ? 15000 : 0);
+  }
+  function spontaneous(kind) {
+    whenFree(function () { put(KEY_DAY, today()); play(kind); });
+  }
+  function gesture() {   // un geste : au plus un par visite
+    if (gestureUsed || !on || reduce || !C.sceneOk) return;
+    gestureUsed = true; whenFree(function () { play(); });
+  }
+  function resetIdle() { clearTimeout(idleT); if (!gestureUsed) idleT = setTimeout(gesture, 180000); }
 
   /* ---------- code Konami ---------- */
   var SEQ = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'], pos = 0;
@@ -205,7 +262,7 @@
     var t = e.target; if (t && t.closest && t.closest('input, textarea, select, [contenteditable]')) { pos = 0; return; }
     var k = e.key && e.key.length === 1 ? e.key.toLowerCase() : e.key;
     pos = k === SEQ[pos] ? pos + 1 : (k === SEQ[0] ? 1 : 0);
-    if (pos === SEQ.length) { pos = 0; if (on && !reduce && C.sceneOk) { busy = false; play('flotte', true); toast('Code Konami : la flotte arrive !'); } }
+    if (pos === SEQ.length) { pos = 0; if (on && !reduce && C.sceneOk) { busy = false; play('konami', true); } }
   });
 
   /* ---------- réglage ---------- */
@@ -213,14 +270,14 @@
     var menu = document.getElementById('theme-menu'); if (!menu || menu.querySelector('.cxv-row')) return;
     var li = el('li', 'perf-row cxv-row'); li.setAttribute('role', 'none');
     li.innerHTML = '<label class="cx-keys-sw"><input type="checkbox" id="cxv-on"> Visiteurs inattendus</label>' +
-      '<small class="perf-hint">' + (reduce ? 'Coupés : votre système demande moins d’animations.' : 'De temps en temps, quelque chose traverse la scène. Cliquez pour l’attraper.') + '</small>';
+      '<small class="perf-hint">' + (reduce ? 'Coupés : votre système demande moins d’animations.' : 'Rarement, et seulement sous certaines conditions. À vous de les trouver.') + '</small>';
     var perf = menu.querySelector('.perf-row:not(.cx-keys-row)'); menu.insertBefore(li, perf || null);
     var cb = li.querySelector('input'); cb.checked = on && !reduce; cb.disabled = reduce;
-    cb.addEventListener('change', function () { on = cb.checked; put(KEY_ON, on ? '1' : '0'); if (on) schedule(rnd(20000, 40000)); else clearTimeout(timer); });
+    cb.addEventListener('change', function () { on = cb.checked; put(KEY_ON, on ? '1' : '0'); if (!on) { clearTimeout(timer); clearTimeout(idleT); } });
   }
 
   /* ---------- démarrage ---------- */
-  C.visitors = { play: play, add: addKind, get count() { return parseInt(get(KEY_N, '0'), 10) || 0; } };
+  C.visitors = { play: play, add: addKind, caught: caught, toast: toast, get count() { return parseInt(get(KEY_N, '0'), 10) || 0; } };
   C.ovni = function (kind) { if (!layer) return 'Pas de scène ici : rien ne peut voler.'; busy = false; play(kind || 'soucoupe', true); return 'En approche : ' + (kind || 'soucoupe'); };
   C.on('ready', function () {
     layer = el('div', 'cxv-layer'); layer.setAttribute('aria-hidden', 'true');
@@ -230,9 +287,13 @@
     settingsRow();
     if (!C.sceneOk) return;
     var q = new URLSearchParams(location.search);
-    if (q.has('ovni')) { setTimeout(function () { busy = false; play(q.get('ovni') || 'soucoupe', true); }, 1200); schedule(rnd(4, 8) * 60000); return; }
-    var today = new Date().toISOString().slice(0, 10), first = get(KEY_DAY, '') !== today;
-    if (first && on && !reduce) put(KEY_DAY, today);
-    schedule(first ? rnd(8000, 15000) : rnd(4, 8) * 60000);
+    if (q.has('ovni')) { setTimeout(function () { busy = false; play(q.get('ovni') || 'soucoupe', true); }, 1200); return; }
+    if (!on || reduce) return;
+    var c = chance();
+    if (c) setTimeout(function () { spontaneous(c === 'avril' ? 'avril' : null); }, rnd(20000, 90000));
+    // gestes : longue contemplation, ou trois visites du même astre
+    ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(function (n) { window.addEventListener(n, resetIdle, { passive: true }); });
+    resetIdle();
+    C.on('navigate', function (ev) { if (!ev || !ev.id) return; visits[ev.id] = (visits[ev.id] || 0) + 1; if (visits[ev.id] === 3) gesture(); });
   });
 })();

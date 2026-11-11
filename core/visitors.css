@@ -25,3 +25,7 @@
 .cxv-toast.on { opacity: 1; transform: translate(-50%, 0); }
 html.reading .cxv-layer { display: none; }
 @media (prefers-reduced-motion: reduce) { .cxv-layer { display: none; } }
+
+/* 1er avril : la soucoupe vole à l'envers */
+.cxv-flip img { transform: scaleY(-1); }
+.cxv-flip .cxv-beam { display: none; }

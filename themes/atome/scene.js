@@ -121,6 +121,92 @@ window.CodexScene = { ok: true };
     return proj(e.U[0] * c + e.V[0] * s + (j1 || 0), e.U[1] * c + e.V[1] * s + (j2 || 0), e.U[2] * c + e.V[2] * s);
   }
 
+  /* ---------- le chat de Schrödinger : une silhouette en nuage de probabilité ----------
+     Pas un dessin : quelques centaines de points tirés au hasard dans la forme d'un chat assis (oreille cassée,
+     queue coudée, yeux dépareillés : un chat bizarre, pas trop mignon). Il vit dans l'atome lui-même, sur une orbite,
+     caché derrière le noyau quand il passe derrière. « Là… et pas là » : sa présence clignote, ses points se brouillent.
+     Code Konami : superposition, un chat sur chaque orbite, puis l'observation n'en laisse qu'un. */
+  var CATP = null, cats = [];
+  function catShape() {
+    if (CATP) return CATP;
+    var S = 72, c = document.createElement('canvas'); c.width = c.height = S; var x = c.getContext('2d');
+    x.fillStyle = '#fff'; x.strokeStyle = '#fff'; x.lineCap = 'round';
+    x.beginPath(); x.ellipse(36, 50, 14, 17, 0, 0, TAU); x.fill();                       // corps assis
+    x.beginPath(); x.ellipse(36, 27, 11, 9.5, -.08, 0, TAU); x.fill();                   // tête un peu de travers
+    x.beginPath(); x.moveTo(26, 23); x.lineTo(26.5, 9); x.lineTo(33, 19); x.fill();      // oreille droite
+    x.beginPath(); x.moveTo(40, 19); x.lineTo(49, 14); x.lineTo(46.5, 25); x.fill();     // oreille cassée, tombante
+    x.lineWidth = 3.2; x.beginPath(); x.moveTo(48, 62); x.quadraticCurveTo(62, 58, 61, 44); x.lineTo(55, 34); x.stroke();   // queue coudée
+    x.lineWidth = 2.6; x.beginPath(); x.moveTo(30, 64); x.lineTo(30, 70); x.moveTo(41, 64); x.lineTo(41, 70); x.stroke();   // pattes
+    var d = x.getImageData(0, 0, S, S).data, pts = [];
+    function A_(xx, yy) { return xx < 0 || yy < 0 || xx >= S || yy >= S ? 0 : d[(yy * S + xx) * 4 + 3]; }
+    for (var yy = 0; yy < S; yy++) for (var xx = 0; xx < S; xx++) {
+      if (A_(xx, yy) < 120) continue;
+      var edge = A_(xx - 1, yy) < 120 || A_(xx + 1, yy) < 120 || A_(xx, yy - 1) < 120 || A_(xx, yy + 1) < 120 || A_(xx - 2, yy) < 120 || A_(xx + 2, yy) < 120 || A_(xx, yy - 2) < 120 || A_(xx, yy + 2) < 120;
+      if (Math.random() < (edge ? .95 : .1)) pts.push([(xx - S / 2) / S, (yy - S / 2) / S, Math.random() * TAU, edge ? .75 + Math.random() * .25 : .35 + Math.random() * .3]);   // le contour dessine le chat, l'intérieur reste un brouillard
+    }
+    CATP = { pts: pts, eyes: [[(31 - S / 2) / S, (26 - S / 2) / S, 1], [(41.5 - S / 2) / S, (25 - S / 2) / S, .62]] };
+    return CATP;
+  }
+  var EYE = null;
+  function eyeSprite() { if (!EYE) EYE = glowSprite('#ffe27a', true); return EYE; }
+  // un chat : sur l'orbite d'un électron (e), à l'angle th ; mode 'seul' (il clignote) ou 'fantome' (superposition)
+  function addCat(e, th, mode, life) { var k = { e: e, th: th, mode: mode, age: 0, life: life, amp: 0, coh: mode === 'seul' ? .82 : .55, ph: Math.random() * TAU, gone: false }; cats.push(k); return k; }
+  function catPresence(k) {   // enveloppe : apparition, présence qui clignote, disparition
+    var a = Math.min(1, k.age / .6) * Math.min(1, Math.max(0, (k.life - k.age) / .8));
+    if (k.mode === 'seul') { var f = Math.sin(k.age * 2.6 + k.ph) + Math.sin(k.age * 6.1 + k.ph * 2) * .55; a *= f > .15 ? 1 : f > -.35 ? (f + .35) / .5 : .06; }
+    if (k.mode === 'fantome') a *= .42 + .18 * Math.sin(k.age * 5 + k.ph);
+    if (k.mode === 'effondre') a *= Math.max(0, 1 - k.age / .7);
+    return a;
+  }
+  function drawCats(back, dt) {
+    if (!cats.length) return;
+    var P = catShape();
+    for (var i = cats.length - 1; i >= 0; i--) {
+      var k = cats[i];
+      if (back) { k.age += dt; k.th += dt * k.e.w * CFG.speed * .35; if (k.age >= k.life) { cats.splice(i, 1); if (k.done) k.done(); continue; } }
+      var p = orbitPt(k.e, k.th, k.e.r * 1.02), X = p[0], Y = p[1], Z = p[2], sc = p[3];
+      if ((Z > 0) !== back) continue;
+      var a = catPresence(k) * (Z > 0 ? .55 : 1) * L.dim; k.sx = X; k.sy = Y; k.sz = Z; k.size = L.R * .46 * sc;
+      if (a < .01) continue;
+      var size = k.size, jit = size * (.06 * (1 - k.coh) + .006), dot = Math.max(1.2, size * .022);
+      if (k.mode === 'unique') k.coh = Math.min(1, k.coh + dt * .9);
+      g.fillStyle = k.mode === 'unique' ? '#bfeaff' : '#8fd6ff';
+      for (var j = 0; j < P.pts.length; j++) {
+        var q = P.pts[j], fl = .45 + .55 * Math.sin(t * 9 + q[2] + j);
+        if (fl < .12) continue;
+        var dx = Math.sin(t * 13 + q[2] * 3) * jit, dy = Math.cos(t * 11 + q[2] * 5) * jit;
+        if (k.mode === 'effondre') { dx *= 1 + k.age * 12; dy *= 1 + k.age * 12; }
+        g.globalAlpha = a * fl * q[3] * .8; g.fillRect(X + q[0] * size + dx - dot / 2, Y + q[1] * size + dy - dot / 2, dot, dot);
+      }
+      var es = Math.max(5, size * .17);
+      P.eyes.forEach(function (ey) { var z = es * ey[2]; g.globalAlpha = a * (.7 + .3 * Math.sin(t * 3 + k.ph)); g.drawImage(eyeSprite(), X + ey[0] * size - z / 2, Y + ey[1] * size - z / 2, z, z); });
+    }
+    g.globalAlpha = 1;
+  }
+  // utilisé par les visiteurs inattendus (core/visitors.js) : le chat seul, et la superposition du code Konami
+  C.atomeFx = {
+    cat: function () {
+      if (reduce || !W) return null;
+      var e = E[Math.floor(Math.random() * E.length)], k = addCat(e, e.th + Math.PI * (.6 + Math.random() * .8), 'seul', 9);
+      return new Promise(function (ok) { k.done = ok; });
+    },
+    superposition: function () {
+      if (reduce || !W) return null;
+      var list = E.map(function (e) { return addCat(e, e.th + Math.PI, 'fantome', 30); });
+      return new Promise(function (ok) {
+        setTimeout(function () {   // l'observation : un seul chat reste, les autres se dissipent
+          var keep = list[Math.floor(Math.random() * list.length)];
+          list.forEach(function (k) { k.age = 0; if (k === keep) { k.mode = 'unique'; k.life = 4.2; k.done = ok; } else { k.mode = 'effondre'; k.life = .7; } });
+          if (C.visitors && C.visitors.toast) C.visitors.toast('Observation : la superposition s’effondre. Le chat est… sur l’orbite ' + keep.e.orb + '.');
+        }, 4200);
+      });
+    },
+    hit: function (x, y) {   // un clic sur un chat visible ?
+      for (var i = 0; i < cats.length; i++) { var k = cats[i]; if (k.size && Math.abs(x - k.sx) < k.size * .45 && Math.abs(y - k.sy) < k.size * .55 && catPresence(k) > .2) return k; }
+      return null;
+    }
+  };
+
   /* ---------- effets : photons, anneaux, paires virtuelles ---------- */
   var photons = [], rings = [], pairs = [];
   function excite(e, strong) {
@@ -267,9 +353,11 @@ window.CodexScene = { ok: true };
     // derrière -> noyau -> devant
     if (CFG.model !== 'nuage') E.forEach(function (e) { strokeOrbit(e, true); });
     E.forEach(function (e) { if (e.sz > 0) drawElectron(e, q); });
+    drawCats(true, dt);
     drawNucleus(q);
     if (CFG.model !== 'nuage') E.forEach(function (e) { strokeOrbit(e, false); });
     E.forEach(function (e) { if (e.sz <= 0) drawElectron(e, q); });
+    drawCats(false, dt);
     drawPairs(dt, q); drawPhotons(dt);
     // photon spontané de temps en temps
     if (!reduce) { nextAmbient -= dt; if (nextAmbient < 0) { excite(E[Math.floor(Math.random() * E.length)], false); nextAmbient = 6 + Math.random() * 8; } }
@@ -294,6 +382,11 @@ window.CodexScene = { ok: true };
   /* ---------- gestes : glisser pour tourner, souris pour la parallaxe ---------- */
   var drag = false, lx = 0, ly = 0;
   cv.addEventListener('pointerdown', function (e) { drag = true; lx = e.clientX; ly = e.clientY; vYaw = 0; });
+  cv.addEventListener('click', function (e) {
+    var k = C.atomeFx.hit(e.clientX, e.clientY); if (!k || k.caught) return;
+    k.caught = true; k.age = Math.max(k.age, k.life - .8);
+    if (C.visitors && C.visitors.caught) C.visitors.caught('chat');
+  });
   addEventListener('pointermove', function (e) {
     if (e.pointerType === 'mouse') { mx = e.clientX / innerWidth - .5; my = e.clientY / innerHeight - .5; }
     if (!drag) return;

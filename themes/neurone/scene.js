@@ -332,6 +332,7 @@ window.CodexScene = { ok: true };
   });
 
   /* ---------- dessin ---------- */
+  var eureka = 0, waveE = -1.3;
   var t = 0, last = 0, nextTract = 1.5, nextHub = 3, waveX = -1.2, mx = 0, my = 0, pmx = 0, pmy = 0;
   var eeg = document.getElementById('nr-eeg'), eg = eeg && eeg.getContext('2d'), eegSpike = 0;
   function sx(v) { return L.cx + v * L.R; } function sy(v) { return L.cy + v * L.R; }
@@ -409,6 +410,11 @@ window.CodexScene = { ok: true };
       var RG = rings[r]; RG.t += dt; var f = RG.t / 1.1; if (f >= 1) { rings.splice(r, 1); continue; }
       g.strokeStyle = 'rgba(' + RG.a.rgb + ',' + (.8 * (1 - f)) + ')'; g.lineWidth = 2 * (1 - f) + .4; g.beginPath(); g.arc(sx(RG.a.x), sy(RG.a.y), 8 + f * 80 * Math.max(.7, s), 0, TAU); g.stroke();
     }
+    // « Eurêka » (code Konami) : une vague d'influx traverse tout le cortex, d'avant en arrière
+    if (eureka > 0) {
+      eureka -= dt; waveE += dt * 1.25; eegSpike = 1;
+      for (var ie = 0; ie < N.length; ie++) if (Math.abs(N[ie].x - waveE) < .05) { flash(ie, 1); if (Math.random() < .25) spawn(ie); }
+    }
     // une aire s'active d'elle-même de temps en temps
     nextHub -= dt * act; if (nextHub < 0 && !reduce) { burst(A[Math.floor(Math.random() * 5)], false); nextHub = 4 + Math.random() * 5; }
     // étiquettes
@@ -419,6 +425,16 @@ window.CodexScene = { ok: true };
     L.cx = ocx; L.cy = ocy;
     drawEeg(dt, b);
   }
+  // utilisé par les visiteurs inattendus (core/visitors.js)
+  C.neuroneFx = {
+    eureka: function () {
+      if (reduce || !W) return null;
+      eureka = 2.6; waveE = -1.3;
+      A.forEach(function (a, i) { setTimeout(function () { burst(a, true); }, 300 + i * 320); });
+      return new Promise(function (ok) { setTimeout(ok, 3400); });
+    },
+    box: function () { return { x: L.cx - 1.1 * L.R, y: L.cy - .82 * L.R, w: 2.2 * L.R, h: 1.75 * L.R }; }
+  };
   /* tracé EEG du rythme choisi */
   var eegT = 0;
   function drawEeg(dt, b) {
@@ -431,7 +447,7 @@ window.CodexScene = { ok: true };
     var cyc = b.f * .55;
     for (var x = 0; x <= w; x += 2) {
       var ph = (x / w) * cyc * TAU - eegT * b.f * TAU * .25, env = Math.sin(x / w * Math.PI);
-      var y = h / 2 + (Math.sin(ph) * b.amp + Math.sin(ph * 2.7 + 1.3) * b.amp * .25 + Math.sin(x * .9 + eegT * 13) * 1.2 + (x > w * .7 ? Math.sin(x * .6) * eegSpike * 12 : 0)) * env;
+      var y = h / 2 + (Math.sin(ph) * b.amp + Math.sin(ph * 2.7 + 1.3) * b.amp * .25 + Math.sin(x * .9 + eegT * 13) * 1.2 + (x > w * .7 || eureka > 0 ? Math.sin(x * .6 + (eureka > 0 ? eegT * 40 : 0)) * eegSpike * (eureka > 0 ? 15 : 12) : 0)) * env;
       if (x) eg.lineTo(x, y); else eg.moveTo(x, y);
     }
     eg.stroke(); eg.shadowBlur = 0;
