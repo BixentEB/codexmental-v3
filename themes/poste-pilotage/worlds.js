@@ -33,6 +33,29 @@
     { id: 'proximab', name: 'Proxima b', where: '4,2 al · la plus proche', type: 'Planète rocheuse', fact: 'La plus proche exoplanète connue, autour d’une naine rouge.', kind: 4, artist: true, sun: [1, .55, .38], atmo: [.7, .6, .9], c: ['#6a5a5a', '#3a3036', '#a8988a', '#e8e4f0'], spin: .025 },
     { id: 'wasp76b', name: 'WASP-76 b', where: '≈ 640 al · constellation des Poissons', type: 'Jupiter ultra-chaud', fact: 'Le fer s’y vaporise côté jour et y pleuvrait côté nuit.', kind: 0, glow: [1, .35, .1], artist: true, atmo: [1, .55, .25], c: ['#c8642a', '#7a2a12', '#f0a050', '#3a1206'], spin: .05 }
   ];
+  /* données d'exploration affichées par le scanner (valeurs arrondies ; « ≈ » = estimation d'après la masse et le rayon mesurés,
+     « ? » = pas encore mesuré). atm : composition · o2 : oxygène · p : pression au sol (ou « pas de sol ») · g : gravité (Terre = 1)
+     · temp : température typique · land : atterrissage · eq : équipement requis */
+  var EXPLO = {
+    jupiter:  { atm: 'H₂ 90 % · He 10 %', o2: 'aucun', p: 'pas de sol', g: '2,5 g', temp: '−110 °C', land: 'impossible', eq: 'sonde atmosphérique' },
+    saturne:  { atm: 'H₂ 96 % · He 3 %', o2: 'aucun', p: 'pas de sol', g: '1,1 g', temp: '−140 °C', land: 'impossible', eq: 'sonde atmosphérique' },
+    terre:    { atm: 'N₂ 78 % · O₂ 21 %', o2: '21 %', p: '1 bar', g: '1 g', temp: '15 °C', land: 'possible', eq: 'aucun' },
+    mars:     { atm: 'CO₂ 95 % · N₂ 3 % · Ar 2 %', o2: '0,2 %', p: '0,006 bar', g: '0,38 g', temp: '−63 °C', land: 'possible', eq: 'scaphandre pressurisé · oxygène' },
+    lune:     { atm: 'quasi vide', o2: 'aucun', p: 'vide', g: '0,17 g', temp: '−170 à +120 °C', land: 'possible', eq: 'scaphandre · protection thermique' },
+    europe:   { atm: 'O₂ très ténu', o2: 'traces', p: 'quasi vide', g: '0,13 g', temp: '−160 °C', land: 'possible (glace)', eq: 'scaphandre · blindage anti-radiations' },
+    titan:    { atm: 'N₂ 95 % · CH₄ 5 %', o2: 'aucun', p: '1,5 bar', g: '0,14 g', temp: '−179 °C', land: 'possible (Huygens, 2005)', eq: 'oxygène · combinaison chauffante' },
+    io:       { atm: 'SO₂ très ténu', o2: 'aucun', p: 'quasi vide', g: '0,18 g', temp: '−130 °C', land: 'risqué (volcans)', eq: 'scaphandre · blindage anti-radiations' },
+    neptune:  { atm: 'H₂ 80 % · He 19 % · CH₄', o2: 'aucun', p: 'pas de sol', g: '1,1 g', temp: '−200 °C', land: 'impossible', eq: 'sonde atmosphérique' },
+    uranus:   { atm: 'H₂ 83 % · He 15 % · CH₄', o2: 'aucun', p: 'pas de sol', g: '0,9 g', temp: '−195 °C', land: 'impossible', eq: 'sonde atmosphérique' },
+    hd189733b:{ atm: 'H₂ · He · vapeur d’eau', o2: 'aucun', p: 'pas de sol', g: '≈ 2,2 g', temp: '≈ 1 000 °C', land: 'impossible', eq: 'aucun ne suffit' },
+    tres2b:   { atm: 'H₂ · He', o2: 'aucun', p: 'pas de sol', g: '≈ 2,2 g', temp: '≈ 1 200 °C', land: 'impossible', eq: 'aucun ne suffit' },
+    '55cnce': { atm: 'CO · CO₂ ? (JWST, 2024)', o2: '?', p: '?', g: '≈ 2,3 g', temp: '> 2 000 °C', land: 'impossible (lave)', eq: 'aucun ne suffit' },
+    kepler16b:{ atm: 'gazeuse (H₂ · He)', o2: 'aucun', p: 'pas de sol', g: '≈ 1,5 g', temp: '≈ −80 °C', land: 'impossible', eq: 'sonde atmosphérique' },
+    trappist1e:{ atm: '? (JWST en cours)', o2: '?', p: '?', g: '≈ 0,8 g', temp: '≈ −20 °C', land: 'peut-être', eq: 'scaphandre · oxygène · abri anti-éruptions' },
+    proximab: { atm: '? (non mesurée)', o2: '?', p: '?', g: '≈ 1,1 g', temp: '≈ −40 °C', land: 'peut-être', eq: 'scaphandre · oxygène · abri anti-éruptions' },
+    wasp76b:  { atm: 'H₂ · He · fer vaporisé', o2: 'aucun', p: 'pas de sol', g: '≈ 0,7 g', temp: '≈ 2 400 °C (jour)', land: 'impossible', eq: 'aucun ne suffit' }
+  };
+  WORLDS.forEach(function (w) { w.ex = EXPLO[w.id] || null; });
 
   var VERT = [
     'varying vec3 vN; varying vec3 vP; varying vec2 vUv;',

@@ -80,6 +80,22 @@
   function toScreen(x, y) { return { x: F.x + x * F.k, y: F.y + y * F.k }; }
   var VP = { x: 646, y: 232 };   // centre de la vitre centrale (repère 1280 × 640)
   var BODY = { x: 704, y: 246, r: 116 };
+  /* vue d'ensemble : une galaxie spirale lointaine et discrète dans la grande vitre, pour donner de la profondeur
+     quand aucun astre n'est verrouillé (dessinée par calcul : un bulbe, deux bras en spirale logarithmique) */
+  var FAR = { rot: -.5 + Math.random(), tilt: .38 + Math.random() * .25, dx: Math.random() < .5 ? -1 : 1, img: null }, farA = 0;
+  function farImg() {
+    if (FAR.img) return FAR.img;
+    var S = 256, c = document.createElement('canvas'); c.width = c.height = S; var x = c.getContext('2d'), h = S / 2;
+    var gr = x.createRadialGradient(h, h, 0, h, h, h); gr.addColorStop(0, 'rgba(255,236,200,.9)'); gr.addColorStop(.08, 'rgba(255,220,170,.55)'); gr.addColorStop(.3, 'rgba(150,170,230,.12)'); gr.addColorStop(1, 'rgba(80,100,180,0)');
+    x.fillStyle = gr; x.fillRect(0, 0, S, S);
+    for (var arm = 0; arm < 2; arm++) for (var i = 0; i < 1400; i++) {
+      var r = Math.pow(Math.random(), .75) * h * .92, th = arm * Math.PI + Math.log(r + 6) * 2.4 + (Math.random() - .5) * (.5 + 18 / (r + 10));
+      var px = h + Math.cos(th) * r, py = h + Math.sin(th) * r, a = (1 - r / h) * (.25 + Math.random() * .5);
+      x.fillStyle = Math.random() < .12 ? 'rgba(255,170,200,' + a.toFixed(2) + ')' : 'rgba(180,205,255,' + a.toFixed(2) + ')';
+      var z = Math.random() < .05 ? 1.6 : .9; x.fillRect(px, py, z, z);
+    }
+    FAR.img = c; return c;
+  }
 
   /* ---------- étoiles en profondeur + Voie lactée ---------- */
   var stars = [], sky = document.createElement('canvas'), sg = sky.getContext('2d');
@@ -246,14 +262,28 @@
   var scanImg = null;
   function scan(id) {
     var w = id && world;
-    $('cp-sc0').textContent = id ? 'SCANNER · ' + DEST[id].code : 'SCANNER · CIBLE';
-    $('cp-sc1').textContent = w ? w.name : id ? label(id) : 'Aucune cible';
-    $('cp-sc2').textContent = w ? w.type + ' · ' + w.where : id ? host(ext(id) || '') : 'choisir une destination';
-    $('cp-sc3').textContent = w ? (w.artist ? 'Vue d’artiste d’après les données' : 'Carte : ' + w.credit) : '';
+    var code = id ? DEST[id].code : '';
+    // pages qui défilent sur le petit écran : identité, puis les données d'exploration ; la source passe en dernier
+    scanPages = [{ k: id ? 'SCANNER · ' + code : 'SCANNER · CIBLE', a: w ? w.name : id ? label(id) : 'Aucune cible', b: w ? w.type + ' · ' + w.where : id ? host(ext(id) || '') : 'choisir une destination', c: '' }];
+    if (w && w.ex) {
+      var x = w.ex;
+      scanPages.push({ k: 'ATMOSPHÈRE', a: x.atm, b: 'Oxygène : ' + x.o2, c: 'Pression : ' + x.p });
+      scanPages.push({ k: 'SURFACE', a: 'Gravité : ' + x.g, b: 'Température : ' + x.temp, c: '' });
+      scanPages.push({ k: 'ATTERRISSAGE', a: x.land.charAt(0).toUpperCase() + x.land.slice(1), b: x.eq, c: 'équipement requis', c: '' });
+    }
+    if (w) scanPages.push({ k: 'SOURCE', a: w.name, b: w.artist ? 'Vue d’artiste' : 'Carte : ' + w.credit, c: w.artist ? 'd’après les données' : '' });
+    scanPage = -1; showScanPage(0);
     scanImg = null;
     if (w && w.tex) { scanImg = new Image(); scanImg.src = 'img/astres/' + w.tex; }
   }
+  var scanPages = [], scanPage = -1;
+  function showScanPage(i) {
+    if (!scanPages.length || i === scanPage) return; scanPage = i; var P = scanPages[i];
+    $('cp-sc0').textContent = P.k + (scanPages.length > 1 ? ' · ' + (i + 1) + '/' + scanPages.length : '');
+    $('cp-sc1').textContent = P.a; $('cp-sc2').textContent = P.b; $('cp-sc3').textContent = P.c;
+  }
   function drawScan(t) {
+    if (scanPages.length > 1) showScanPage(Math.floor(t / 4) % scanPages.length);
     scg.clearRect(0, 0, 74, 74);
     scg.strokeStyle = 'rgba(127,200,255,.6)'; scg.lineWidth = 1.5; scg.beginPath(); scg.arc(37, 37, 35, 0, TAU); scg.stroke();
     if (world) {
@@ -283,7 +313,7 @@
     lock.style.cssText = 'left:' + x + 'px;top:' + y + 'px;width:' + s + 'px;height:' + Math.min(s, 300 - y) + 'px';
     if (!world) { lockHide(); return; }
     $('cp-lock-t').textContent = DEST[cur].code + ' · ' + label(cur).toUpperCase();
-    $('cp-lock-b').textContent = world.name.toUpperCase() + ' · ' + (world.artist ? 'VUE D’ARTISTE' : 'VERROUILLÉ');
+    $('cp-lock-b').textContent = world.name.toUpperCase() + ' · ' + 'VERROUILLÉ';
     lock.hidden = false; bodyBtn.hidden = false;
     bodyBtn.style.cssText = 'left:' + (BODY.x - r) + 'px;top:' + Math.max(120, BODY.y - r) + 'px;width:' + r * 2 + 'px;height:' + (330 - Math.max(120, BODY.y - r)) + 'px';
     bodyBtn.setAttribute('aria-label', 'Entrer dans la rubrique ' + label(cur));
@@ -385,6 +415,12 @@
     if (streak > .05) {   // lueur bleue au cœur du saut
       var fl = g.createRadialGradient(cx, cy, 0, cx, cy, sc * .9); fl.addColorStop(0, 'rgba(150,200,255,' + (streak * .35).toFixed(2) + ')'); fl.addColorStop(1, 'rgba(60,90,200,0)');
       g.fillStyle = fl; g.fillRect(0, 0, cv.width, cv.height);
+    }
+    farA += ((!cur && jumpT < 0 ? 1 : 0) - farA) * Math.min(1, dt * (cur || jumpT >= 0 ? 3 : .5));
+    if (farA > .01) {
+      var fp = toScreen(BODY.x + FAR.dx * 150, BODY.y - 40), fs = BODY.r * F.k * DPR * 1.15;
+      g.save(); g.translate(fp.x * DPR, fp.y * DPR); g.rotate(FAR.rot); g.scale(1, FAR.tilt); g.rotate(now / 300000);
+      g.globalAlpha = farA * .75; g.globalCompositeOperation = 'lighter'; g.drawImage(farImg(), -fs / 2, -fs / 2, fs, fs); g.restore();
     }
     // astre de la destination : il grandit en arrivant, dérive doucement ensuite
     if (cur && jumpT < 0) {
