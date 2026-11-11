@@ -211,11 +211,11 @@
     id = id && DEST[id] ? id : null;
     if (id === cur && jumpT < 0) { if (id) openSoon(id, 200); return; }
     target = id; pendingOpen = id;
-    nextWorld = id && !ext(id) ? pickWorld() : null;
+    nextWorld = id ? pickWorld() : null;   // même vers l'Observatoire ou le Labo : un monde dans la vitre, le sas s'ouvre ensuite
     if (!cfg.jump || reduce) { arrive(); return; }
     jumpT = 0; document.body.classList.add('cp-away'); if (gl) Wd.hide();
     lockHide(); nav('SAUT EN COURS', id ? (nextWorld ? nextWorld.name : host(ext(id))) : 'Vue d’ensemble', id ? DEST[id].code + ' · ' + label(id) : 'retour en orbite libre');
-    log(id ? (ext(id) ? 'Cap sur ' + host(ext(id)) : 'Saut vers ' + nextWorld.name + ' · ' + label(id)) : 'Retour en orbite libre');
+    log(id ? (ext(id) ? 'Cap sur ' + leLa(label(id)) + ' (' + host(ext(id)) + ')' : 'Saut vers ' + nextWorld.name + ' · ' + label(id)) : 'Retour en orbite libre');
     fuelFrom = fuel; fuelTo = Math.max(6, fuel - rnd(3, 6)); lastCount = -1;
   }
   function arrive() {
@@ -225,9 +225,9 @@
     shipAt(0); gauges();
     C.emit('nav:active', cur);
     if (cur) {
-      if (world) nav('CIBLE VERROUILLÉE', world.name, DEST[cur].code + ' · ' + label(cur) + ' · ' + countArticles(cur) + ' articles');
-      else nav('SORTIE', host(ext(cur)), DEST[cur].code + ' · ' + label(cur) + ' · même onglet');
-      scan(cur); log(world ? 'Arrivée : ' + world.name : 'Ouverture du sas : ' + host(ext(cur)));
+      if (ext(cur)) nav('SAS · AUTRE SITE', label(cur), DEST[cur].code + ' · ' + host(ext(cur)));
+      else if (world) nav('CIBLE VERROUILLÉE', world.name, DEST[cur].code + ' · ' + label(cur) + ' · ' + countArticles(cur) + ' articles');
+      scan(cur); log(world ? 'Arrivée : ' + world.name + (ext(cur) ? ' · le sas mène ' + (/^[AEIOUYÉÈ]/i.test(label(cur)) ? 'à l’' : 'au ') + label(cur) : '') : 'Ouverture du sas : ' + host(ext(cur)));
       if (world) setTimeout(function () { if (world) log(world.fact); }, 1400);
       if (pendingOpen === cur) openSoon(cur, reduce ? 0 : 900);
     } else {
@@ -242,6 +242,7 @@
   var routeP = $('cp-route'), shipDot = document.querySelector('#cp-s-nav .cp-ship'), routeLen = 0;
   try { routeLen = routeP.getTotalLength(); } catch (e) {}
   function shipAt(q) { if (!routeLen || !shipDot) return; var pt = routeP.getPointAtLength(routeLen * q); shipDot.setAttribute('cx', pt.x.toFixed(1)); shipDot.setAttribute('cy', pt.y.toFixed(1)); }
+  function leLa(n) { return (/^[AEIOUYÉÈ]/i.test(n) ? 'l’' : 'le ') + n; }
   function nav(a, b, c) { $('cp-n1').textContent = a; $('cp-n2').textContent = b; $('cp-n3').textContent = c; }
   var logEl = $('cp-log');
   function hhmm() { var d = new Date(); return ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); }
@@ -283,7 +284,7 @@
     $('cp-sc1').textContent = P.a; $('cp-sc2').textContent = P.b; $('cp-sc3').textContent = P.c;
   }
   function drawScan(t) {
-    if (scanPages.length > 1) showScanPage(Math.floor(t / 4) % scanPages.length);
+    if (scanPages.length > 1 && performance.now() > holdScan) showScanPage(Math.floor(t / 4) % scanPages.length);
     scg.clearRect(0, 0, 74, 74);
     scg.strokeStyle = 'rgba(127,200,255,.6)'; scg.lineWidth = 1.5; scg.beginPath(); scg.arc(37, 37, 35, 0, TAU); scg.stroke();
     if (world) {
@@ -301,6 +302,7 @@
     [44, 29, 14].forEach(function (r, i) { rg.globalAlpha = i ? .6 : 1; rg.beginPath(); rg.arc(46, 46, r, 0, TAU); rg.stroke(); }); rg.globalAlpha = 1;
     var a = t * 1.6 % TAU; rg.fillStyle = 'rgba(127,200,255,.28)'; rg.beginPath(); rg.moveTo(46, 46); rg.arc(46, 46, 44, a - .7, a); rg.closePath(); rg.fill();
     rg.fillStyle = '#d9ecff'; rg.beginPath(); rg.arc(46, 46, 2.5, 0, TAU); rg.fill();
+    if (pingT >= 0) { pingT += .066; var pr = pingT * 60; if (pr > 46) pingT = -1; else { rg.strokeStyle = 'rgba(244,199,122,' + (1 - pr / 46).toFixed(2) + ')'; rg.lineWidth = 2; rg.beginPath(); rg.arc(46, 46, pr, 0, TAU); rg.stroke(); } }
     if (contact) { var ca = contact.a + t * .25; rg.fillStyle = '#f4c77a'; rg.shadowColor = '#f4c77a'; rg.shadowBlur = 8; rg.beginPath(); rg.arc(46 + Math.cos(ca) * contact.d, 46 + Math.sin(ca) * contact.d, 4, 0, TAU); rg.fill(); rg.shadowBlur = 0; }
   }
   function radarText(a, b, c) { $('cp-r1').textContent = a; $('cp-r2').textContent = b; $('cp-r3').textContent = c; }
@@ -437,15 +439,39 @@
     var pop = C.customize.pop();
     var box = document.createElement('div');
     box.innerHTML = '<div><span class="cx-l">Vitesse de croisière</span><input id="cp-cruise" type="range" min="0.2" max="3" step="0.1"></div>' +
-      '<div class="cx-row"><label for="cp-jump">Saut en hyperespace à chaque rubrique</label><input id="cp-jump" type="checkbox"></div>' +
-      '<div class="cx-row"><label for="cp-fuel">Faire le plein d’antimatière</label><button type="button" id="cp-fuel" class="cp-fuel">Remplir</button></div>';
+      '<div class="cx-row"><label for="cp-jump">Saut en hyperespace à chaque rubrique</label><input id="cp-jump" type="checkbox"></div>';
     pop.appendChild(box);
     var cr = box.querySelector('#cp-cruise'), jp = box.querySelector('#cp-jump');
     cr.value = cfg.cruise; jp.checked = cfg.jump;
     cr.addEventListener('input', function () { cfg.cruise = +cr.value; save(); });
     jp.addEventListener('change', function () { cfg.jump = jp.checked; save(); });
-    box.querySelector('#cp-fuel').addEventListener('click', function () { fuel = 100; gauges(); log('Plein d’antimatière effectué'); });
   }
+
+  /* ---------- boutons de la console ---------- */
+  var refueling = false, pingT = -1, holdScan = 0;
+  $('cp-refuel').addEventListener('click', function () {
+    if (refueling) return;
+    if (fuel >= 97) { log('Réservoirs d’antimatière déjà pleins'); return; }
+    refueling = true; this.classList.add('on'); log('Plein d’antimatière en cours…', true);
+    var from = fuel, t0 = performance.now(), btn = this;
+    (function fill(now) {
+      var k = Math.min(1, (now - t0) / 2600); fuel = from + (100 - from) * (1 - Math.pow(1 - k, 2)); gauges();
+      if (k < 1) requestAnimationFrame(fill); else { refueling = false; btn.classList.remove('on'); log('Plein d’antimatière effectué : 100 %'); }
+    })(t0);
+  });
+  $('cp-ping').addEventListener('click', function () {
+    pingT = 0; log(contact ? 'Impulsion radar : contact confirmé' : 'Impulsion radar : rien à signaler dans le secteur', !!contact);
+  });
+  $('cp-scnext').addEventListener('click', function () {
+    if (scanPages.length < 2) return; holdScan = performance.now() + 9000; scanPage = -1; showScanPage(scanManual = (scanManual + 1) % scanPages.length);
+  });
+  var scanManual = 0;
+  var NOX = ['Tous les systèmes sont nominaux.', 'Je surveille le radar. Rien d’inhabituel… pour l’instant.', 'Petit rappel : l’antimatière ne se boit pas.', 'La molette au centre choisit la destination.',
+    'Vitesse de croisière stable. On pourrait presque faire la sieste.', 'J’ai compté les étoiles de la vitre. Il en manque une, je vérifie.', 'Les réservoirs sont à ' , 'Le scanner défile tout seul, mais tu peux le feuilleter.'];
+  $('cp-nox').addEventListener('click', function () {
+    var m = NOX[Math.floor(Math.random() * NOX.length)]; if (m === 'Les réservoirs sont à ') m += Math.round(fuel) + ' %.';
+    log('Nox : ' + m);
+  });
 
   /* ---------- démarrage ---------- */
   addEventListener('resize', function () { layout(); placeLock(); });

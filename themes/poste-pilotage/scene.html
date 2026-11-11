@@ -11,12 +11,12 @@
   <div class="cp-dome" aria-hidden="true"><i class="cp-dome-sq"><i class="cp-dome-sweep"></i></i><i class="cp-dome-blip" id="cp-dome-blip"></i></div>
 
   <div class="cp-scr" id="cp-s-radar" aria-hidden="true" style="width:300px;height:130px;transform:matrix3d(0.580665,0.250554,0,0.000740,0.225826,0.653033,0,0.000378,0,0,1,0,42.931229,445.727170,0,1)">
-    <div class="cp-k">RADAR · COURTE PORTÉE</div>
+    <div class="cp-k cp-kb">RADAR<button type="button" class="cp-act" id="cp-ping" title="Envoyer une impulsion radar">PING</button></div>
     <div class="cp-row"><canvas id="cp-radar" width="92" height="92"></canvas>
       <div class="cp-col"><div class="cp-k cp-warm" id="cp-r1">AUCUN CONTACT</div><div class="cp-t" id="cp-r2">Secteur dégagé</div><div class="cp-m" id="cp-r3">balayage continu</div></div></div>
   </div>
   <div class="cp-scr" id="cp-s-state" aria-hidden="true" style="width:300px;height:130px;transform:matrix3d(0.540747,-0.095099,0,-0.000141,0.572634,1.216685,0,0.001658,0,0,1,0,244.599775,409.605411,0,1)">
-    <div class="cp-k">CAELES · ÉTAT</div>
+    <div class="cp-k cp-kb">CAELES · ÉTAT<button type="button" class="cp-act cp-act-warm" id="cp-refuel" title="Faire le plein d’antimatière">PLEIN</button></div>
     <div class="cp-gauges">
       <span>Bouclier</span><b><i id="cp-g1"></i></b><em id="cp-v1">98 %</em>
       <span>Réacteur</span><b><i id="cp-g2"></i></b><em id="cp-v2">74 %</em>
@@ -37,11 +37,11 @@
     </div>
   </div>
   <div class="cp-scr" id="cp-s-log" aria-hidden="true" style="width:300px;height:130px;transform:matrix3d(0.819748,0.133334,0,0.000214,1.715737,1.307795,0,0.001816,0,0,1,0,854.917700,397.267193,0,1)">
-    <div class="cp-k cp-nox">JOURNAL DE BORD · NOX</div>
+    <div class="cp-k cp-nox cp-kb">JOURNAL · NOX<button type="button" class="cp-act" id="cp-nox" title="Appeler Nox">NOX</button></div>
     <ol class="cp-log" id="cp-log"></ol>
   </div>
   <div class="cp-scr" id="cp-s-scan" aria-hidden="true" style="width:300px;height:130px;transform:matrix3d(0.266808,0.030330,0,-0.000126,-0.004608,0.493744,0,0.000145,0,0,1,0,1107.914318,421.240135,0,1)">
-    <div class="cp-k" id="cp-sc0">SCANNER · CIBLE</div>
+    <div class="cp-k cp-kb"><span id="cp-sc0">SCANNER · CIBLE</span><button type="button" class="cp-act" id="cp-scnext" title="Page suivante du scanner">›</button></div>
     <div class="cp-row"><canvas id="cp-scan" width="74" height="74"></canvas>
       <div class="cp-col"><div class="cp-t" id="cp-sc1">—</div><div class="cp-m" id="cp-sc2"></div><div class="cp-m" id="cp-sc3"></div></div></div>
   </div>

@@ -114,3 +114,13 @@ body.cp-away #scene .cp-hero { opacity: 0; pointer-events: none; }
 #scene .cp-wheel.open button:nth-of-type(4) { animation-delay: .18s; } #scene .cp-wheel.open button:nth-of-type(5) { animation-delay: .24s; }
 @keyframes cp-flick { 0% { opacity: 0; } 20% { opacity: .8; } 35% { opacity: .15; } 55% { opacity: 1; } 70% { opacity: .5; } 100% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { #scene .cp-wheel.open .cp-holo, #scene .cp-wheel.open button { animation: none; } }
+
+/* boutons de la console : posés sur les écrans, ils suivent leur perspective */
+#scene .cp-kb { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+#scene .cp-act { pointer-events: auto; font: 500 11px/1 'IBM Plex Mono', monospace; letter-spacing: 2px; color: #bfe4ff; background: rgba(127, 200, 255, .1);
+  border: 1px solid rgba(127, 200, 255, .55); border-radius: 4px; padding: 4px 8px; cursor: pointer; text-shadow: 0 0 6px rgba(127, 200, 255, .6); box-shadow: 0 0 8px rgba(127, 200, 255, .15) inset; }
+#scene .cp-act:hover, #scene .cp-act:focus-visible { background: rgba(127, 200, 255, .25); color: #fff; outline: none; box-shadow: 0 0 12px rgba(127, 200, 255, .5); }
+#scene .cp-act.cp-act-warm { color: #ffd89a; border-color: rgba(244, 199, 122, .65); background: rgba(244, 199, 122, .12); text-shadow: 0 0 6px rgba(244, 199, 122, .6); }
+#scene .cp-act.cp-act-warm:hover { background: rgba(244, 199, 122, .28); }
+#scene .cp-act.on { animation: cp-blink .5s steps(2) infinite; }
+@keyframes cp-blink { 50% { opacity: .45; } }
