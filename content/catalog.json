@@ -310,10 +310,23 @@
    ]
   },
   {
+   "id": "immersion",
+   "label": "Immersion",
+   "kicker": "Expériences",
+   "intro": "Des expériences à vivre plutôt qu’à lire.",
+   "layout": "page",
+   "direct": true,
+   "tree": [
+    {
+     "article": "immersion/index"
+    }
+   ]
+  },
+  {
    "id": "profil",
    "label": "Portrait",
    "kicker": "L'auteur",
-   "intro": "Parcours, passions, influences et fragments de pensée.",
+   "intro": "Qui écrit ici, et ce qui nourrit ce site : parcours, passions, influences et fragments de pensée.",
    "tree": [
     {
      "label": "Ma bio",
@@ -1222,6 +1235,14 @@
     "Astronautique",
     "Propulsion"
    ]
+  },
+  "immersion/index": {
+   "title": "Immersion",
+   "src": "content/immersion/index.html",
+   "base": "immersion",
+   "words": 110,
+   "type": "page",
+   "published": "2026-11-11"
   }
  }
 }

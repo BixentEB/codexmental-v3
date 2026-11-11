@@ -322,3 +322,19 @@
 .cx-dep-go { display: inline-flex; gap: 6px; align-items: center; padding: 9px 14px; border-radius: 10px; background: var(--accent, #f4c77a); color: #14110a; font-weight: 600; font-size: .86rem; text-decoration: none; }
 .cx-dep-go:hover { filter: brightness(1.08); }
 .cx-dep-a button { font: inherit; font-size: .84rem; padding: 9px 12px; border-radius: 10px; border: 1px solid var(--line, rgba(255,255,255,.15)); background: transparent; color: var(--fg-soft, #c9cde0); cursor: pointer; }
+
+/* Immersion : courte intro, puis des blocs-boutons (en pointillés flous tant qu'ils sont en préparation) */
+.im-intro { font-size: 1.02rem; line-height: 1.7; max-width: 62ch; }
+.im-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin: 26px 0 8px; }
+.im-card { position: relative; padding: 18px 18px 16px; border-radius: 14px; border: 1.5px dashed color-mix(in srgb, var(--accent, #9cc8ff) 55%, transparent); }
+.im-card h3 { margin: 4px 0 8px; font-family: var(--font-display, inherit); font-weight: 400; font-size: 1.2rem; letter-spacing: .02em; }
+.im-card p { margin: 0; font-size: .86rem; line-height: 1.55; }
+.im-card .im-k { font: 500 .64rem var(--font-mono, monospace); letter-spacing: .14em; text-transform: uppercase; color: var(--accent, #9cc8ff); }
+.im-tag { display: inline-block; margin-top: 12px; font: .66rem var(--font-mono, monospace); letter-spacing: .1em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; border: 1px dashed currentColor; opacity: .75; }
+.im-soon { cursor: not-allowed; opacity: .62; filter: blur(.35px) saturate(.75); box-shadow: 0 0 14px color-mix(in srgb, var(--accent, #9cc8ff) 18%, transparent), 0 0 1px color-mix(in srgb, var(--accent, #9cc8ff) 40%, transparent) inset; transition: opacity .25s, filter .25s; }
+.im-soon:hover { opacity: .8; filter: blur(0) saturate(.9); }
+
+/* blocs « Parcourir » plus compacts : la hauteur suit le contenu (plus de bloc vide de 158 px), plus de blocs par ligne */
+.cards { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+.gcard { min-height: 0; padding: 13px 15px; gap: 5px; }
+.gcard:not(:has(.gc-d)) { min-height: 64px; justify-content: center; }
